@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conclusión general</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================
+   CONCLUSIÓN GENERAL — COMPONENTE PARA IFRAME EN GENIALLY
+   Área recomendada: aprox. 1180 × 470 px.
+   El título principal "Conclusión general" se coloca fuera
+   del iframe, en la plantilla, con Montserrat 34 px.
+========================================================== */
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#cg-root{
+  --cg-fondo:#104938;
+  --cg-texto:#D1DE8C;
+  --cg-boton:#279371;
+  --cg-popup:#D1DE8C;
+  --cg-tinta:#104938;
+  --cg-blanco:#FFFFFF;
+  --cg-linea:rgba(209,222,140,.25);
+  --cg-sombra:0 12px 30px rgba(16,73,56,.22);
+
+  position:relative;
+  width:100%;
+  height:100%;
+  padding:10px 16px 12px;
+  overflow:hidden;
+  color:var(--cg-texto);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  isolation:isolate;
+}
+
+#cg-root,
+#cg-root *{
+  box-sizing:border-box;
+}
+
+#cg-root button{
+  margin:0;
+  padding:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  background:none;
+  color:inherit;
+  font:inherit;
+  text-transform:none;
+  letter-spacing:normal;
+}
+
+.cg-panel{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) 58px;
+  gap:11px;
+  padding:24px 26px 18px;
+  overflow:hidden;
+  border-radius:22px;
+  background:var(--cg-fondo);
+  box-shadow:var(--cg-sombra);
+}
+
+/* TRES PÁRRAFOS COMPLETOS */
+.cg-textos{
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+}
+
+.cg-bloque{
+  position:relative;
+  min-width:0;
+  height:100%;
+  padding:19px 20px 18px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  border:1px solid var(--cg-linea);
+  border-radius:17px;
+  background:rgba(255,255,255,.035);
+  scrollbar-width:thin;
+  scrollbar-color:var(--cg-boton) rgba(255,255,255,.08);
+
+  opacity:0;
+  transform:translateY(15px);
+}
+
+.cg-bloque::-webkit-scrollbar{
+  width:7px;
+}
+
+.cg-bloque::-webkit-scrollbar-track{
+  background:rgba(255,255,255,.07);
+  border-radius:999px;
+}
+
+.cg-bloque::-webkit-scrollbar-thumb{
+  background:var(--cg-boton);
+  border-radius:999px;
+}
+
+.cg-bloque.cg-visible{
+  animation:cg-entrada .55s ease forwards;
+}
+
+.cg-bloque:nth-child(2).cg-visible{
+  animation-delay:.18s;
+}
+
+.cg-bloque:nth-child(3).cg-visible{
+  animation-delay:.36s;
+}
+
+@keyframes cg-entrada{
+  from{
+    opacity:0;
+    transform:translateY(15px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.cg-parrafo{
+  margin:0;
+  color:var(--cg-texto);
+  font-size:20px;
+  font-weight:400;
+  line-height:1.37;
+}
+
+.cg-parrafo strong{
+  font-weight:700;
+}
+
+/* PEQUEÑO MARCADOR VISUAL, SIN TEXTO AÑADIDO */
+.cg-marca{
+  width:42px;
+  height:5px;
+  margin-bottom:14px;
+  border-radius:999px;
+  background:var(--cg-boton);
+}
+
+/* BOTÓN PUNTOS CLAVE */
+.cg-acciones{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.cg-boton{
+  min-width:230px;
+  min-height:48px;
+  padding:10px 26px !important;
+  border-radius:999px !important;
+  color:var(--cg-blanco) !important;
+  background:var(--cg-boton) !important;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.2;
+  cursor:pointer;
+  box-shadow:0 7px 17px rgba(0,0,0,.18);
+  animation:cg-pulso 2.4s ease-in-out infinite;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+
+.cg-boton:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 22px rgba(0,0,0,.23);
+  animation-play-state:paused;
+}
+
+.cg-boton:focus-visible{
+  outline:3px solid var(--cg-texto);
+  outline-offset:4px;
+}
+
+@keyframes cg-pulso{
+  0%,100%{box-shadow:0 7px 17px rgba(0,0,0,.18),0 0 0 0 rgba(39,147,113,.22)}
+  50%{box-shadow:0 9px 20px rgba(0,0,0,.22),0 0 0 9px rgba(39,147,113,0)}
+}
+
+/* MODAL */
+.cg-modal{
+  position:absolute;
+  inset:0;
+  z-index:20;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  background:rgba(6,38,29,.72);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .24s ease,visibility .24s ease;
+}
+
+.cg-modal.cg-abierto{
+  opacity:1;
+  visibility:visible;
+}
+
+.cg-modal-caja{
+  position:relative;
+  width:min(940px,94%);
+  max-height:92%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:27px 30px 29px;
+  border-radius:22px;
+  color:var(--cg-tinta);
+  background:var(--cg-popup);
+  box-shadow:0 20px 50px rgba(0,0,0,.32);
+  transform:translateY(14px) scale(.985);
+  transition:transform .27s ease;
+}
+
+.cg-modal.cg-abierto .cg-modal-caja{
+  transform:none;
+}
+
+.cg-cerrar{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:50% !important;
+  color:var(--cg-blanco) !important;
+  background:var(--cg-tinta) !important;
+  cursor:pointer;
+}
+
+.cg-cerrar svg{
+  display:block;
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:#FFFFFF;
+  stroke-width:2.6;
+  stroke-linecap:round;
+}
+
+.cg-modal-titulo{
+  margin:0 54px 22px 0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.cg-claves{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+.cg-clave{
+  min-height:168px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:20px 18px;
+  border-radius:16px;
+  text-align:center;
+  background:rgba(255,255,255,.58);
+  border:2px solid rgba(16,73,56,.12);
+}
+
+.cg-icono{
+  width:62px;
+  height:62px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  color:#FFFFFF;
+  background:var(--cg-boton);
+}
+
+.cg-icono svg{
+  display:block;
+  width:39px;
+  height:39px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.cg-clave-texto{
+  margin:0;
+  color:var(--cg-tinta);
+  font-size:20px;
+  font-weight:700;
+  line-height:1.3;
+}
+
+/* CONTENEDORES MÁS ESTRECHOS */
+@media (max-width:880px){
+  html,
+  body{
+    overflow:auto;
+  }
+
+  #cg-root{
+    min-height:760px;
+  }
+
+  .cg-panel{
+    overflow:visible;
+    height:auto;
+  }
+
+  .cg-textos{
+    grid-template-columns:1fr;
+  }
+
+  .cg-bloque{
+    overflow:visible;
+  }
+
+  .cg-claves{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #cg-root *,
+  #cg-root *::before,
+  #cg-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+
+  .cg-bloque{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="cg-root" aria-label="Conclusión general">
+  <div class="cg-panel">
+
+    <div class="cg-textos">
+      <article class="cg-bloque">
+        <div class="cg-marca" aria-hidden="true"></div>
+        <p class="cg-parrafo">
+          Las instancias gubernamentales y organismos vinculados con el <strong>comercio exterior</strong> cumplen funciones esenciales dentro del proceso de internacionalización empresarial. Algunas regulan, otras generan información, otras financian, otras acompañan y otras facilitan la vinculación con mercados internacionales. Comprender sus funciones permite reconocer el ecosistema institucional que apoya la participación de las empresas mexicanas en el comercio global.
+        </p>
+      </article>
+
+      <article class="cg-bloque">
+        <div class="cg-marca" aria-hidden="true"></div>
+        <p class="cg-parrafo">
+          En el contexto de Sistemas de Investigación de Mercados II, el estudio de estos organismos debe ir más allá de la identificación de trámites o apoyos generales. Su importancia radica en que pueden utilizarse como <strong>fuentes de información secundaria</strong> para analizar mercados internacionales, identificar oportunidades de negocio, revisar condiciones normativas, evaluar riesgos, dimensionar sectores, comprender tendencias y justificar decisiones comerciales (Malhotra, 2020).
+        </p>
+      </article>
+
+      <article class="cg-bloque">
+        <div class="cg-marca" aria-hidden="true"></div>
+        <p class="cg-parrafo">
+          Por ello, el estudiante debe ser capaz de <strong>clasificar los organismos según su función</strong>, <strong>identificar qué información proporciona cada uno</strong> y <strong>explicar cómo puede utilizarse dentro de una investigación de mercados internacional</strong>. Esta comprensión será útil para desarrollar actividades posteriores de la unidad, especialmente aquellas orientadas al análisis del ambiente internacional, la integración de organismos pertinentes y la estructuración de propuestas de investigación en contextos globales.
+        </p>
+      </article>
+    </div>
+
+    <div class="cg-acciones">
+      <button class="cg-boton" id="cg-abrir" type="button">
+        Puntos clave
+      </button>
+    </div>
+
+    <div class="cg-modal" id="cg-modal" role="dialog" aria-modal="true" aria-labelledby="cg-modal-titulo">
+      <div class="cg-modal-caja">
+        <button class="cg-cerrar" id="cg-cerrar" type="button" aria-label="Cerrar ventana">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18"/>
+          </svg>
+        </button>
+
+        <h2 class="cg-modal-titulo" id="cg-modal-titulo">Puntos clave</h2>
+
+        <div class="cg-claves">
+          <article class="cg-clave">
+            <div class="cg-icono" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <path d="M8 52h48"/>
+                <path d="M13 52V23h38v29"/>
+                <path d="M10 23h44L32 9z"/>
+                <path d="M21 31h22v21H21z"/>
+                <path d="M32 31v21"/>
+              </svg>
+            </div>
+            <p class="cg-clave-texto">Clasificar los organismos según su función</p>
+          </article>
+
+          <article class="cg-clave">
+            <div class="cg-icono" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <path d="M16 8h25l9 9v39H16z"/>
+                <path d="M41 8v11h9"/>
+                <path d="M24 29h18M24 37h18M24 45h12"/>
+                <circle cx="13" cy="20" r="5"/>
+              </svg>
+            </div>
+            <p class="cg-clave-texto">Identificar qué información proporciona cada uno</p>
+          </article>
+
+          <article class="cg-clave">
+            <div class="cg-icono" aria-hidden="true">
+              <svg viewBox="0 0 64 64">
+                <circle cx="27" cy="27" r="15"/>
+                <path d="M38 38l15 15"/>
+                <path d="M21 27l4 4 8-9"/>
+              </svg>
+            </div>
+            <p class="cg-clave-texto">Explicar cómo puede utilizarse dentro de una investigación de mercados internacional</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const cgBloques = document.querySelectorAll(".cg-bloque");
+const cgAbrir = document.getElementById("cg-abrir");
+const cgModal = document.getElementById("cg-modal");
+const cgCerrar = document.getElementById("cg-cerrar");
+let cgFocoAnterior = null;
+
+function cgMostrarTexto(){
+  cgBloques.forEach(bloque => bloque.classList.add("cg-visible"));
+}
+
+function cgAbrirModal(){
+  cgFocoAnterior = document.activeElement;
+  cgModal.classList.add("cg-abierto");
+  cgCerrar.focus();
+}
+
+function cgCerrarModal(){
+  cgModal.classList.remove("cg-abierto");
+  if(cgFocoAnterior) cgFocoAnterior.focus();
+}
+
+cgAbrir.addEventListener("click",cgAbrirModal);
+cgCerrar.addEventListener("click",cgCerrarModal);
+
+cgModal.addEventListener("click",evento=>{
+  if(evento.target===cgModal) cgCerrarModal();
+});
+
+document.addEventListener("keydown",evento=>{
+  if(evento.key==="Escape" && cgModal.classList.contains("cg-abierto")){
+    cgCerrarModal();
+  }
+});
+
+document.fonts.ready.then(cgMostrarTexto);
+</script>
+</body>
+</html>
