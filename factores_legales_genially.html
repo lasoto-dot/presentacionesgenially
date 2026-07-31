@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factores legales</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#fl-root{
+  --fl-principal:#104938;
+  --fl-verde:#279371;
+  --fl-medio:#3F9089;
+  --fl-claro:#D1DE8C;
+  --fl-fondo:#F4F9F4;
+  --fl-blanco:#FFFFFF;
+  --fl-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 16px 10px;
+  overflow:hidden;
+  color:var(--fl-principal);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+}
+
+#fl-root,
+#fl-root *{
+  box-sizing:border-box;
+}
+
+#fl-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+}
+
+.fl-layout{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns:40% 60%;
+  gap:18px;
+}
+
+/* PANEL IZQUIERDO */
+.fl-intro{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--fl-fondo);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.fl-intro-head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 18px;
+  color:var(--fl-blanco);
+  background:var(--fl-principal);
+}
+
+.fl-icono{
+  flex:0 0 56px;
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  color:var(--fl-blanco);
+  background:rgba(255,255,255,.15);
+}
+
+.fl-icono svg{
+  width:38px;
+  height:38px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.fl-intro-label{
+  font-size:20px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.fl-intro-title{
+  margin-top:3px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.18;
+}
+
+.fl-intro-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:18px 20px 20px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fl-principal) rgba(16,73,56,.12);
+}
+
+.fl-intro-body::-webkit-scrollbar,
+.fl-detail-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.fl-intro-body::-webkit-scrollbar-track,
+.fl-detail-body::-webkit-scrollbar-track{
+  background:rgba(16,73,56,.10);
+  border-radius:999px;
+}
+
+.fl-intro-body::-webkit-scrollbar-thumb,
+.fl-detail-body::-webkit-scrollbar-thumb{
+  background:var(--fl-principal);
+  border-radius:999px;
+}
+
+.fl-p{
+  margin:0 0 15px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.fl-cierre{
+  margin:4px 0 0;
+  padding:12px 14px;
+  border-left:6px solid var(--fl-principal);
+  border-radius:11px;
+  background:var(--fl-claro);
+  font-size:20px;
+  font-weight:400;
+  line-height:1.34;
+}
+
+/* PANEL DERECHO */
+.fl-derecha{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:12px;
+}
+
+.fl-botones{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.fl-btn{
+  min-height:66px;
+  padding:10px 14px;
+  border-radius:13px;
+  color:var(--fl-principal);
+  background:var(--fl-fondo);
+  border:2px solid var(--fl-borde) !important;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.17;
+  text-align:center;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(10px);
+  transition:
+    opacity .35s ease,
+    transform .35s ease,
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease;
+}
+
+.fl-btn.fl-show{
+  opacity:1;
+  transform:none;
+}
+
+.fl-btn:hover{
+  border-color:var(--fl-principal) !important;
+}
+
+.fl-btn.fl-activo{
+  color:var(--fl-blanco);
+  background:var(--fl-principal);
+  border-color:var(--fl-principal) !important;
+}
+
+.fl-btn:focus-visible{
+  outline:3px solid var(--fl-verde);
+  outline-offset:3px;
+}
+
+/* DETALLE */
+.fl-detail{
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:19px;
+  background:var(--fl-claro);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.fl-detail-bar{
+  background:var(--fl-principal);
+}
+
+.fl-detail-title{
+  margin:0;
+  padding:15px 20px 8px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.fl-detail-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:0 20px 18px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fl-principal) rgba(16,73,56,.16);
+}
+
+.fl-detail-text{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.38;
+}
+
+.fl-detail-body.fl-entra{
+  animation:fl-entra .28s ease;
+}
+
+@keyframes fl-entra{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+  #fl-root{
+    min-height:900px;
+    overflow:auto;
+  }
+  .fl-layout{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+  .fl-intro{min-height:440px}
+  .fl-derecha{min-height:470px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #fl-root *,
+  #fl-root *::before,
+  #fl-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .fl-btn{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="fl-root" aria-label="Factores legales">
+  <div class="fl-layout">
+
+    <article class="fl-intro">
+      <div class="fl-intro-head">
+        <div class="fl-icono" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M12 54h40"/>
+            <path d="M32 10v44"/>
+            <path d="M18 18h28"/>
+            <path d="M18 18l-9 17h18z"/>
+            <path d="M46 18l-9 17h18z"/>
+            <path d="M22 54h20"/>
+          </svg>
+        </div>
+
+        <div>
+          <div class="fl-intro-label">4 de 7</div>
+          <div class="fl-intro-title">Factores legales</div>
+        </div>
+      </div>
+
+      <div class="fl-intro-body">
+        <p class="fl-p">
+          Los <strong>factores legales</strong> comprenden leyes, reglamentos, normas, decretos y disposiciones que regulan la actividad comercial en un país. Estos factores determinan qué se puede vender, cómo debe comercializarse, qué requisitos debe cumplir el producto y qué restricciones existen para operar en el mercado (Keegan y Green, 2020).
+        </p>
+
+        <p class="fl-p">
+          En <strong>investigación de mercados internacional</strong>, el análisis legal permite identificar restricciones, requisitos, riesgos de incumplimiento y condiciones normativas que deben considerarse en la <strong>estrategia de entrada</strong>.
+        </p>
+
+        <p class="fl-cierre">
+          Los factores legales permiten que la <strong>investigación de mercados</strong> no se limite al interés del consumidor, sino que considere la viabilidad normativa y regulatoria del producto en el mercado destino.
+        </p>
+      </div>
+    </article>
+
+    <section class="fl-derecha">
+      <div class="fl-botones" id="fl-botones"></div>
+
+      <article class="fl-detail" aria-live="polite">
+        <div class="fl-detail-bar"></div>
+        <h2 class="fl-detail-title" id="fl-detail-title">Disposiciones arancelarias</h2>
+        <div class="fl-detail-body" id="fl-detail-body"></div>
+      </article>
+    </section>
+
+  </div>
+</section>
+
+<script>
+const FL_FACTORES = [
+  {
+    titulo:"Disposiciones arancelarias",
+    boton:"Disposiciones arancelarias",
+    texto:"Las <strong>disposiciones arancelarias</strong> se relacionan con impuestos o tarifas aplicadas a la importación o exportación de bienes. Pueden encarecer el producto en el mercado destino."
+  },
+  {
+    titulo:"Disposiciones no arancelarias",
+    boton:"Disposiciones no arancelarias",
+    texto:"Las <strong>disposiciones no arancelarias</strong> son requisitos que un país impone para permitir el ingreso de mercancías, como permisos previos, cuotas, certificaciones o procesos de homologación."
+  },
+  {
+    titulo:"Medidas sanitarias y reglamentos técnicos",
+    boton:"Medidas sanitarias",
+    texto:"Las <strong>medidas sanitarias</strong> buscan proteger la salud de la población, mientras que los <strong>reglamentos técnicos</strong> establecen características obligatorias para productos (materiales, etiquetado, embalaje)."
+  },
+  {
+    titulo:"Medidas proteccionistas",
+    boton:"Medidas proteccionistas",
+    texto:"Las <strong>medidas proteccionistas</strong> son acciones que buscan limitar el ingreso de productos extranjeros o proteger sectores locales, como subsidios, cuotas de importación o barreras administrativas."
+  }
+];
+
+const flBotones = document.getElementById("fl-botones");
+const flTitulo = document.getElementById("fl-detail-title");
+const flBody = document.getElementById("fl-detail-body");
+
+flBotones.innerHTML = FL_FACTORES.map((item,indice)=>`
+  <button
+    type="button"
+    class="fl-btn"
+    data-indice="${indice}"
+    aria-label="Mostrar ${item.titulo}"
+  >${item.boton}</button>
+`).join("");
+
+function flMostrar(indice){
+  const item = FL_FACTORES[indice];
+
+  [...flBotones.children].forEach((btn,i)=>{
+    btn.classList.toggle("fl-activo",i===indice);
+    btn.setAttribute("aria-pressed",i===indice ? "true" : "false");
+  });
+
+  flTitulo.textContent = item.titulo;
+  flBody.classList.remove("fl-entra");
+  flBody.innerHTML = `<p class="fl-detail-text">${item.texto}</p>`;
+  flBody.scrollTop = 0;
+  requestAnimationFrame(()=>flBody.classList.add("fl-entra"));
+}
+
+flBotones.addEventListener("click",evento=>{
+  const btn = evento.target.closest(".fl-btn");
+  if(btn) flMostrar(Number(btn.dataset.indice));
+});
+
+document.fonts.ready.then(()=>{
+  [...flBotones.children].forEach((btn,i)=>{
+    setTimeout(()=>btn.classList.add("fl-show"),130*i);
+  });
+  flMostrar(0);
+});
+</script>
+</body>
+</html>
