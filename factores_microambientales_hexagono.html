@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factores internos o microambientales</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#mi-root{
+  --mi-verde:#279371;
+  --mi-medio:#3F9089;
+  --mi-oscuro:#104938;
+  --mi-claro:#D1DE8C;
+  --mi-fondo:#F4F9F4;
+  --mi-blanco:#FFFFFF;
+  --mi-linea:#BFD9CE;
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 16px 10px;
+  overflow:hidden;
+  color:var(--mi-oscuro);
+  font-family:"Montserrat",Arial,sans-serif;
+  background:transparent;
+  box-sizing:border-box;
+}
+
+#mi-root *,
+#mi-root *::before,
+#mi-root *::after{
+  box-sizing:border-box;
+}
+
+#mi-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+}
+
+.mi-stage{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:0;
+  overflow:hidden;
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(244,249,244,.98),rgba(255,255,255,.98));
+  box-shadow:0 9px 24px rgba(16,73,56,.13);
+}
+
+/* RED CENTRAL */
+.mi-network{
+  position:absolute;
+  inset:0;
+}
+
+.mi-lines{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+}
+
+.mi-line{
+  fill:none;
+  stroke:var(--mi-linea);
+  stroke-width:4;
+  stroke-linecap:round;
+  stroke-dasharray:360;
+  stroke-dashoffset:360;
+  animation:mi-draw .72s ease forwards;
+}
+
+.mi-line:nth-child(2){animation-delay:.18s}
+.mi-line:nth-child(3){animation-delay:.36s}
+.mi-line:nth-child(4){animation-delay:.54s}
+.mi-line:nth-child(5){animation-delay:.72s}
+
+@keyframes mi-draw{
+  to{stroke-dashoffset:0}
+}
+
+.mi-center{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:300px;
+  height:226px;
+  transform:translate(-50%,-50%);
+  display:grid;
+  place-items:center;
+  padding:38px 42px;
+  color:var(--mi-blanco);
+  text-align:center;
+  background:linear-gradient(135deg,var(--mi-verde),var(--mi-medio));
+  clip-path:polygon(22% 0,78% 0,100% 50%,78% 100%,22% 100%,0 50%);
+  filter:drop-shadow(0 10px 18px rgba(16,73,56,.2));
+  opacity:0;
+  animation:mi-center-in .5s ease .88s forwards;
+  z-index:2;
+}
+
+.mi-center-text{
+  max-width:210px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.18;
+}
+
+@keyframes mi-center-in{
+  from{opacity:0;transform:translate(-50%,-50%) scale(.86)}
+  to{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+
+/* NODOS */
+.mi-node{
+  position:absolute;
+  width:236px;
+  min-height:94px;
+  padding:13px 16px !important;
+  display:grid;
+  grid-template-columns:56px minmax(0,1fr);
+  align-items:center;
+  justify-items:center;
+  gap:12px;
+  border-radius:18px !important;
+  color:var(--mi-oscuro) !important;
+  background:var(--mi-blanco) !important;
+  box-shadow:0 7px 17px rgba(16,73,56,.12);
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(12px);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  z-index:3;
+}
+
+.mi-node:hover{
+  transform:translateY(-3px);
+  box-shadow:0 11px 23px rgba(16,73,56,.18);
+  background:var(--mi-claro) !important;
+}
+
+.mi-node:focus-visible{
+  outline:3px solid var(--mi-verde);
+  outline-offset:4px;
+}
+
+.mi-node.mi-show{
+  animation:mi-node-in .48s ease forwards;
+}
+
+.mi-node:nth-of-type(1){animation-delay:.98s}
+.mi-node:nth-of-type(2){animation-delay:1.10s}
+.mi-node:nth-of-type(3){animation-delay:1.22s}
+.mi-node:nth-of-type(4){animation-delay:1.34s}
+.mi-node:nth-of-type(5){animation-delay:1.46s}
+
+@keyframes mi-node-in{
+  to{opacity:1;transform:none}
+}
+
+.mi-node-1{left:50%;top:12px;width:248px;transform:translateX(-50%) translateY(12px)}
+.mi-node-1.mi-show{animation-name:mi-node-top}
+@keyframes mi-node-top{
+  to{opacity:1;transform:translateX(-50%)}
+}
+
+.mi-node-2{left:36px;top:108px}
+.mi-node-3{right:36px;top:108px}
+.mi-node-4{left:92px;bottom:28px}
+.mi-node-5{right:92px;bottom:28px}
+
+.mi-node-icon{
+  width:54px;
+  height:54px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  color:var(--mi-blanco);
+  background:var(--mi-verde);
+}
+
+.mi-node:nth-of-type(2) .mi-node-icon,
+.mi-node:nth-of-type(4) .mi-node-icon{
+  background:var(--mi-medio);
+}
+
+.mi-node-icon svg{
+  width:34px;
+  height:34px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.35;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.mi-node-label{
+  font-size:20px;
+  font-weight:700;
+  line-height:1.18;
+  text-align:center;
+}
+
+/* INDICACIÓN */
+.mi-hint{
+  position:absolute;
+  left:50%;
+  bottom:8px;
+  transform:translateX(-50%);
+  padding:7px 15px;
+  border-radius:999px;
+  color:var(--mi-oscuro);
+  background:rgba(209,222,140,.88);
+  font-size:20px;
+  font-weight:700;
+  line-height:1.15;
+  z-index:4;
+}
+
+/* MODAL */
+.mi-modal{
+  position:absolute;
+  inset:0;
+  z-index:20;
+  display:grid;
+  place-items:center;
+  padding:22px;
+  background:rgba(8,45,35,.74);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .22s ease,visibility .22s ease;
+}
+
+.mi-modal.mi-open{
+  opacity:1;
+  visibility:visible;
+}
+
+.mi-dialog{
+  position:relative;
+  width:min(900px,94%);
+  max-height:90%;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  border-radius:22px;
+  color:var(--mi-oscuro);
+  background:var(--mi-claro);
+  box-shadow:0 18px 46px rgba(0,0,0,.30);
+  transform:translateY(14px) scale(.985);
+  transition:transform .24s ease;
+}
+
+.mi-modal.mi-open .mi-dialog{
+  transform:none;
+}
+
+.mi-dialog-bar{
+  background:var(--mi-verde);
+}
+
+.mi-dialog-head{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:18px 66px 10px 22px;
+}
+
+.mi-dialog-icon{
+  flex:0 0 58px;
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  color:#FFFFFF;
+  background:var(--mi-verde);
+}
+
+.mi-dialog-icon svg{
+  width:37px;
+  height:37px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.35;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.mi-dialog-title{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.mi-dialog-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:4px 24px 24px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--mi-verde) rgba(39,147,113,.15);
+}
+
+.mi-dialog-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.mi-dialog-body::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.12);
+  border-radius:999px;
+}
+
+.mi-dialog-body::-webkit-scrollbar-thumb{
+  background:var(--mi-verde);
+  border-radius:999px;
+}
+
+.mi-dialog-p{
+  margin:0 0 15px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.38;
+}
+
+.mi-dialog-p:last-child{
+  margin-bottom:0;
+}
+
+.mi-close{
+  position:absolute;
+  top:17px;
+  right:17px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:50% !important;
+  color:#FFFFFF !important;
+  background:var(--mi-oscuro) !important;
+  cursor:pointer;
+}
+
+.mi-close svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:#FFFFFF;
+  stroke-width:2.7;
+  stroke-linecap:round;
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+  #mi-root{
+    min-height:900px;
+    overflow:auto;
+  }
+  .mi-stage{
+    min-height:850px;
+  }
+  .mi-center{
+    top:46%;
+  }
+  .mi-node-2{left:14px}
+  .mi-node-3{right:14px}
+  .mi-node-4{left:26px}
+  .mi-node-5{right:26px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #mi-root *,
+  #mi-root *::before,
+  #mi-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .mi-center,
+  .mi-node{
+    opacity:1;
+  }
+  .mi-node-1{
+    transform:translateX(-50%);
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="mi-root" aria-label="Actores del entorno inmediato de la empresa">
+  <div class="mi-stage">
+
+    <div class="mi-network">
+      <svg class="mi-lines" viewBox="0 0 1180 450" preserveAspectRatio="none" aria-hidden="true">
+        <path class="mi-line" d="M590 138 L590 98"/>
+        <path class="mi-line" d="M478 205 L260 155"/>
+        <path class="mi-line" d="M702 205 L920 155"/>
+        <path class="mi-line" d="M492 310 L322 362"/>
+        <path class="mi-line" d="M688 310 L858 362"/>
+      </svg>
+
+      <div class="mi-center">
+        <div class="mi-center-text">Entorno inmediato de la empresa</div>
+      </div>
+
+      <button class="mi-node mi-node-1" type="button" data-actor="competencia">
+        <span class="mi-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M8 52h48"/>
+            <path d="M12 52V24h18v28M34 52V14h18v38"/>
+            <path d="M17 31h7M17 39h7M39 22h7M39 31h7M39 40h7"/>
+          </svg>
+        </span>
+        <span class="mi-node-label">Competencia</span>
+      </button>
+
+      <button class="mi-node mi-node-2" type="button" data-actor="proveedores">
+        <span class="mi-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M9 21h31v28H9z"/>
+            <path d="M40 31h9l7 9v9H40z"/>
+            <circle cx="20" cy="51" r="5"/>
+            <circle cx="48" cy="51" r="5"/>
+            <path d="M16 28h17M16 35h12"/>
+          </svg>
+        </span>
+        <span class="mi-node-label">Proveedores</span>
+      </button>
+
+      <button class="mi-node mi-node-3" type="button" data-actor="intermediarios">
+        <span class="mi-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M8 24h48l-5-12H13z"/>
+            <path d="M12 24v30h40V24"/>
+            <path d="M20 54V38h12v16M39 34h8"/>
+            <path d="M9 24c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8"/>
+          </svg>
+        </span>
+        <span class="mi-node-label">Intermediarios</span>
+      </button>
+
+      <button class="mi-node mi-node-4" type="button" data-actor="clientes">
+        <span class="mi-node-icon">
+          <svg viewBox="0 0 64 64">
+            <circle cx="24" cy="20" r="8"/>
+            <circle cx="44" cy="24" r="6"/>
+            <path d="M11 52v-8c0-9 6-15 13-15s13 6 13 15v8"/>
+            <path d="M35 36c2-4 5-6 9-6 6 0 10 5 10 12v10"/>
+          </svg>
+        </span>
+        <span class="mi-node-label">Clientes</span>
+      </button>
+
+      <button class="mi-node mi-node-5" type="button" data-actor="publicos">
+        <span class="mi-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M10 31h13l20-11v24L23 34H10z"/>
+            <path d="M23 34l4 18h-8l-5-18"/>
+            <path d="M49 23l6-6M50 32h8M49 41l6 6"/>
+          </svg>
+        </span>
+        <span class="mi-node-label">Públicos</span>
+      </button>
+
+      <div class="mi-hint">Selecciona un actor</div>
+    </div>
+
+    <div class="mi-modal" id="mi-modal" role="dialog" aria-modal="true" aria-labelledby="mi-dialog-title">
+      <article class="mi-dialog">
+        <div class="mi-dialog-bar" id="mi-dialog-bar"></div>
+
+        <header class="mi-dialog-head">
+          <div class="mi-dialog-icon" id="mi-dialog-icon" aria-hidden="true"></div>
+          <h2 class="mi-dialog-title" id="mi-dialog-title"></h2>
+        </header>
+
+        <div class="mi-dialog-body" id="mi-dialog-body"></div>
+
+        <button class="mi-close" id="mi-close" type="button" aria-label="Cerrar">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 6l12 12M18 6L6 18"/>
+          </svg>
+        </button>
+      </article>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const MI_ICONOS = {
+  competencia:`
+    <svg viewBox="0 0 64 64">
+      <path d="M8 52h48"/>
+      <path d="M12 52V24h18v28M34 52V14h18v38"/>
+      <path d="M17 31h7M17 39h7M39 22h7M39 31h7M39 40h7"/>
+    </svg>`,
+  proveedores:`
+    <svg viewBox="0 0 64 64">
+      <path d="M9 21h31v28H9z"/>
+      <path d="M40 31h9l7 9v9H40z"/>
+      <circle cx="20" cy="51" r="5"/>
+      <circle cx="48" cy="51" r="5"/>
+      <path d="M16 28h17M16 35h12"/>
+    </svg>`,
+  intermediarios:`
+    <svg viewBox="0 0 64 64">
+      <path d="M8 24h48l-5-12H13z"/>
+      <path d="M12 24v30h40V24"/>
+      <path d="M20 54V38h12v16M39 34h8"/>
+      <path d="M9 24c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8"/>
+    </svg>`,
+  clientes:`
+    <svg viewBox="0 0 64 64">
+      <circle cx="24" cy="20" r="8"/>
+      <circle cx="44" cy="24" r="6"/>
+      <path d="M11 52v-8c0-9 6-15 13-15s13 6 13 15v8"/>
+      <path d="M35 36c2-4 5-6 9-6 6 0 10 5 10 12v10"/>
+    </svg>`,
+  publicos:`
+    <svg viewBox="0 0 64 64">
+      <path d="M10 31h13l20-11v24L23 34H10z"/>
+      <path d="M23 34l4 18h-8l-5-18"/>
+      <path d="M49 23l6-6M50 32h8M49 41l6 6"/>
+    </svg>`
+};
+
+const MI_ACTORES = {
+  competencia:{
+    titulo:"Competencia",
+    color:"#279371",
+    icono:"competencia",
+    texto:[
+      `La <strong>competencia</strong> está integrada por las empresas que ofrecen productos o servicios similares, sustitutos o alternativos en el mercado. Su análisis permite identificar posicionamiento, precios, estrategias de distribución, comunicación y ventajas competitivas existentes (Cruz, 2015).`,
+      `En <strong>investigación de mercados internacional</strong>, el análisis de competencia ayuda a formular preguntas sobre marcas dominantes, posicionamiento percibido, diferenciación y lealtad del consumidor. Esta información puede orientar el <strong>diseño de investigación</strong> hacia variables comparativas.`
+    ]
+  },
+  proveedores:{
+    titulo:"Proveedores",
+    color:"#3F9089",
+    icono:"proveedores",
+    texto:[
+      `Los <strong>proveedores</strong> proporcionan insumos, materiales, servicios, tecnología, empaques o recursos necesarios para operar. En un contexto internacional, los proveedores pueden estar ubicados en el mismo país de origen o en el país destino.`,
+      `En <strong>investigación de mercados</strong>, el análisis de proveedores ayuda a determinar si el producto puede adaptarse, producirse, envasarse o distribuirse con los recursos disponibles en la cadena de suministro del mercado objetivo.`
+    ]
+  },
+  intermediarios:{
+    titulo:"Intermediarios de marketing",
+    color:"#279371",
+    icono:"intermediarios",
+    texto:[
+      `Los <strong>intermediarios de marketing</strong> son actores que ayudan a promover, vender, almacenar, transportar o distribuir productos entre la empresa y el consumidor final. Pueden ser distribuidores, mayoristas, minoristas, agentes o plataformas digitales.`,
+      `En investigación internacional, este factor permite conocer cómo llega el producto al consumidor, qué canales son predominantes y cuáles son las condiciones de acceso a esos canales.`
+    ]
+  },
+  clientes:{
+    titulo:"Clientes",
+    color:"#3F9089",
+    icono:"clientes",
+    texto:[
+      `Los <strong>clientes</strong> son el centro de la <strong>investigación de mercados</strong>. Comprender sus necesidades, expectativas, hábitos, motivaciones y objeciones es el propósito principal de cualquier estudio de mercado.`,
+      `En el <strong>diseño de investigación</strong>, el análisis de clientes permite definir el segmento objetivo, seleccionar el método de recolección de datos, construir los instrumentos y determinar el tamaño de muestra.`
+    ]
+  },
+  publicos:{
+    titulo:"Públicos y opinión pública",
+    color:"#279371",
+    icono:"publicos",
+    texto:[
+      `Los <strong>públicos</strong> son grupos que pueden influir en la imagen, legitimidad o aceptación de una empresa. Pueden incluir medios de comunicación, comunidades locales, organizaciones no gubernamentales, asociaciones industriales o autoridades regulatorias.`,
+      `La <strong>opinión pública</strong> puede afectar la reputación de una marca, especialmente cuando el producto se relaciona con temas sensibles como sostenibilidad, salud, ambiente o equidad. En <strong>investigación de mercados</strong>, puede estudiarse mediante análisis de redes sociales, encuestas de percepción o grupos focales.`
+    ]
+  }
+};
+
+const miModal = document.getElementById("mi-modal");
+const miClose = document.getElementById("mi-close");
+const miTitle = document.getElementById("mi-dialog-title");
+const miBody = document.getElementById("mi-dialog-body");
+const miIcon = document.getElementById("mi-dialog-icon");
+const miBar = document.getElementById("mi-dialog-bar");
+const miNodes = document.querySelectorAll(".mi-node");
+let miPreviousFocus = null;
+
+function miOpen(actorKey){
+  const actor = MI_ACTORES[actorKey];
+  miPreviousFocus = document.activeElement;
+
+  miTitle.textContent = actor.titulo;
+  miBody.innerHTML = actor.texto.map(parrafo =>
+    `<p class="mi-dialog-p">${parrafo}</p>`
+  ).join("");
+  miIcon.innerHTML = MI_ICONOS[actor.icono];
+  miIcon.style.background = actor.color;
+  miBar.style.background = actor.color;
+  miBody.scrollTop = 0;
+
+  miModal.classList.add("mi-open");
+  miClose.focus();
+}
+
+function miCloseModal(){
+  miModal.classList.remove("mi-open");
+  if(miPreviousFocus) miPreviousFocus.focus();
+}
+
+miNodes.forEach(node=>{
+  node.addEventListener("click",()=>miOpen(node.dataset.actor));
+});
+
+miClose.addEventListener("click",miCloseModal);
+
+miModal.addEventListener("click",event=>{
+  if(event.target === miModal) miCloseModal();
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key === "Escape" && miModal.classList.contains("mi-open")){
+    miCloseModal();
+  }
+});
+
+document.fonts.ready.then(()=>{
+  miNodes.forEach(node=>node.classList.add("mi-show"));
+});
+</script>
+</body>
+</html>
