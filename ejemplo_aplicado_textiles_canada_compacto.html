@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ejemplo aplicado: análisis preliminar para exportar productos artesanales mexicanos</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================
+   VERSIÓN COMPACTA PARA IFRAME EN GENIALLY
+   Área recomendada del iframe: aprox. 1180 × 470 px.
+   No incluye el título principal: se conserva en la plantilla.
+========================================================== */
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#ea-root{
+  --v1:#279371;
+  --v2:#3F9089;
+  --tinta:#104938;
+  --pop:#D1DE8C;
+  --fondo:#F4F9F4;
+  --linea:#CFE3DA;
+  --blanco:#FFFFFF;
+
+  width:100%;
+  height:100%;
+  min-height:0;
+  padding:8px 16px 10px;
+  overflow:hidden;
+  color:var(--tinta);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  isolation:isolate;
+}
+
+#ea-root,
+#ea-root *{
+  box-sizing:border-box;
+}
+
+#ea-root button{
+  margin:0;
+  padding:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  background:none;
+  color:inherit;
+  font:inherit;
+  text-transform:none;
+  letter-spacing:normal;
+}
+
+.ea-layout{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-rows:78px minmax(0,1fr) 48px;
+  gap:9px;
+}
+
+/* LÍNEA DE TIEMPO */
+.ea-timeline{
+  position:relative;
+  min-height:0;
+}
+
+.ea-track{
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:50px;
+  height:4px;
+  border-radius:999px;
+  background:var(--linea);
+  pointer-events:none;
+}
+
+.ea-nodos{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  height:100%;
+}
+
+.ea-nodo{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .4s ease,transform .4s ease;
+}
+
+.ea-nodo.show{
+  opacity:1;
+  transform:none;
+}
+
+.ea-nodo:focus-visible{
+  outline:3px solid var(--v1);
+  outline-offset:4px;
+  border-radius:9px;
+}
+
+.ea-etiqueta{
+  display:block;
+  margin-bottom:8px;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.2;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+.ea-punto{
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:4px solid var(--blanco);
+  box-shadow:0 0 0 2px rgba(16,73,56,.12);
+  transition:transform .2s ease,box-shadow .2s ease;
+  pointer-events:none;
+}
+
+.ea-punto::after{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:rgba(255,255,255,.9);
+}
+
+.ea-nodo:hover .ea-punto{
+  transform:scale(1.12);
+}
+
+.ea-nodo.activo .ea-punto{
+  transform:scale(1.24);
+  box-shadow:0 0 0 7px rgba(39,147,113,.18);
+}
+
+/* PANEL PRINCIPAL */
+.ea-panel{
+  position:relative;
+  min-height:0;
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--pop);
+  box-shadow:0 8px 21px rgba(16,73,56,.14);
+}
+
+.ea-panel-barra{
+  height:8px;
+  background:var(--v1);
+  transition:background .22s ease;
+}
+
+.ea-panel-contenido{
+  height:calc(100% - 8px);
+  min-height:0;
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr);
+  gap:17px;
+  padding:16px 68px 16px 21px;
+}
+
+.ea-icono{
+  width:72px;
+  height:72px;
+  display:grid;
+  place-items:center;
+  align-self:start;
+  border-radius:18px;
+  color:var(--blanco);
+  background:var(--v1);
+  transition:background .22s ease;
+}
+
+.ea-icono svg{
+  display:block;
+  width:47px;
+  height:47px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.ea-cuerpo{
+  min-width:0;
+  min-height:0;
+  height:100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:0 8px 2px 0;
+  scrollbar-width:thin;
+  scrollbar-color:var(--v1) rgba(255,255,255,.48);
+}
+
+.ea-cuerpo::-webkit-scrollbar{
+  width:7px;
+}
+
+.ea-cuerpo::-webkit-scrollbar-track{
+  background:rgba(255,255,255,.45);
+  border-radius:999px;
+}
+
+.ea-cuerpo::-webkit-scrollbar-thumb{
+  background:var(--v1);
+  border-radius:999px;
+}
+
+.ea-titulo{
+  margin:0 0 7px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.23;
+}
+
+.ea-organismo{
+  margin:0 0 8px;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.33;
+}
+
+.ea-descripcion{
+  margin:0 0 10px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.37;
+}
+
+.ea-utilidad{
+  margin:0;
+  padding:10px 13px;
+  border-left:6px solid var(--v1);
+  border-radius:10px;
+  background:rgba(255,255,255,.58);
+  font-size:20px;
+  font-weight:700;
+  line-height:1.34;
+}
+
+.ea-cuerpo.entrada{
+  animation:ea-entrada .3s ease;
+}
+
+@keyframes ea-entrada{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+/* FLECHAS */
+.ea-flecha{
+  position:absolute;
+  right:17px;
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:50% !important;
+  color:#FFFFFF !important;
+  background:rgba(16,73,56,.84) !important;
+  box-shadow:0 5px 12px rgba(16,73,56,.17);
+  cursor:pointer;
+  transition:transform .18s ease,opacity .18s ease;
+}
+
+.ea-flecha:hover{
+  transform:scale(1.07);
+}
+
+.ea-flecha:disabled{
+  opacity:.24;
+  cursor:default;
+  transform:none;
+}
+
+.ea-flecha.anterior{
+  top:calc(50% - 45px);
+}
+
+.ea-flecha.siguiente{
+  top:calc(50% + 5px);
+}
+
+.ea-flecha svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:#FFFFFF;
+  stroke-width:2.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* BARRA INFERIOR */
+.ea-pie{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:14px;
+}
+
+.ea-pie-btn{
+  min-height:42px;
+  padding:8px 17px !important;
+  border-radius:999px !important;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.2;
+  cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+
+.ea-pie-btn:hover{
+  transform:translateY(-2px);
+}
+
+.ea-pie-btn.contexto{
+  justify-self:start;
+  color:#FFFFFF !important;
+  background:var(--v1) !important;
+  box-shadow:0 5px 12px rgba(39,147,113,.18);
+}
+
+.ea-pie-btn.cierre{
+  justify-self:end;
+  color:var(--tinta) !important;
+  background:var(--pop) !important;
+  box-shadow:0 5px 12px rgba(16,73,56,.13);
+}
+
+.ea-estado{
+  min-width:92px;
+  text-align:center;
+  font-size:20px;
+  font-weight:700;
+  color:var(--tinta);
+}
+
+/* CONTENEDORES ESTRECHOS */
+@media (max-width:850px){
+  .ea-layout{
+    grid-template-rows:128px minmax(0,1fr) 100px;
+  }
+
+  .ea-track{
+    display:none;
+  }
+
+  .ea-nodos{
+    grid-template-columns:repeat(4,1fr);
+    row-gap:9px;
+  }
+
+  .ea-panel-contenido{
+    grid-template-columns:1fr;
+    padding-right:64px;
+  }
+
+  .ea-icono{
+    display:none;
+  }
+
+  .ea-pie{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .ea-estado{
+    grid-column:1 / -1;
+    grid-row:1;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #ea-root *,
+  #ea-root *::before,
+  #ea-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+
+  .ea-nodo{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="ea-root" aria-label="Ejemplo aplicado: análisis preliminar para exportar productos artesanales mexicanos">
+  <div class="ea-layout">
+
+    <div class="ea-timeline">
+      <div class="ea-track" aria-hidden="true"></div>
+      <div class="ea-nodos" id="ea-nodos"></div>
+    </div>
+
+    <section class="ea-panel" aria-live="polite">
+      <div class="ea-panel-barra" id="ea-barra"></div>
+
+      <div class="ea-panel-contenido">
+        <div class="ea-icono" id="ea-icono" aria-hidden="true"></div>
+        <div class="ea-cuerpo" id="ea-cuerpo"></div>
+      </div>
+
+      <button class="ea-flecha anterior" id="ea-anterior" type="button" aria-label="Mostrar paso anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+
+      <button class="ea-flecha siguiente" id="ea-siguiente" type="button" aria-label="Mostrar paso siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </section>
+
+    <div class="ea-pie">
+      <button class="ea-pie-btn contexto" id="ea-contexto" type="button">
+        Contexto
+      </button>
+
+      <div class="ea-estado" id="ea-estado">Contexto</div>
+
+      <button class="ea-pie-btn cierre" id="ea-cierre" type="button">
+        Cierre del ejemplo
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const EA_CONTEXTO = {
+  titulo:"Contexto",
+  descripcion:"Una empresa mexicana dedicada a la elaboración de textiles artesanales desea analizar la posibilidad de ingresar al mercado canadiense. Antes de tomar la decisión de exportar, la empresa necesita realizar una investigación de mercados internacional que le permita conocer si existe una oportunidad comercial real, qué requisitos debe considerar, qué tipo de consumidores podrían interesarse en el producto y qué organismos pueden aportar información o apoyo.",
+  icono:"contexto"
+};
+
+const EA_CIERRE = {
+  titulo:"Cierre del ejemplo",
+  descripcion:"Este ejemplo muestra que las instancias gubernamentales y organismos vinculados con el comercio exterior no solo sirven para realizar trámites. También funcionan como fuentes de información estratégica para construir una investigación de mercados internacional y fundamentar decisiones empresariales.",
+  icono:"cierre"
+};
+
+const EA_PASOS = [
+  {
+    n:1,
+    titulo:"Paso 1. Identificación del producto y clasificación arancelaria",
+    organismo:"Organismo: Secretaría de Economía. Herramienta sugerida: SIAVI.",
+    descripcion:"La empresa puede revisar la fracción arancelaria correspondiente a los textiles artesanales y consultar información arancelaria o normativa. Debido a que SIAVI ya no se actualiza desde febrero de 2022, esta consulta debe complementarse con fuentes vigentes como INEGI, Banco de México y el Diario Oficial de la Federación (Secretaría de Economía, s. f.-c).",
+    utilidad:"Utilidad para la investigación: permite delimitar correctamente el producto investigado y comprender las condiciones comerciales asociadas.",
+    icono:"arancel"
+  },
+  {
+    n:2,
+    titulo:"Paso 2. Análisis de exportaciones e importaciones",
+    organismo:"Organismos: Secretaría de Economía, Banco de México e INEGI.",
+    descripcion:"La empresa puede consultar estadísticas de exportaciones e importaciones para identificar si México ya exporta productos similares, hacia qué países, con qué volumen y bajo qué tendencia (Banco de México, s. f.-a; Instituto Nacional de Estadística y Geografía, s. f.-a).",
+    utilidad:"Utilidad para la investigación: permite identificar mercados potenciales, analizar tendencias y justificar por qué un país puede ser atractivo.",
+    icono:"comercio"
+  },
+  {
+    n:3,
+    titulo:"Paso 3. Identificación de empresas, sectores y posibles competidores",
+    organismo:"Organismo: INEGI. Herramienta sugerida: DENUE.",
+    descripcion:"La empresa puede utilizar el DENUE para identificar unidades económicas relacionadas con la producción de textiles, artesanías o productos similares (Instituto Nacional de Estadística y Geografía, s. f.-b).",
+    utilidad:"Utilidad para la investigación: permite identificar actores del sector, posibles proveedores, competidores nacionales o empresas con características similares.",
+    icono:"empresas"
+  },
+  {
+    n:4,
+    titulo:"Paso 4. Análisis de indicadores económicos",
+    organismo:"Organismos: INEGI y Banco de México. Herramientas sugeridas: Banco de Información Económica, indicadores económicos y tipo de cambio.",
+    descripcion:"La empresa puede revisar indicadores como inflación, tipo de cambio, actividad económica, consumo y comportamiento sectorial (Banco de México, s. f.-b; Instituto Nacional de Estadística y Geografía, s. f.-c).",
+    utilidad:"Utilidad para la investigación: permite considerar condiciones macroeconómicas que influyen en la toma de decisiones internacionales.",
+    icono:"indicadores"
+  },
+  {
+    n:5,
+    titulo:"Paso 5. Revisión de requisitos fiscales y aduaneros",
+    organismo:"Organismos: Servicio de Administración Tributaria y Agencia Nacional de Aduanas de México.",
+    descripcion:"La empresa debe revisar obligaciones fiscales, documentación, facturación con complemento de comercio exterior, requisitos aduaneros y procedimientos necesarios para movilizar mercancías fuera del país (Agencia Nacional de Aduanas de México, s. f.; Servicio de Administración Tributaria, s. f.).",
+    utilidad:"Utilidad para la investigación: permite incorporar requisitos fiscales y operativos dentro del análisis de viabilidad.",
+    icono:"requisitos"
+  },
+  {
+    n:6,
+    titulo:"Paso 6. Identificación de apoyos financieros",
+    organismo:"Organismo: Bancomext.",
+    descripcion:"La empresa puede consultar programas de financiamiento o apoyo para empresas vinculadas con comercio exterior (Banco Nacional de Comercio Exterior, 2025).",
+    utilidad:"Utilidad para la investigación: permite relacionar la oportunidad de mercado con la capacidad económica de la empresa para ejecutar la estrategia.",
+    icono:"financiamiento"
+  },
+  {
+    n:7,
+    titulo:"Paso 7. Vinculación comercial e institucional",
+    organismo:"Organismos: Secretaría de Relaciones Exteriores y COMCE.",
+    descripcion:"La empresa puede revisar oportunidades de vinculación, eventos, redes empresariales, comités bilaterales o representaciones mexicanas en el exterior (Consejo Empresarial Mexicano de Comercio Exterior, Inversión y Tecnología, s. f.; Secretaría de Relaciones Exteriores, 2019).",
+    utilidad:"Utilidad para la investigación: permite identificar actores institucionales y empresariales que pueden apoyar la exploración del mercado destino.",
+    icono:"vinculacion"
+  }
+];
+
+const EA_ICONOS = {
+  contexto:`
+    <svg viewBox="0 0 64 64">
+      <path d="M10 53h44"/>
+      <path d="M15 53V25h34v28"/>
+      <path d="M20 25l12-14 12 14"/>
+      <path d="M26 53V39h12v14"/>
+      <path d="M46 12h8v8"/>
+      <path d="M50 16l-8 8"/>
+    </svg>`,
+
+  cierre:`
+    <svg viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="23"/>
+      <path d="M21 33l7 7 16-18"/>
+    </svg>`,
+
+  arancel:`
+    <svg viewBox="0 0 64 64">
+      <path d="M13 10h30l8 8v36H13z"/>
+      <path d="M43 10v10h8"/>
+      <path d="M21 29h22M21 37h16"/>
+      <path d="M22 47h20"/>
+      <path d="M30 43l-4 4 4 4M34 43l4 4-4 4"/>
+    </svg>`,
+
+  comercio:`
+    <svg viewBox="0 0 64 64">
+      <path d="M8 21h39"/>
+      <path d="M40 14l7 7-7 7"/>
+      <path d="M56 43H17"/>
+      <path d="M24 36l-7 7 7 7"/>
+      <path d="M13 29h38v8H13z"/>
+    </svg>`,
+
+  empresas:`
+    <svg viewBox="0 0 64 64">
+      <path d="M8 53h48"/>
+      <path d="M13 53V23h22v30"/>
+      <path d="M35 53V13h16v40"/>
+      <path d="M19 30h5M28 30h5M19 39h5M28 39h5"/>
+      <path d="M41 21h4M41 30h4M41 39h4"/>
+    </svg>`,
+
+  indicadores:`
+    <svg viewBox="0 0 64 64">
+      <path d="M10 53h44"/>
+      <path d="M15 47V35h8v12M28 47V26h8v21M41 47V16h8v31"/>
+      <path d="M13 22l12-6 11 5 15-11"/>
+      <path d="M44 10h7v7"/>
+    </svg>`,
+
+  requisitos:`
+    <svg viewBox="0 0 64 64">
+      <path d="M16 8h25l9 9v39H16z"/>
+      <path d="M41 8v11h9"/>
+      <path d="M24 29h18M24 37h18M24 45h12"/>
+      <path d="M8 20h8M8 30h8M8 40h8"/>
+    </svg>`,
+
+  financiamiento:`
+    <svg viewBox="0 0 64 64">
+      <path d="M9 27h46L32 11z"/>
+      <path d="M14 27v21M24 27v21M40 27v21M50 27v21"/>
+      <path d="M10 48h44M7 54h50"/>
+      <circle cx="48" cy="17" r="8"/>
+      <path d="M48 12v10M44 15c0-2 2-3 4-3s4 1 4 3-2 3-4 3-4 1-4 3 2 3 4 3 4-1 4-3"/>
+    </svg>`,
+
+  vinculacion:`
+    <svg viewBox="0 0 64 64">
+      <circle cx="32" cy="12" r="7"/>
+      <circle cx="13" cy="47" r="7"/>
+      <circle cx="51" cy="47" r="7"/>
+      <circle cx="32" cy="34" r="7"/>
+      <path d="M32 19v8M27 38l-8 5M37 38l8 5"/>
+      <path d="M18 43l9-7M46 43l-9-7"/>
+    </svg>`
+};
+
+const nodos = document.getElementById("ea-nodos");
+const cuerpo = document.getElementById("ea-cuerpo");
+const icono = document.getElementById("ea-icono");
+const barra = document.getElementById("ea-barra");
+const anterior = document.getElementById("ea-anterior");
+const siguiente = document.getElementById("ea-siguiente");
+const contexto = document.getElementById("ea-contexto");
+const cierre = document.getElementById("ea-cierre");
+const estado = document.getElementById("ea-estado");
+
+let actual = -1;
+
+nodos.innerHTML = EA_PASOS.map((paso,indice)=>`
+  <button type="button" class="ea-nodo" data-indice="${indice}" aria-label="${paso.titulo}">
+    <span class="ea-etiqueta">Paso ${paso.n}</span>
+    <span class="ea-punto" style="background:${indice%2===0 ? "var(--v1)" : "var(--v2)"}"></span>
+  </button>
+`).join("");
+
+function marcarNodos(indice){
+  [...nodos.children].forEach((nodo,i)=>{
+    nodo.classList.toggle("activo",i===indice);
+    nodo.setAttribute("aria-current",i===indice ? "step" : "false");
+  });
+}
+
+function pintarContenido(datos,color,indicePaso=null){
+  barra.style.background=color;
+  icono.style.background=color;
+  icono.innerHTML=EA_ICONOS[datos.icono];
+
+  cuerpo.classList.remove("entrada");
+
+  if(indicePaso===null){
+    cuerpo.innerHTML=`
+      <h3 class="ea-titulo">${datos.titulo}</h3>
+      <p class="ea-descripcion">${datos.descripcion}</p>
+    `;
+  }else{
+    cuerpo.innerHTML=`
+      <h3 class="ea-titulo">${datos.titulo}</h3>
+      <p class="ea-organismo">${datos.organismo}</p>
+      <p class="ea-descripcion">${datos.descripcion}</p>
+      <p class="ea-utilidad" style="border-left-color:${color}">${datos.utilidad}</p>
+    `;
+  }
+
+  cuerpo.scrollTop=0;
+  requestAnimationFrame(()=>cuerpo.classList.add("entrada"));
+}
+
+function verContexto(){
+  actual=-1;
+  marcarNodos(-1);
+  pintarContenido(EA_CONTEXTO,"#279371");
+  anterior.disabled=true;
+  siguiente.disabled=false;
+  estado.textContent="Contexto";
+}
+
+function verCierre(){
+  actual=EA_PASOS.length;
+  marcarNodos(-1);
+  pintarContenido(EA_CIERRE,"#104938");
+  anterior.disabled=false;
+  siguiente.disabled=true;
+  estado.textContent="Cierre";
+}
+
+function verPaso(indice){
+  actual=Math.max(0,Math.min(indice,EA_PASOS.length-1));
+  const paso=EA_PASOS[actual];
+  const color=actual%2===0 ? "#279371" : "#3F9089";
+
+  marcarNodos(actual);
+  pintarContenido(paso,color,actual);
+  anterior.disabled=false;
+  siguiente.disabled=false;
+  estado.textContent=`Paso ${paso.n} de 7`;
+}
+
+function retroceder(){
+  if(actual===EA_PASOS.length){
+    verPaso(EA_PASOS.length-1);
+  }else if(actual===0){
+    verContexto();
+  }else if(actual>0){
+    verPaso(actual-1);
+  }
+}
+
+function avanzar(){
+  if(actual===-1){
+    verPaso(0);
+  }else if(actual<EA_PASOS.length-1){
+    verPaso(actual+1);
+  }else if(actual===EA_PASOS.length-1){
+    verCierre();
+  }
+}
+
+nodos.addEventListener("click",evento=>{
+  const nodo=evento.target.closest(".ea-nodo");
+  if(nodo) verPaso(Number(nodo.dataset.indice));
+});
+
+anterior.addEventListener("click",retroceder);
+siguiente.addEventListener("click",avanzar);
+contexto.addEventListener("click",verContexto);
+cierre.addEventListener("click",verCierre);
+
+document.addEventListener("keydown",evento=>{
+  if(evento.key==="ArrowLeft") retroceder();
+  if(evento.key==="ArrowRight") avanzar();
+});
+
+function mostrarNodos(){
+  [...nodos.children].forEach((nodo,i)=>{
+    setTimeout(()=>nodo.classList.add("show"),130*i);
+  });
+}
+
+document.fonts.ready.then(()=>{
+  verContexto();
+  mostrarNodos();
+});
+</script>
+</body>
+</html>
