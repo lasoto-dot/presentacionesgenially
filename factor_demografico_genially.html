@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factor demográfico</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#fd-root{
+  --fd-principal:#3F9089;
+  --fd-verde:#279371;
+  --fd-tinta:#104938;
+  --fd-claro:#D1DE8C;
+  --fd-fondo:#F4F9F4;
+  --fd-blanco:#FFFFFF;
+  --fd-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 16px 10px;
+  overflow:hidden;
+  color:var(--fd-tinta);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+}
+
+#fd-root,
+#fd-root *{
+  box-sizing:border-box;
+}
+
+#fd-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+}
+
+.fd-layout{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns:40% 60%;
+  gap:18px;
+}
+
+/* PANEL IZQUIERDO */
+.fd-intro{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--fd-fondo);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.fd-intro-head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 18px;
+  color:var(--fd-blanco);
+  background:var(--fd-principal);
+}
+
+.fd-icono{
+  flex:0 0 56px;
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  color:var(--fd-blanco);
+  background:rgba(255,255,255,.15);
+}
+
+.fd-icono svg{
+  width:39px;
+  height:39px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.fd-intro-label{
+  font-size:20px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.fd-intro-title{
+  margin-top:3px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.18;
+}
+
+.fd-intro-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:18px 20px 20px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fd-principal) rgba(63,144,137,.12);
+}
+
+.fd-intro-body::-webkit-scrollbar,
+.fd-detail-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.fd-intro-body::-webkit-scrollbar-track,
+.fd-detail-body::-webkit-scrollbar-track{
+  background:rgba(63,144,137,.10);
+  border-radius:999px;
+}
+
+.fd-intro-body::-webkit-scrollbar-thumb,
+.fd-detail-body::-webkit-scrollbar-thumb{
+  background:var(--fd-principal);
+  border-radius:999px;
+}
+
+.fd-p{
+  margin:0 0 15px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.fd-p:last-child{
+  margin-bottom:0;
+}
+
+/* PANEL DERECHO */
+.fd-derecha{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:12px;
+}
+
+.fd-botones{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+
+.fd-btn{
+  min-height:61px;
+  padding:9px 11px;
+  border-radius:13px;
+  color:var(--fd-tinta);
+  background:var(--fd-fondo);
+  border:2px solid var(--fd-borde) !important;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.17;
+  text-align:center;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(10px);
+  transition:
+    opacity .35s ease,
+    transform .35s ease,
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease;
+}
+
+.fd-btn.fd-show{
+  opacity:1;
+  transform:none;
+}
+
+.fd-btn:hover{
+  border-color:var(--fd-principal) !important;
+}
+
+.fd-btn.fd-activo{
+  color:var(--fd-blanco);
+  background:var(--fd-principal);
+  border-color:var(--fd-principal) !important;
+}
+
+.fd-btn:focus-visible{
+  outline:3px solid var(--fd-verde);
+  outline-offset:3px;
+}
+
+/* DETALLE */
+.fd-detail{
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:19px;
+  background:var(--fd-claro);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.fd-detail-bar{
+  background:var(--fd-principal);
+}
+
+.fd-detail-title{
+  margin:0;
+  padding:15px 20px 8px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.fd-detail-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:0 20px 18px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fd-principal) rgba(63,144,137,.16);
+}
+
+.fd-detail-text{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.38;
+}
+
+.fd-detail-body.fd-entra{
+  animation:fd-entra .28s ease;
+}
+
+@keyframes fd-entra{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+  #fd-root{
+    min-height:920px;
+    overflow:auto;
+  }
+  .fd-layout{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+  .fd-intro{min-height:410px}
+  .fd-derecha{min-height:520px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #fd-root *,
+  #fd-root *::before,
+  #fd-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .fd-btn{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="fd-root" aria-label="Factor demográfico">
+  <div class="fd-layout">
+
+    <article class="fd-intro">
+      <div class="fd-intro-head">
+        <div class="fd-icono" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <circle cx="32" cy="17" r="8"/>
+            <circle cx="15" cy="25" r="6"/>
+            <circle cx="49" cy="25" r="6"/>
+            <path d="M20 52v-7c0-8 5-14 12-14s12 6 12 14v7"/>
+            <path d="M6 52v-5c0-7 4-12 9-12 4 0 7 2 9 6"/>
+            <path d="M58 52v-5c0-7-4-12-9-12-4 0-7 2-9 6"/>
+          </svg>
+        </div>
+
+        <div>
+          <div class="fd-intro-label">3 de 7</div>
+          <div class="fd-intro-title">Factor demográfico</div>
+        </div>
+      </div>
+
+      <div class="fd-intro-body">
+        <p class="fd-p">
+          El <strong>factor demográfico</strong> permite analizar las características de la población de un mercado. En <strong>mercadotecnia internacional</strong>, es uno de los factores más relevantes para la segmentación, el posicionamiento y la adaptación del producto, ya que la composición de la población determina el tamaño, la naturaleza y las características de la demanda potencial (Kotler y Keller, 2016).
+        </p>
+
+        <p class="fd-p">
+          En <strong>investigación de mercados internacional</strong>, los datos demográficos permiten definir el <strong>público objetivo</strong>, construir perfiles de consumidor, delimitar el universo de estudio y determinar el método de muestreo. También orientan la selección de variables del <strong>problema de investigación</strong>.
+        </p>
+      </div>
+    </article>
+
+    <section class="fd-derecha">
+      <div class="fd-botones" id="fd-botones"></div>
+
+      <article class="fd-detail" aria-live="polite">
+        <div class="fd-detail-bar"></div>
+        <h2 class="fd-detail-title" id="fd-detail-title">Tamaño de la población</h2>
+        <div class="fd-detail-body" id="fd-detail-body"></div>
+      </article>
+    </section>
+
+  </div>
+</section>
+
+<script>
+const FD_INDICADORES = [
+  {
+    titulo:"Tamaño de la población",
+    boton:"Tamaño de la población",
+    texto:"El <strong>tamaño de la población</strong> permite estimar el número potencial de consumidores dentro de un mercado."
+  },
+  {
+    titulo:"Tasas de natalidad y mortalidad",
+    boton:"Natalidad y mortalidad",
+    texto:"Las <strong>tasas de natalidad y mortalidad</strong> muestran cambios en el crecimiento o reducción de la población, relevantes para proyecciones de demanda a mediano y largo plazo."
+  },
+  {
+    titulo:"Estructura de edad",
+    boton:"Estructura de edad",
+    texto:"La <strong>estructura de edad</strong> muestra cómo se distribuye la población por rangos de edad, lo que permite identificar segmentos prioritarios como jóvenes, adultos o adultos mayores."
+  },
+  {
+    titulo:"Género",
+    boton:"Género",
+    texto:"El <strong>género</strong> puede ser una variable de segmentación cuando el producto, la comunicación o los hábitos de consumo presentan diferencias significativas entre grupos."
+  },
+  {
+    titulo:"Tamaño y número de familias",
+    boton:"Tamaño de familias",
+    texto:"El <strong>tamaño y número de familias</strong> influye en el volumen de consumo, el tipo de productos adquiridos y la frecuencia de compra."
+  },
+  {
+    titulo:"Ocupación",
+    boton:"Ocupación",
+    texto:"La <strong>ocupación</strong> permite conocer actividades laborales predominantes y puede relacionarse con ingresos, estilos de vida, horarios y consumo específico. En <strong>investigación de mercados internacional</strong>, permite segmentar por tipo de actividad económica."
+  },
+  {
+    titulo:"Nivel educativo",
+    boton:"Nivel educativo",
+    texto:"El <strong>nivel educativo</strong> influye en el acceso a información, comprensión de mensajes, consumo de productos especializados y adopción de innovaciones."
+  },
+  {
+    titulo:"Movimientos de población",
+    boton:"Movimientos de población",
+    texto:"Los <strong>movimientos de población</strong>, como migración interna o internacional, modifican el tamaño y composición de los mercados."
+  },
+  {
+    titulo:"Concentración de la población",
+    boton:"Concentración poblacional",
+    texto:"La <strong>concentración de la población</strong> permite identificar zonas urbanas y posibles áreas de distribución, lo que puede influir en el <strong>trabajo de campo</strong> de una investigación."
+  }
+];
+
+const fdBotones = document.getElementById("fd-botones");
+const fdTitulo = document.getElementById("fd-detail-title");
+const fdBody = document.getElementById("fd-detail-body");
+
+fdBotones.innerHTML = FD_INDICADORES.map((item,indice)=>`
+  <button
+    type="button"
+    class="fd-btn"
+    data-indice="${indice}"
+    aria-label="Mostrar ${item.titulo}"
+  >${item.boton}</button>
+`).join("");
+
+function fdMostrar(indice){
+  const item = FD_INDICADORES[indice];
+
+  [...fdBotones.children].forEach((btn,i)=>{
+    btn.classList.toggle("fd-activo",i===indice);
+    btn.setAttribute("aria-pressed",i===indice ? "true" : "false");
+  });
+
+  fdTitulo.textContent = item.titulo;
+  fdBody.classList.remove("fd-entra");
+  fdBody.innerHTML = `<p class="fd-detail-text">${item.texto}</p>`;
+  fdBody.scrollTop = 0;
+  requestAnimationFrame(()=>fdBody.classList.add("fd-entra"));
+}
+
+fdBotones.addEventListener("click",evento=>{
+  const btn = evento.target.closest(".fd-btn");
+  if(btn) fdMostrar(Number(btn.dataset.indice));
+});
+
+document.fonts.ready.then(()=>{
+  [...fdBotones.children].forEach((btn,i)=>{
+    setTimeout(()=>btn.classList.add("fd-show"),95*i);
+  });
+  fdMostrar(0);
+});
+</script>
+</body>
+</html>
