@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factores internos o microambientales</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#mp-root{
+  --mp-verde:#279371;
+  --mp-medio:#3F9089;
+  --mp-oscuro:#104938;
+  --mp-claro:#D1DE8C;
+  --mp-fondo:#F4F9F4;
+  --mp-blanco:#FFFFFF;
+  --mp-linea:#CFE3DA;
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 16px 10px;
+  overflow:hidden;
+  color:var(--mp-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  box-sizing:border-box;
+}
+
+#mp-root,
+#mp-root *{
+  box-sizing:border-box;
+}
+
+#mp-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.mp-layout{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-columns:49% 51%;
+  gap:16px;
+}
+
+/* Área izquierda */
+.mp-network{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+  border-radius:21px;
+  background:linear-gradient(180deg,#F4F9F4,#FFFFFF);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.mp-svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+.mp-line{
+  fill:none;
+  stroke:var(--mp-linea);
+  stroke-width:4;
+  stroke-linecap:round;
+}
+
+.mp-dot{
+  fill:var(--mp-verde);
+  opacity:.92;
+}
+
+.mp-center{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:210px;
+  height:190px;
+  transform:translate(-50%,-50%);
+  display:grid;
+  place-items:center;
+  padding:28px 26px;
+  text-align:center;
+  color:var(--mp-blanco);
+  background:linear-gradient(135deg,var(--mp-verde),var(--mp-medio));
+  clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);
+  filter:drop-shadow(0 8px 16px rgba(16,73,56,.18));
+  z-index:2;
+}
+
+.mp-center span{
+  max-width:145px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.18;
+}
+
+.mp-node{
+  position:absolute;
+  width:185px;
+  min-height:88px;
+  padding:11px 12px !important;
+  display:grid;
+  grid-template-columns:52px minmax(0,1fr);
+  align-items:center;
+  gap:10px;
+  border-radius:17px !important;
+  color:var(--mp-oscuro) !important;
+  background:#FFFFFF !important;
+  border:2px solid var(--mp-linea) !important;
+  box-shadow:0 5px 13px rgba(16,73,56,.10);
+  cursor:pointer;
+  z-index:3;
+  transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+
+.mp-node:hover{
+  border-color:var(--mp-verde) !important;
+  box-shadow:0 8px 18px rgba(16,73,56,.15);
+}
+
+.mp-node.mp-active{
+  background:var(--mp-claro) !important;
+  border-color:var(--mp-verde) !important;
+}
+
+.mp-node:focus-visible{
+  outline:3px solid var(--mp-verde);
+  outline-offset:3px;
+}
+
+.mp-node-top{
+  left:50%;
+  top:14px;
+  transform:translateX(-50%);
+}
+
+.mp-node-upper-left{
+  left:18px;
+  top:112px;
+}
+
+.mp-node-upper-right{
+  right:18px;
+  top:112px;
+}
+
+.mp-node-lower-left{
+  left:58px;
+  bottom:20px;
+}
+
+.mp-node-lower-right{
+  right:58px;
+  bottom:20px;
+}
+
+.mp-node-icon{
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  color:#FFFFFF;
+  background:var(--mp-verde);
+}
+
+.mp-node-alt .mp-node-icon{
+  background:var(--mp-medio);
+}
+
+.mp-node-icon svg{
+  width:33px;
+  height:33px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.35;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.mp-node-label{
+  width:100%;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.15;
+  text-align:center;
+  overflow-wrap:anywhere;
+  hyphens:auto;
+}
+
+/* Panel derecho */
+.mp-panel{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:21px;
+  background:var(--mp-claro);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.mp-panel-bar{
+  background:var(--mp-verde);
+  transition:background .18s ease;
+}
+
+.mp-panel-head{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:17px 22px 10px;
+}
+
+.mp-panel-icon{
+  flex:0 0 58px;
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  color:#FFFFFF;
+  background:var(--mp-verde);
+  transition:background .18s ease;
+}
+
+.mp-panel-icon svg{
+  width:37px;
+  height:37px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.35;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.mp-panel-title{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.mp-panel-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:4px 24px 22px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--mp-verde) rgba(39,147,113,.14);
+}
+
+.mp-panel-body::-webkit-scrollbar{
+  width:7px;
+}
+.mp-panel-body::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.12);
+  border-radius:999px;
+}
+.mp-panel-body::-webkit-scrollbar-thumb{
+  background:var(--mp-verde);
+  border-radius:999px;
+}
+
+.mp-panel-p{
+  margin:0 0 15px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.38;
+}
+.mp-panel-p:last-child{
+  margin-bottom:0;
+}
+
+.mp-panel-body.mp-enter{
+  animation:mp-enter .22s ease;
+}
+@keyframes mp-enter{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+  #mp-root{
+    min-height:1000px;
+    overflow:auto;
+  }
+  .mp-layout{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+  .mp-network{
+    min-height:470px;
+  }
+  .mp-node-upper-left{left:10px}
+  .mp-node-upper-right{right:10px}
+  .mp-node-lower-left{left:24px}
+  .mp-node-lower-right{right:24px}
+  .mp-panel{
+    min-height:430px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #mp-root *,
+  #mp-root *::before,
+  #mp-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+</style>
+</head>
+<body>
+<section id="mp-root" aria-label="Factores internos o microambientales">
+  <div class="mp-layout">
+
+    <section class="mp-network" aria-label="Actores del entorno inmediato de la empresa">
+      <svg class="mp-svg" viewBox="0 0 580 450" preserveAspectRatio="none" aria-hidden="true">
+        <!-- vértices del pentágono -->
+        <path class="mp-line" d="M290 140 L290 102"/>
+        <path class="mp-line" d="M209 194 L126 152"/>
+        <path class="mp-line" d="M371 194 L454 152"/>
+        <path class="mp-line" d="M244 308 L164 344"/>
+        <path class="mp-line" d="M336 308 L416 344"/>
+        <circle class="mp-dot" cx="290" cy="140" r="5"/>
+        <circle class="mp-dot" cx="209" cy="194" r="5"/>
+        <circle class="mp-dot" cx="371" cy="194" r="5"/>
+        <circle class="mp-dot" cx="244" cy="308" r="5"/>
+        <circle class="mp-dot" cx="336" cy="308" r="5"/>
+      </svg>
+
+      <button class="mp-node mp-node-top mp-active" type="button" data-actor="competencia">
+        <span class="mp-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M8 52h48"/>
+            <path d="M12 52V24h18v28M34 52V14h18v38"/>
+            <path d="M17 31h7M17 39h7M39 22h7M39 31h7M39 40h7"/>
+          </svg>
+        </span>
+        <span class="mp-node-label">Competencia</span>
+      </button>
+
+      <button class="mp-node mp-node-upper-left mp-node-alt" type="button" data-actor="proveedores">
+        <span class="mp-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M9 21h31v28H9z"/>
+            <path d="M40 31h9l7 9v9H40z"/>
+            <circle cx="20" cy="51" r="5"/>
+            <circle cx="48" cy="51" r="5"/>
+            <path d="M16 28h17M16 35h12"/>
+          </svg>
+        </span>
+        <span class="mp-node-label">Proveedores</span>
+      </button>
+
+      <button class="mp-node mp-node-upper-right" type="button" data-actor="intermediarios">
+        <span class="mp-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M8 24h48l-5-12H13z"/>
+            <path d="M12 24v30h40V24"/>
+            <path d="M20 54V38h12v16M39 34h8"/>
+            <path d="M9 24c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8"/>
+          </svg>
+        </span>
+        <span class="mp-node-label">Intermediarios</span>
+      </button>
+
+      <div class="mp-center">
+        <span>Entorno inmediato de la empresa</span>
+      </div>
+
+      <button class="mp-node mp-node-lower-left mp-node-alt" type="button" data-actor="clientes">
+        <span class="mp-node-icon">
+          <svg viewBox="0 0 64 64">
+            <circle cx="24" cy="20" r="8"/>
+            <circle cx="44" cy="24" r="6"/>
+            <path d="M11 52v-8c0-9 6-15 13-15s13 6 13 15v8"/>
+            <path d="M35 36c2-4 5-6 9-6 6 0 10 5 10 12v10"/>
+          </svg>
+        </span>
+        <span class="mp-node-label">Clientes</span>
+      </button>
+
+      <button class="mp-node mp-node-lower-right" type="button" data-actor="publicos">
+        <span class="mp-node-icon">
+          <svg viewBox="0 0 64 64">
+            <path d="M10 31h13l20-11v24L23 34H10z"/>
+            <path d="M23 34l4 18h-8l-5-18"/>
+            <path d="M49 23l6-6M50 32h8M49 41l6 6"/>
+          </svg>
+        </span>
+        <span class="mp-node-label">Públicos</span>
+      </button>
+    </section>
+
+    <article class="mp-panel" aria-live="polite">
+      <div class="mp-panel-bar" id="mp-bar"></div>
+      <header class="mp-panel-head">
+        <div class="mp-panel-icon" id="mp-icon" aria-hidden="true"></div>
+        <h2 class="mp-panel-title" id="mp-title">Competencia</h2>
+      </header>
+      <div class="mp-panel-body" id="mp-body"></div>
+    </article>
+
+  </div>
+</section>
+
+<script>
+const MP_ICONOS = {
+  competencia:`
+    <svg viewBox="0 0 64 64">
+      <path d="M8 52h48"/>
+      <path d="M12 52V24h18v28M34 52V14h18v38"/>
+      <path d="M17 31h7M17 39h7M39 22h7M39 31h7M39 40h7"/>
+    </svg>`,
+  proveedores:`
+    <svg viewBox="0 0 64 64">
+      <path d="M9 21h31v28H9z"/>
+      <path d="M40 31h9l7 9v9H40z"/>
+      <circle cx="20" cy="51" r="5"/>
+      <circle cx="48" cy="51" r="5"/>
+      <path d="M16 28h17M16 35h12"/>
+    </svg>`,
+  intermediarios:`
+    <svg viewBox="0 0 64 64">
+      <path d="M8 24h48l-5-12H13z"/>
+      <path d="M12 24v30h40V24"/>
+      <path d="M20 54V38h12v16M39 34h8"/>
+      <path d="M9 24c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8c0 5 4 8 8 8s8-3 8-8"/>
+    </svg>`,
+  clientes:`
+    <svg viewBox="0 0 64 64">
+      <circle cx="24" cy="20" r="8"/>
+      <circle cx="44" cy="24" r="6"/>
+      <path d="M11 52v-8c0-9 6-15 13-15s13 6 13 15v8"/>
+      <path d="M35 36c2-4 5-6 9-6 6 0 10 5 10 12v10"/>
+    </svg>`,
+  publicos:`
+    <svg viewBox="0 0 64 64">
+      <path d="M10 31h13l20-11v24L23 34H10z"/>
+      <path d="M23 34l4 18h-8l-5-18"/>
+      <path d="M49 23l6-6M50 32h8M49 41l6 6"/>
+    </svg>`
+};
+
+const MP_ACTORES = {
+  competencia:{
+    titulo:"Competencia",
+    color:"#279371",
+    icono:"competencia",
+    texto:[
+      `La <strong>competencia</strong> está integrada por las empresas que ofrecen productos o servicios similares, sustitutos o alternativos en el mercado. Su análisis permite identificar posicionamiento, precios, estrategias de distribución, comunicación y ventajas competitivas existentes (Cruz, 2015).`,
+      `En <strong>investigación de mercados internacional</strong>, el análisis de competencia ayuda a formular preguntas sobre marcas dominantes, posicionamiento percibido, diferenciación y lealtad del consumidor. Esta información puede orientar el <strong>diseño de investigación</strong> hacia variables comparativas.`
+    ]
+  },
+  proveedores:{
+    titulo:"Proveedores",
+    color:"#3F9089",
+    icono:"proveedores",
+    texto:[
+      `Los <strong>proveedores</strong> proporcionan insumos, materiales, servicios, tecnología, empaques o recursos necesarios para operar. En un contexto internacional, los proveedores pueden estar ubicados en el mismo país de origen o en el país destino.`,
+      `En <strong>investigación de mercados</strong>, el análisis de proveedores ayuda a determinar si el producto puede adaptarse, producirse, envasarse o distribuirse con los recursos disponibles en la cadena de suministro del mercado objetivo.`
+    ]
+  },
+  intermediarios:{
+    titulo:"Intermediarios de marketing",
+    color:"#279371",
+    icono:"intermediarios",
+    texto:[
+      `Los <strong>intermediarios de marketing</strong> son actores que ayudan a promover, vender, almacenar, transportar o distribuir productos entre la empresa y el consumidor final. Pueden ser distribuidores, mayoristas, minoristas, agentes o plataformas digitales.`,
+      `En investigación internacional, este factor permite conocer cómo llega el producto al consumidor, qué canales son predominantes y cuáles son las condiciones de acceso a esos canales.`
+    ]
+  },
+  clientes:{
+    titulo:"Clientes",
+    color:"#3F9089",
+    icono:"clientes",
+    texto:[
+      `Los <strong>clientes</strong> son el centro de la <strong>investigación de mercados</strong>. Comprender sus necesidades, expectativas, hábitos, motivaciones y objeciones es el propósito principal de cualquier estudio de mercado.`,
+      `En el <strong>diseño de investigación</strong>, el análisis de clientes permite definir el segmento objetivo, seleccionar el método de recolección de datos, construir los instrumentos y determinar el tamaño de muestra.`
+    ]
+  },
+  publicos:{
+    titulo:"Públicos y opinión pública",
+    color:"#279371",
+    icono:"publicos",
+    texto:[
+      `Los <strong>públicos</strong> son grupos que pueden influir en la imagen, legitimidad o aceptación de una empresa. Pueden incluir medios de comunicación, comunidades locales, organizaciones no gubernamentales, asociaciones industriales o autoridades regulatorias.`,
+      `La <strong>opinión pública</strong> puede afectar la reputación de una marca, especialmente cuando el producto se relaciona con temas sensibles como sostenibilidad, salud, ambiente o equidad. En <strong>investigación de mercados</strong>, puede estudiarse mediante análisis de redes sociales, encuestas de percepción o grupos focales.`
+    ]
+  }
+};
+
+const root = document.getElementById("mp-root");
+const buttons = root.querySelectorAll(".mp-node");
+const titleEl = document.getElementById("mp-title");
+const bodyEl = document.getElementById("mp-body");
+const iconEl = document.getElementById("mp-icon");
+const barEl = document.getElementById("mp-bar");
+
+function showActor(actorKey){
+  const actor = MP_ACTORES[actorKey];
+
+  buttons.forEach(button=>{
+    const active = button.dataset.actor === actorKey;
+    button.classList.toggle("mp-active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+
+  titleEl.textContent = actor.titulo;
+  iconEl.innerHTML = MP_ICONOS[actor.icono];
+  iconEl.style.background = actor.color;
+  barEl.style.background = actor.color;
+
+  bodyEl.classList.remove("mp-enter");
+  bodyEl.innerHTML = actor.texto.map(p => `<p class="mp-panel-p">${p}</p>`).join("");
+  bodyEl.scrollTop = 0;
+  requestAnimationFrame(()=>bodyEl.classList.add("mp-enter"));
+}
+
+root.addEventListener("click", event=>{
+  const button = event.target.closest(".mp-node");
+  if(!button || !root.contains(button)) return;
+  event.preventDefault();
+  showActor(button.dataset.actor);
+});
+
+document.fonts.ready.then(()=>{
+  showActor("competencia");
+});
+</script>
+</body>
+</html>
