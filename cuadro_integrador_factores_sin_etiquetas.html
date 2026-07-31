@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuadro integrador de factores del ambiente internacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#ci-root{
+  --ci-macro:#279371;
+  --ci-micro:#3F9089;
+  --ci-interno:#93C01F;
+  --ci-oscuro:#104938;
+  --ci-claro:#D1DE8C;
+  --ci-fondo:#F4F9F4;
+  --ci-blanco:#FFFFFF;
+  --ci-borde:#CFE3DA;
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:7px 14px 9px;
+  overflow:hidden;
+  color:var(--ci-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  box-sizing:border-box;
+}
+
+#ci-root,
+#ci-root *{
+  box-sizing:border-box;
+}
+
+#ci-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.ci-layout{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-rows:48px minmax(0,1fr) 36px;
+  gap:8px;
+}
+
+.ci-intro{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 18px;
+  border-radius:14px;
+  background:var(--ci-fondo);
+  box-shadow:0 5px 13px rgba(16,73,56,.08);
+  font-size:20px;
+  font-weight:400;
+  line-height:1.25;
+  text-align:center;
+}
+
+.ci-main{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:66% 34%;
+  gap:12px;
+}
+
+/* =======================
+   DASHBOARD DE TARJETAS
+======================= */
+.ci-grid{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  gap:9px;
+}
+
+.ci-card{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  padding:9px 10px !important;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr);
+  align-items:center;
+  gap:9px;
+  border-radius:15px !important;
+  cursor:pointer;
+  box-shadow:0 5px 12px rgba(16,73,56,.10);
+  opacity:0;
+  animation:ci-in .34s ease forwards;
+  transition:filter .16s ease,box-shadow .16s ease,transform .16s ease;
+}
+
+.ci-card:hover{
+  filter:brightness(1.035);
+  box-shadow:0 8px 17px rgba(16,73,56,.16);
+  transform:translateY(-2px);
+}
+
+.ci-card:focus-visible{
+  outline:3px solid var(--ci-claro);
+  outline-offset:2px;
+}
+
+.ci-card.ci-active{
+  outline:4px solid var(--ci-oscuro);
+  outline-offset:-4px;
+}
+
+.ci-card:nth-child(1){animation-delay:.03s}
+.ci-card:nth-child(2){animation-delay:.06s}
+.ci-card:nth-child(3){animation-delay:.09s}
+.ci-card:nth-child(4){animation-delay:.12s}
+.ci-card:nth-child(5){animation-delay:.15s}
+.ci-card:nth-child(6){animation-delay:.18s}
+.ci-card:nth-child(7){animation-delay:.21s}
+.ci-card:nth-child(8){animation-delay:.24s}
+.ci-card:nth-child(9){animation-delay:.27s}
+.ci-card:nth-child(10){animation-delay:.30s}
+.ci-card:nth-child(11){animation-delay:.33s}
+.ci-card:nth-child(12){animation-delay:.36s}
+.ci-card:nth-child(13){animation-delay:.39s}
+.ci-card:nth-child(14){animation-delay:.42s}
+.ci-card:nth-child(15){animation-delay:.45s}
+.ci-card:nth-child(16){animation-delay:.48s}
+
+@keyframes ci-in{
+  to{opacity:1}
+}
+
+.ci-card[data-group="macro"]{
+  color:#FFFFFF !important;
+  background:var(--ci-macro) !important;
+}
+
+.ci-card[data-group="micro"]{
+  color:#FFFFFF !important;
+  background:var(--ci-micro) !important;
+}
+
+.ci-card[data-group="interno"]{
+  color:var(--ci-oscuro) !important;
+  background:var(--ci-interno) !important;
+}
+
+.ci-card-icon{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:rgba(255,255,255,.17);
+}
+
+.ci-card[data-group="interno"] .ci-card-icon{
+  background:rgba(16,73,56,.10);
+}
+
+.ci-card-icon svg{
+  width:28px;
+  height:28px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.25;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.ci-card-name{
+  min-width:0;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.08;
+  text-align:left;
+  overflow-wrap:anywhere;
+  hyphens:auto;
+}
+
+/* =======================
+   PANEL DE DETALLE
+======================= */
+.ci-panel{
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  border-radius:18px;
+  background:var(--ci-claro);
+  box-shadow:0 7px 18px rgba(16,73,56,.12);
+}
+
+.ci-panel-bar{
+  background:var(--ci-macro);
+  transition:background .18s ease;
+}
+
+.ci-panel-head{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:14px 18px 8px;
+}
+
+.ci-panel-icon{
+  flex:0 0 54px;
+  width:54px;
+  height:54px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  color:#FFFFFF;
+  background:var(--ci-macro);
+  transition:background .18s ease,color .18s ease;
+}
+
+.ci-panel-icon svg{
+  width:34px;
+  height:34px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.25;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.ci-panel-title{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.15;
+}
+
+.ci-panel-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:4px 18px 16px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--ci-oscuro) rgba(16,73,56,.12);
+}
+
+.ci-panel-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.ci-panel-body::-webkit-scrollbar-track{
+  background:rgba(16,73,56,.10);
+  border-radius:999px;
+}
+
+.ci-panel-body::-webkit-scrollbar-thumb{
+  background:var(--ci-oscuro);
+  border-radius:999px;
+}
+
+.ci-block{
+  margin:0 0 12px;
+  padding:12px 13px;
+  border-radius:12px;
+  background:#FFFFFF;
+}
+
+.ci-block:last-child{
+  margin-bottom:0;
+}
+
+.ci-label{
+  margin:0 0 6px;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.15;
+}
+
+.ci-text{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.34;
+}
+
+.ci-panel-body.ci-enter{
+  animation:ci-panel-in .22s ease;
+}
+
+@keyframes ci-panel-in{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* =======================
+   LEYENDA
+======================= */
+.ci-footer{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  padding:4px 10px;
+  border-radius:12px;
+  background:var(--ci-fondo);
+}
+
+.ci-legend{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:18px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.ci-dot{
+  width:15px;
+  height:15px;
+  border-radius:50%;
+}
+
+.ci-source{
+  margin-left:auto;
+  font-size:14px;
+  font-weight:400;
+  line-height:1.15;
+  text-align:right;
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+
+  #ci-root{
+    min-height:1300px;
+    overflow:auto;
+  }
+
+  .ci-layout{
+    grid-template-rows:auto auto auto;
+  }
+
+  .ci-main{
+    grid-template-columns:1fr;
+  }
+
+  .ci-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-rows:auto;
+  }
+
+  .ci-card{
+    min-height:92px;
+  }
+
+  .ci-panel{
+    min-height:380px;
+  }
+
+  .ci-footer{
+    flex-wrap:wrap;
+  }
+
+  .ci-source{
+    width:100%;
+    margin-left:0;
+    text-align:center;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #ci-root *,
+  #ci-root *::before,
+  #ci-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+
+  .ci-card{
+    opacity:1;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="ci-root" aria-label="Cuadro integrador de factores del ambiente internacional">
+  <div class="ci-layout">
+
+    <div class="ci-intro">
+      A continuación se presenta el cuadro integrador de factores del ambiente internacional y su impacto en la investigación de mercados.
+    </div>
+
+    <div class="ci-main">
+      <section class="ci-grid" id="ci-grid" aria-label="Dashboard de factores"></section>
+
+      <article class="ci-panel" aria-live="polite">
+        <div class="ci-panel-bar" id="ci-panel-bar"></div>
+        <header class="ci-panel-head">
+          <div class="ci-panel-icon" id="ci-panel-icon" aria-hidden="true"></div>
+          <h2 class="ci-panel-title" id="ci-panel-title"></h2>
+        </header>
+        <div class="ci-panel-body" id="ci-panel-body"></div>
+      </article>
+    </div>
+
+    <footer class="ci-footer">
+      <div class="ci-legend"><span class="ci-dot" style="background:#279371"></span>Macroambientales</div>
+      <div class="ci-legend"><span class="ci-dot" style="background:#3F9089"></span>Microambientales</div>
+      <div class="ci-legend"><span class="ci-dot" style="background:#93C01F"></span>Internos de empresa</div>
+      <div class="ci-source">Fuente: Elaboración propia con base en Cateora et al. (2020), Keegan y Green (2020), Kotler y Keller (2016) y Malhotra (2020).</div>
+    </footer>
+
+  </div>
+</section>
+
+<script>
+const CI_ICONOS = {
+  socio:`<svg viewBox="0 0 64 64"><path d="M9 52h46"/><path d="M14 46V34h8v12M28 46V24h8v22M42 46V15h8v31"/><path d="M13 23l12-6 11 5 15-11"/></svg>`,
+  politico:`<svg viewBox="0 0 64 64"><path d="M8 52h48M12 26h40"/><path d="M16 26v22M27 26v22M37 26v22M48 26v22"/><path d="M9 26L32 10l23 16z"/></svg>`,
+  demo:`<svg viewBox="0 0 64 64"><circle cx="32" cy="17" r="8"/><circle cx="15" cy="25" r="6"/><circle cx="49" cy="25" r="6"/><path d="M20 52v-7c0-8 5-14 12-14s12 6 12 14v7"/><path d="M6 52v-5c0-7 4-12 9-12M58 52v-5c0-7-4-12-9-12"/></svg>`,
+  legal:`<svg viewBox="0 0 64 64"><path d="M12 54h40M32 10v44M18 18h28"/><path d="M18 18l-9 17h18zM46 18l-9 17h18z"/></svg>`,
+  cultura:`<svg viewBox="0 0 64 64"><path d="M13 12h38v29H31L19 52V41h-6z"/><path d="M21 22h22M21 30h15"/></svg>`,
+  tecnologia:`<svg viewBox="0 0 64 64"><rect x="11" y="13" width="42" height="30" rx="4"/><path d="M22 52h20M32 43v9"/><path d="M19 28h7l4-7 7 14 4-7h5"/></svg>`,
+  geo:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M10 32h44M32 10c7 6 11 13 11 22S39 48 32 54M32 10c-7 6-11 13-11 22s4 16 11 22"/></svg>`,
+  competencia:`<svg viewBox="0 0 64 64"><path d="M8 52h48"/><path d="M12 52V24h18v28M34 52V14h18v38"/><path d="M17 31h7M39 22h7M39 31h7"/></svg>`,
+  proveedores:`<svg viewBox="0 0 64 64"><path d="M9 21h31v28H9z"/><path d="M40 31h9l7 9v9H40z"/><circle cx="20" cy="51" r="5"/><circle cx="48" cy="51" r="5"/></svg>`,
+  intermediarios:`<svg viewBox="0 0 64 64"><path d="M8 24h48l-5-12H13z"/><path d="M12 24v30h40V24"/><path d="M20 54V38h12v16"/></svg>`,
+  clientes:`<svg viewBox="0 0 64 64"><circle cx="24" cy="20" r="8"/><circle cx="44" cy="24" r="6"/><path d="M11 52v-8c0-9 6-15 13-15s13 6 13 15v8"/><path d="M35 36c2-4 5-6 9-6 6 0 10 5 10 12v10"/></svg>`,
+  publicos:`<svg viewBox="0 0 64 64"><path d="M10 31h13l20-11v24L23 34H10z"/><path d="M23 34l4 18h-8l-5-18"/><path d="M49 23l6-6M50 32h8M49 41l6 6"/></svg>`,
+  recursos:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M32 18v28M39 23c-2-3-5-5-9-5-5 0-9 3-9 7 0 5 4 6 11 8 7 2 11 4 11 9 0 4-4 7-10 7-5 0-9-2-12-6"/></svg>`,
+  estrategia:`<svg viewBox="0 0 64 64"><circle cx="30" cy="31" r="19"/><circle cx="30" cy="31" r="11"/><circle cx="30" cy="31" r="4"/><path d="M42 19l12-9M45 10h9v9"/></svg>`,
+  analisis:`<svg viewBox="0 0 64 64"><path d="M10 52h44"/><path d="M15 45V31h8v14M28 45V22h8v23M41 45V14h8v31"/><circle cx="45" cy="20" r="10"/><path d="M52 27l7 7"/></svg>`,
+  organizacion:`<svg viewBox="0 0 64 64"><circle cx="22" cy="23" r="7"/><circle cx="42" cy="23" r="7"/><circle cx="32" cy="17" r="7"/><path d="M9 50v-6c0-8 5-13 13-13M55 50v-6c0-8-5-13-13-13"/><path d="M20 50v-7c0-9 5-15 12-15s12 6 12 15v7"/></svg>`
+};
+
+const CI_FACTORES = [
+  {nombre:"Socioeconómico",grupo:"macro",icono:"socio",revisar:"PIB, ingreso, inflación, empleo, tipo de cambio, capacidad de compra.",impacto:"Ayuda a definir potencial de mercado, sensibilidad al precio y segmentos viables."},
+  {nombre:"Político",grupo:"macro",icono:"politico",revisar:"Estabilidad, política comercial, riesgo político, acuerdos y restricciones.",impacto:"Permite identificar riesgos, barreras de entrada y fuentes oficiales que deben consultarse."},
+  {nombre:"Demográfico",grupo:"macro",icono:"demo",revisar:"Tamaño de población, edad, género, educación, ocupación y concentración urbana.",impacto:"Apoya la definición de público objetivo, muestra y variables de segmentación."},
+  {nombre:"Legal",grupo:"macro",icono:"legal",revisar:"Aranceles, normas, permisos, etiquetado, reglamentos técnicos y medidas sanitarias.",impacto:"Determina requisitos de entrada, adaptación del producto y viabilidad normativa."},
+  {nombre:"Cultural",grupo:"macro",icono:"cultura",revisar:"Valores, idioma, religión, estética, actitudes y hábitos.",impacto:"Influye en la redacción de instrumentos, interpretación de respuestas y adaptación de mensajes."},
+  {nombre:"Tecnológico",grupo:"macro",icono:"tecnologia",revisar:"Acceso digital, comercio electrónico, innovación, plataformas y comunicaciones.",impacto:"Define si la recolección de datos puede realizarse en línea, presencial o mediante métodos mixtos."},
+  {nombre:"Geográfico",grupo:"macro",icono:"geo",revisar:"Localización, clima, relieve, recursos naturales e infraestructura.",impacto:"Permite valorar logística, distribución, zonas de estudio y adaptación física del producto."},
+
+  {nombre:"Competencia",grupo:"micro",icono:"competencia",revisar:"Marcas, precios, posicionamiento, canales y comunicación.",impacto:"Orienta análisis comparativo, observación de mercado y preguntas sobre diferenciación."},
+  {nombre:"Proveedores",grupo:"micro",icono:"proveedores",revisar:"Disponibilidad, costos, calidad, tiempos y confiabilidad.",impacto:"Ayuda a evaluar viabilidad operativa y condiciones de abastecimiento."},
+  {nombre:"Intermediarios",grupo:"micro",icono:"intermediarios",revisar:"Distribuidores, minoristas, plataformas, agentes y logística.",impacto:"Permite identificar canales de acceso al consumidor y actores clave para entrevistas o análisis."},
+  {nombre:"Clientes",grupo:"micro",icono:"clientes",revisar:"Necesidades, hábitos, expectativas, motivaciones y objeciones.",impacto:"Define el núcleo de la investigación, los sujetos de estudio y los instrumentos."},
+  {nombre:"Públicos",grupo:"micro",icono:"publicos",revisar:"Medios, comunidades, autoridades, asociaciones y opinión pública.",impacto:"Ayuda a identificar percepciones externas que pueden afectar la aceptación de la marca."},
+
+  {nombre:"Recursos financieros",grupo:"interno",icono:"recursos",revisar:"Presupuesto disponible para investigar y entrar al mercado.",impacto:"Determina alcance, muestra, métodos y profundidad del estudio."},
+  {nombre:"Estrategia de marketing",grupo:"interno",icono:"estrategia",revisar:"Objetivo comercial, posicionamiento y forma de entrada.",impacto:"Orienta las preguntas de investigación y el tipo de información requerida."},
+  {nombre:"Capacidad de análisis",grupo:"interno",icono:"analisis",revisar:"Personal, herramientas y habilidades para interpretar datos.",impacto:"Influye en la calidad de la interpretación y en el uso de los hallazgos."},
+  {nombre:"Cultura organizacional",grupo:"interno",icono:"organizacion",revisar:"Apertura a la innovación, aprendizaje y adaptación.",impacto:"Determina si la empresa utilizará los resultados para ajustar sus decisiones."}
+];
+
+const CI_COLORES = {
+  macro:"#279371",
+  micro:"#3F9089",
+  interno:"#93C01F"
+};
+
+const ciGrid = document.getElementById("ci-grid");
+const ciBar = document.getElementById("ci-panel-bar");
+const ciIcon = document.getElementById("ci-panel-icon");
+const ciTitle = document.getElementById("ci-panel-title");
+const ciBody = document.getElementById("ci-panel-body");
+
+ciGrid.innerHTML = CI_FACTORES.map((factor,index)=>`
+  <button
+    class="ci-card ${index===0?"ci-active":""}"
+    type="button"
+    data-index="${index}"
+    data-group="${factor.grupo}">
+    <span class="ci-card-icon">${CI_ICONOS[factor.icono]}</span>
+    <span class="ci-card-name">${factor.nombre}</span>
+  </button>
+`).join("");
+
+function ciShow(index){
+  const factor = CI_FACTORES[index];
+  const color = CI_COLORES[factor.grupo];
+
+  [...ciGrid.children].forEach((card,i)=>{
+    const active = i===index;
+    card.classList.toggle("ci-active",active);
+    card.setAttribute("aria-pressed",active ? "true":"false");
+  });
+
+  ciBar.style.background = color;
+  ciIcon.style.background = color;
+  ciIcon.style.color = factor.grupo==="interno" ? "#104938" : "#FFFFFF";
+  ciIcon.innerHTML = CI_ICONOS[factor.icono];
+  ciTitle.textContent = factor.nombre;
+
+  ciBody.classList.remove("ci-enter");
+  ciBody.innerHTML = `
+    <section class="ci-block">
+      <h3 class="ci-label">Qué se debe revisar</h3>
+      <p class="ci-text">${factor.revisar}</p>
+    </section>
+    <section class="ci-block">
+      <h3 class="ci-label">Impacto en el diseño de investigación</h3>
+      <p class="ci-text">${factor.impacto}</p>
+    </section>
+  `;
+  ciBody.scrollTop = 0;
+  requestAnimationFrame(()=>ciBody.classList.add("ci-enter"));
+}
+
+ciGrid.addEventListener("click",event=>{
+  const card = event.target.closest(".ci-card");
+  if(!card || !ciGrid.contains(card)) return;
+  event.preventDefault();
+  ciShow(Number(card.dataset.index));
+});
+
+document.fonts.ready.then(()=>ciShow(0));
+</script>
+</body>
+</html>
