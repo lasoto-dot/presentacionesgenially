@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factores políticos</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#fp-root{
+  --fp-principal:#156049;
+  --fp-verde:#279371;
+  --fp-tinta:#104938;
+  --fp-medio:#3F9089;
+  --fp-claro:#D1DE8C;
+  --fp-fondo:#F4F9F4;
+  --fp-blanco:#FFFFFF;
+  --fp-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 16px 10px;
+  overflow:hidden;
+  color:var(--fp-tinta);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+}
+
+#fp-root,
+#fp-root *{
+  box-sizing:border-box;
+}
+
+#fp-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+}
+
+.fp-layout{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns:40% 60%;
+  gap:18px;
+}
+
+/* PANEL IZQUIERDO */
+.fp-intro{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--fp-fondo);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.fp-intro-head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 18px;
+  color:var(--fp-blanco);
+  background:var(--fp-principal);
+}
+
+.fp-icono{
+  flex:0 0 56px;
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  color:var(--fp-blanco);
+  background:rgba(255,255,255,.15);
+}
+
+.fp-icono svg{
+  width:38px;
+  height:38px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.fp-intro-label{
+  font-size:20px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.fp-intro-title{
+  margin-top:3px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.18;
+}
+
+.fp-intro-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:18px 20px 20px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fp-principal) rgba(21,96,73,.12);
+}
+
+.fp-intro-body::-webkit-scrollbar,
+.fp-detail-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.fp-intro-body::-webkit-scrollbar-track,
+.fp-detail-body::-webkit-scrollbar-track{
+  background:rgba(21,96,73,.10);
+  border-radius:999px;
+}
+
+.fp-intro-body::-webkit-scrollbar-thumb,
+.fp-detail-body::-webkit-scrollbar-thumb{
+  background:var(--fp-principal);
+  border-radius:999px;
+}
+
+.fp-p{
+  margin:0 0 15px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.fp-cierre{
+  margin:4px 0 0;
+  padding:12px 14px;
+  border-left:6px solid var(--fp-principal);
+  border-radius:11px;
+  background:var(--fp-claro);
+  font-size:20px;
+  font-weight:700;
+  line-height:1.34;
+}
+
+/* PANEL DERECHO */
+.fp-derecha{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:12px;
+}
+
+.fp-botones{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+
+.fp-btn{
+  min-height:61px;
+  padding:9px 12px;
+  border-radius:13px;
+  color:var(--fp-tinta);
+  background:var(--fp-fondo);
+  border:2px solid var(--fp-borde) !important;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.17;
+  text-align:center;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(10px);
+  transition:
+    opacity .35s ease,
+    transform .35s ease,
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease;
+}
+
+.fp-btn.fp-show{
+  opacity:1;
+  transform:none;
+}
+
+.fp-btn:hover{
+  border-color:var(--fp-principal) !important;
+}
+
+.fp-btn.fp-activo{
+  color:var(--fp-blanco);
+  background:var(--fp-principal);
+  border-color:var(--fp-principal) !important;
+}
+
+.fp-btn:focus-visible{
+  outline:3px solid var(--fp-verde);
+  outline-offset:3px;
+}
+
+/* DETALLE */
+.fp-detail{
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:19px;
+  background:var(--fp-claro);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.fp-detail-bar{
+  background:var(--fp-principal);
+}
+
+.fp-detail-title{
+  margin:0;
+  padding:15px 20px 8px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.fp-detail-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:0 20px 18px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fp-principal) rgba(21,96,73,.16);
+}
+
+.fp-detail-text{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.38;
+}
+
+.fp-detail-body.fp-entra{
+  animation:fp-entra .28s ease;
+}
+
+@keyframes fp-entra{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+  #fp-root{
+    min-height:900px;
+    overflow:auto;
+  }
+  .fp-layout{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+  .fp-intro{min-height:430px}
+  .fp-derecha{min-height:510px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #fp-root *,
+  #fp-root *::before,
+  #fp-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .fp-btn{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="fp-root" aria-label="Factores políticos">
+  <div class="fp-layout">
+
+    <article class="fp-intro">
+      <div class="fp-intro-head">
+        <div class="fp-icono" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M8 52h48"/>
+            <path d="M12 26h40"/>
+            <path d="M16 26v22M27 26v22M37 26v22M48 26v22"/>
+            <path d="M9 26L32 10l23 16z"/>
+            <path d="M6 56h52"/>
+          </svg>
+        </div>
+
+        <div>
+          <div class="fp-intro-label">2 de 7</div>
+          <div class="fp-intro-title">Factores políticos</div>
+        </div>
+      </div>
+
+      <div class="fp-intro-body">
+        <p class="fp-p">
+          Los <strong>factores políticos</strong> se relacionan con la estabilidad gubernamental, las políticas públicas, el grado de apertura comercial y el marco institucional de un país. En <strong>mercadotecnia internacional</strong>, estos factores determinan si el entorno político favorece o limita las operaciones empresariales en un mercado extranjero (Cateora et al., 2020).
+        </p>
+
+        <p class="fp-p">
+          En <strong>investigación de mercados internacional</strong>, el análisis político ayuda a identificar riesgos, restricciones, oportunidades de acceso, fuentes de información gubernamental y posibles cambios en las condiciones del mercado.
+        </p>
+
+        <p class="fp-cierre">
+          En conjunto, los factores políticos permiten anticipar si el ambiente institucional favorece o limita la entrada de una empresa a un mercado, y qué tipo de <strong>barreras de entrada</strong> de naturaleza política pueden enfrentarse.
+        </p>
+      </div>
+    </article>
+
+    <section class="fp-derecha">
+      <div class="fp-botones" id="fp-botones"></div>
+
+      <article class="fp-detail" aria-live="polite">
+        <div class="fp-detail-bar"></div>
+        <h2 class="fp-detail-title" id="fp-detail-title">Riesgo político</h2>
+        <div class="fp-detail-body" id="fp-detail-body"></div>
+      </article>
+    </section>
+
+  </div>
+</section>
+
+<script>
+const FP_FACTORES = [
+  {
+    titulo:"Riesgo político",
+    boton:"Riesgo político",
+    texto:"El <strong>riesgo político</strong> se refiere a la posibilidad de que decisiones gubernamentales, conflictos internos, cambios regulatorios o inestabilidad institucional afecten negativamente las operaciones de una empresa. Este riesgo debe considerarse en la <strong>investigación de mercados</strong> como una variable que puede modificar el atractivo del mercado."
+  },
+  {
+    titulo:"Política comercial",
+    boton:"Política comercial",
+    texto:"La <strong>política comercial</strong> comprende las decisiones gubernamentales relacionadas con importaciones, exportaciones, tratados, aranceles, subsidios y acuerdos bilaterales o multilaterales. Puede facilitar o dificultar el acceso a un mercado."
+  },
+  {
+    titulo:"Política cambiaria",
+    boton:"Política cambiaria",
+    texto:"La <strong>política cambiaria</strong> se relaciona con las decisiones que influyen en el comportamiento de la moneda nacional frente a monedas extranjeras. Puede afectar los precios, la competitividad y los costos del comercio internacional."
+  },
+  {
+    titulo:"Política fiscal",
+    boton:"Política fiscal",
+    texto:"La <strong>política fiscal</strong> se refiere a las decisiones del Estado sobre impuestos, gasto público, derechos, contribuciones y endeudamiento. En <strong>investigación de mercados</strong>, el entorno fiscal puede influir en la rentabilidad y en los precios al consumidor."
+  },
+  {
+    titulo:"Política monetaria y crediticia",
+    boton:"Monetaria y crediticia",
+    texto:"La <strong>política monetaria y crediticia</strong> busca regular la cantidad de dinero, el crédito y las tasas de interés para mantener la estabilidad económica. Su análisis es relevante en el <strong>diseño de investigación</strong> cuando se estudian variables de consumo y acceso al crédito."
+  },
+  {
+    titulo:"Política de precios y tarifas",
+    boton:"Precios y tarifas",
+    texto:"La <strong>política de precios y tarifas</strong> incluye regulaciones o controles gubernamentales sobre ciertos bienes y servicios. Puede afectar directamente la estrategia de precios de una empresa en el mercado internacional y debe contemplarse en la <strong>investigación de mercados</strong>."
+  }
+];
+
+const fpBotones = document.getElementById("fp-botones");
+const fpTitulo = document.getElementById("fp-detail-title");
+const fpBody = document.getElementById("fp-detail-body");
+
+fpBotones.innerHTML = FP_FACTORES.map((item,indice)=>`
+  <button
+    type="button"
+    class="fp-btn"
+    data-indice="${indice}"
+    aria-label="Mostrar ${item.titulo}"
+  >${item.boton}</button>
+`).join("");
+
+function fpMostrar(indice){
+  const item = FP_FACTORES[indice];
+
+  [...fpBotones.children].forEach((btn,i)=>{
+    btn.classList.toggle("fp-activo",i===indice);
+    btn.setAttribute("aria-pressed",i===indice ? "true" : "false");
+  });
+
+  fpTitulo.textContent = item.titulo;
+  fpBody.classList.remove("fp-entra");
+  fpBody.innerHTML = `<p class="fp-detail-text">${item.texto}</p>`;
+  fpBody.scrollTop = 0;
+  requestAnimationFrame(()=>fpBody.classList.add("fp-entra"));
+}
+
+fpBotones.addEventListener("click",evento=>{
+  const btn = evento.target.closest(".fp-btn");
+  if(btn) fpMostrar(Number(btn.dataset.indice));
+});
+
+document.fonts.ready.then(()=>{
+  [...fpBotones.children].forEach((btn,i)=>{
+    setTimeout(()=>btn.classList.add("fp-show"),115*i);
+  });
+  fpMostrar(0);
+});
+</script>
+</body>
+</html>
