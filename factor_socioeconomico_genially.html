@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factor socioeconómico</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#se-root{
+  --se-verde:#279371;
+  --se-verde-oscuro:#104938;
+  --se-verde-medio:#3F9089;
+  --se-claro:#D1DE8C;
+  --se-fondo:#F4F9F4;
+  --se-blanco:#FFFFFF;
+  --se-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 16px 10px;
+  overflow:hidden;
+  color:var(--se-verde-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+}
+
+#se-root,
+#se-root *{
+  box-sizing:border-box;
+}
+
+#se-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+}
+
+.se-layout{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns:39% 61%;
+  gap:18px;
+}
+
+/* PANEL IZQUIERDO */
+.se-intro{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--se-fondo);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.se-intro-head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 18px;
+  color:var(--se-blanco);
+  background:var(--se-verde);
+}
+
+.se-icono{
+  flex:0 0 56px;
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  color:var(--se-blanco);
+  background:rgba(255,255,255,.15);
+}
+
+.se-icono svg{
+  width:37px;
+  height:37px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.se-intro-label{
+  font-size:20px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.se-intro-title{
+  margin-top:3px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.18;
+}
+
+.se-intro-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:18px 20px 20px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--se-verde) rgba(39,147,113,.12);
+}
+
+.se-intro-body::-webkit-scrollbar,
+.se-detail-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.se-intro-body::-webkit-scrollbar-track,
+.se-detail-body::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.10);
+  border-radius:999px;
+}
+
+.se-intro-body::-webkit-scrollbar-thumb,
+.se-detail-body::-webkit-scrollbar-thumb{
+  background:var(--se-verde);
+  border-radius:999px;
+}
+
+.se-p{
+  margin:0 0 15px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.se-p:last-child{
+  margin-bottom:0;
+}
+
+/* PANEL DERECHO */
+.se-derecha{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:12px;
+}
+
+.se-botones{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+
+.se-btn{
+  min-height:54px;
+  padding:9px 12px;
+  border-radius:13px;
+  color:var(--se-verde-oscuro);
+  background:var(--se-fondo);
+  border:2px solid var(--se-borde) !important;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.18;
+  text-align:center;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(10px);
+  transition:
+    opacity .35s ease,
+    transform .35s ease,
+    background .18s ease,
+    color .18s ease,
+    border-color .18s ease;
+}
+
+.se-btn.se-show{
+  opacity:1;
+  transform:none;
+}
+
+.se-btn:hover{
+  border-color:var(--se-verde) !important;
+}
+
+.se-btn.se-activo{
+  color:var(--se-blanco);
+  background:var(--se-verde-oscuro);
+  border-color:var(--se-verde-oscuro) !important;
+}
+
+.se-btn:focus-visible{
+  outline:3px solid var(--se-verde);
+  outline-offset:3px;
+}
+
+/* PANEL DE DETALLE */
+.se-detail{
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:19px;
+  background:var(--se-claro);
+  box-shadow:0 8px 20px rgba(16,73,56,.12);
+}
+
+.se-detail-bar{
+  background:var(--se-verde);
+}
+
+.se-detail-title{
+  margin:0;
+  padding:15px 20px 8px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.se-detail-body{
+  min-height:0;
+  overflow-y:auto;
+  padding:0 20px 18px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--se-verde) rgba(39,147,113,.16);
+}
+
+.se-detail-text{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.38;
+}
+
+.se-detail-body.se-entra{
+  animation:se-entra .28s ease;
+}
+
+@keyframes se-entra{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  html,body{overflow:auto}
+  #se-root{
+    min-height:900px;
+    overflow:auto;
+  }
+  .se-layout{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+  .se-intro{
+    min-height:390px;
+  }
+  .se-derecha{
+    min-height:520px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #se-root *,
+  #se-root *::before,
+  #se-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .se-btn{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="se-root" aria-label="Factor socioeconómico">
+  <div class="se-layout">
+
+    <article class="se-intro">
+      <div class="se-intro-head">
+        <div class="se-icono" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M9 52h46"/>
+            <path d="M14 46V34h8v12M28 46V24h8v22M42 46V15h8v31"/>
+            <path d="M13 23l12-6 11 5 15-11"/>
+            <path d="M44 10h7v7"/>
+          </svg>
+        </div>
+        <div>
+          <div class="se-intro-label">1 de 7</div>
+          <div class="se-intro-title">Factor socioeconómico</div>
+        </div>
+      </div>
+
+      <div class="se-intro-body">
+        <p class="se-p">
+          El <strong>factor socioeconómico</strong> permite conocer las condiciones económicas del mercado destino y su impacto en el consumo, la <strong>capacidad de compra</strong> y la dinámica de la <strong>mercadotecnia internacional</strong>. Este factor ayuda a determinar si el mercado tiene condiciones económicas favorables para el producto o servicio que se desea ofrecer.
+        </p>
+
+        <p class="se-p">
+          En <strong>investigación de mercados</strong> internacional, los indicadores socioeconómicos permiten formular preguntas relacionadas con el <strong>potencial del mercado</strong>, la <strong>sensibilidad al precio</strong> y el perfil económico de los consumidores objetivo.
+        </p>
+      </div>
+    </article>
+
+    <section class="se-derecha">
+      <div class="se-botones" id="se-botones"></div>
+
+      <article class="se-detail" aria-live="polite">
+        <div class="se-detail-bar"></div>
+        <h2 class="se-detail-title" id="se-detail-title">Producto interno bruto (PIB)</h2>
+        <div class="se-detail-body" id="se-detail-body"></div>
+      </article>
+    </section>
+
+  </div>
+</section>
+
+<script>
+const SE_INDICADORES = [
+  {
+    titulo:"Producto interno bruto (PIB)",
+    boton:"PIB",
+    texto:"El <strong>producto interno bruto</strong>, conocido como <strong>PIB</strong>, representa el valor total de los bienes y servicios producidos en un país durante un periodo determinado. Es un indicador del <strong>tamaño de la economía</strong> y su <strong>potencial del mercado</strong> (Cruz, 2015)."
+  },
+  {
+    titulo:"Crecimiento del PIB",
+    boton:"Crecimiento del PIB",
+    texto:"El <strong>crecimiento del PIB</strong> muestra si una economía se encuentra en expansión, desaceleración o estancamiento. Una economía en crecimiento suele ofrecer condiciones más favorables para el consumo."
+  },
+  {
+    titulo:"PIB per cápita",
+    boton:"PIB per cápita",
+    texto:"El <strong>PIB per cápita</strong> resulta de dividir el PIB entre el número de habitantes. Este indicador ofrece una aproximación al ingreso promedio de la población y permite estimar el nivel general de vida del mercado."
+  },
+  {
+    titulo:"Distribución del ingreso",
+    boton:"Distribución del ingreso",
+    texto:"La <strong>distribución del ingreso</strong> permite conocer cómo se reparte la riqueza entre los distintos grupos de población. En <strong>investigación de mercados</strong>, este indicador ayuda a identificar si el <strong>segmento objetivo</strong> pertenece a un grupo con capacidad de compra suficiente para el producto ofrecido."
+  },
+  {
+    titulo:"Tasa de interés",
+    boton:"Tasa de interés",
+    texto:"La <strong>tasa de interés</strong> representa el costo del dinero en operaciones de crédito, ahorro e inversión. Cuando las tasas de interés son altas, el crédito se encarece y el consumo puede reducirse."
+  },
+  {
+    titulo:"Tipo de cambio",
+    boton:"Tipo de cambio",
+    texto:"El <strong>tipo de cambio</strong> expresa el valor de una moneda en relación con otra. En mercados internacionales, influye en precios, costos de importación, márgenes de ganancia y <strong>sensibilidad al precio</strong>. Su análisis es relevante en el <strong>diseño de investigación</strong> porque puede determinar si el precio del producto es competitivo en el mercado destino (Keegan y Green, 2020)."
+  },
+  {
+    titulo:"Inflación",
+    boton:"Inflación",
+    texto:"La <strong>inflación</strong> consiste en el aumento generalizado y sostenido de precios. Cuando la inflación es alta, disminuye la <strong>capacidad de compra</strong> real de los consumidores. Este dato puede utilizarse en <strong>investigación de mercados</strong> para analizar el comportamiento del consumidor ante cambios en precios."
+  },
+  {
+    titulo:"Tasa de empleo y nivel salarial",
+    boton:"Empleo y salario",
+    texto:"La <strong>tasa de empleo</strong> y el <strong>nivel salarial</strong> influyen directamente en el ingreso disponible de las familias. Un mercado con alta desocupación o salarios bajos puede presentar menor <strong>capacidad de compra</strong>."
+  },
+  {
+    titulo:"Balanza de pagos",
+    boton:"Balanza de pagos",
+    texto:"La <strong>balanza de pagos</strong> registra las transacciones económicas de un país con el resto del mundo. En <strong>investigación de mercados internacional</strong>, puede indicar si el país tiende a importar o exportar ciertos tipos de productos."
+  }
+];
+
+const seBotones = document.getElementById("se-botones");
+const seTitulo = document.getElementById("se-detail-title");
+const seBody = document.getElementById("se-detail-body");
+let seActual = 0;
+
+seBotones.innerHTML = SE_INDICADORES.map((item,indice)=>`
+  <button
+    type="button"
+    class="se-btn"
+    data-indice="${indice}"
+    aria-label="Mostrar ${item.titulo}"
+  >${item.boton}</button>
+`).join("");
+
+function seMostrar(indice){
+  seActual = indice;
+  const item = SE_INDICADORES[indice];
+
+  [...seBotones.children].forEach((btn,i)=>{
+    btn.classList.toggle("se-activo",i===indice);
+    btn.setAttribute("aria-pressed",i===indice ? "true" : "false");
+  });
+
+  seTitulo.textContent = item.titulo;
+  seBody.classList.remove("se-entra");
+  seBody.innerHTML = `<p class="se-detail-text">${item.texto}</p>`;
+  seBody.scrollTop = 0;
+  requestAnimationFrame(()=>seBody.classList.add("se-entra"));
+}
+
+seBotones.addEventListener("click",evento=>{
+  const btn = evento.target.closest(".se-btn");
+  if(btn) seMostrar(Number(btn.dataset.indice));
+});
+
+document.fonts.ready.then(()=>{
+  [...seBotones.children].forEach((btn,i)=>{
+    setTimeout(()=>btn.classList.add("se-show"),95*i);
+  });
+  seMostrar(0);
+});
+</script>
+</body>
+</html>
