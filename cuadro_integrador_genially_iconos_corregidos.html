@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuadro integrador de organismos</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================
+   COMPONENTE AISLADO PARA GENIALLY
+   Todas las clases usan el prefijo ci- para evitar conflictos
+   con los estilos de la vista publicada de Genially.
+========================================================== */
+
+#ci-root{
+  --ci-se:#279371;
+  --ci-anam:#156049;
+  --ci-sat:#156049;
+  --ci-sre:#279371;
+  --ci-banxico:#3F9089;
+  --ci-bancomext:#3F9089;
+  --ci-inegi:#93C01F;
+  --ci-comce:#D1DE8C;
+  --ci-promexico:#FFFFFF;
+  --ci-tinta:#104938;
+  --ci-popup:#D1DE8C;
+  --ci-borde:#D1DE8C;
+  --ci-linea:#D9EAE3;
+  --ci-sombra:0 10px 24px rgba(16,73,56,.17);
+
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:"Montserrat",Arial,sans-serif;
+  color:var(--ci-tinta);
+  background:transparent;
+  isolation:isolate;
+}
+
+#ci-root,
+#ci-root *{
+  box-sizing:border-box;
+}
+
+#ci-root button{
+  margin:0;
+  padding:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  color:inherit;
+  background:none;
+  text-transform:none;
+  letter-spacing:normal;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+/* El escenario conserva exactamente la misma proporción
+   tanto en el editor como en el modo Presentar. */
+#ci-stage{
+  position:absolute;
+  left:0;
+  top:0;
+  width:1060px;
+  height:390px;
+  transform-origin:top left;
+  overflow:hidden;
+}
+
+/* PROGRESO */
+.ci-progress{
+  width:960px;
+  height:5px;
+  margin:7px auto 16px;
+  overflow:hidden;
+  border-radius:999px;
+  background:var(--ci-linea);
+}
+
+.ci-progress-bar{
+  width:33.333%;
+  height:100%;
+  border-radius:999px;
+  background:var(--ci-se);
+  transition:width .38s ease;
+}
+
+/* CARRUSEL */
+.ci-carousel{
+  display:grid;
+  grid-template-columns:48px 1fr 48px;
+  align-items:center;
+  gap:14px;
+  width:1030px;
+  margin:0 auto;
+}
+
+.ci-viewport{
+  width:906px;
+  overflow:hidden;
+  padding:4px 4px 9px;
+}
+
+.ci-track{
+  display:flex;
+  width:100%;
+  transition:transform .48s cubic-bezier(.4,.2,.2,1);
+}
+
+.ci-group{
+  min-width:100%;
+  display:grid;
+  grid-template-columns:repeat(3, 286px);
+  justify-content:center;
+  gap:20px;
+}
+
+/* FLECHAS */
+.ci-arrow{
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:50% !important;
+  color:#FFFFFF !important;
+  background:var(--ci-tinta) !important;
+  cursor:pointer;
+  box-shadow:0 6px 15px rgba(16,73,56,.20);
+  transition:transform .2s ease,opacity .2s ease;
+}
+
+.ci-arrow:hover{
+  transform:scale(1.07);
+}
+
+.ci-arrow:disabled{
+  opacity:.26;
+  cursor:default;
+  transform:none;
+}
+
+.ci-arrow svg{
+  display:block;
+  width:22px;
+  height:22px;
+  fill:none;
+  stroke:#FFFFFF;
+  stroke-width:2.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+
+/* TARJETAS */
+.ci-card{
+  position:relative;
+  width:286px;
+  height:292px;
+  padding:22px 20px 20px !important;
+  overflow:hidden;
+  border-radius:23px !important;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:var(--ci-sombra);
+  opacity:0;
+  transform:translateY(15px);
+  transition:opacity .4s ease,transform .4s ease,box-shadow .22s ease;
+}
+
+.ci-card.ci-visible{
+  opacity:1;
+  transform:none;
+}
+
+.ci-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 29px rgba(16,73,56,.22);
+}
+
+.ci-card:focus-visible{
+  outline:4px solid var(--ci-tinta);
+  outline-offset:4px;
+}
+
+.ci-dark{
+  color:#FFFFFF !important;
+}
+
+.ci-light{
+  color:var(--ci-tinta) !important;
+}
+
+.ci-promexico{
+  border:4px solid var(--ci-borde) !important;
+}
+
+/* ÍCONOS: SVG con atributos explícitos para que Genially
+   no cambie trazos o rellenos en la vista publicada. */
+.ci-icon{
+  width:78px;
+  height:78px;
+  display:grid;
+  place-items:center;
+  margin-bottom:18px;
+  border-radius:19px;
+  background:rgba(255,255,255,.18);
+  color:currentColor;
+  pointer-events:none;
+}
+
+.ci-light .ci-icon{
+  background:rgba(16,73,56,.09);
+}
+
+.ci-icon svg{
+  display:block;
+  width:52px;
+  height:52px;
+  overflow:visible;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+
+/* TEXTOS */
+.ci-name{
+  display:block;
+  margin-bottom:12px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.17;
+  pointer-events:none;
+}
+
+.ci-type{
+  display:block;
+  padding-right:42px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.28;
+  pointer-events:none;
+}
+
+/* BOTÓN + */
+.ci-open{
+  position:absolute;
+  right:17px;
+  bottom:17px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:#FFFFFF;
+  background:rgba(16,73,56,.76);
+  pointer-events:none;
+}
+
+.ci-open svg{
+  display:block;
+  width:22px;
+  height:22px;
+  fill:none;
+  stroke:#FFFFFF;
+  stroke-width:2.5;
+  stroke-linecap:round;
+}
+
+/* FUNCIÓN GENERAL EN HOVER */
+.ci-tooltip{
+  position:absolute;
+  left:15px;
+  right:15px;
+  bottom:69px;
+  z-index:6;
+  padding:13px 15px;
+  border-radius:13px;
+  background:#FFFFFF;
+  color:var(--ci-tinta);
+  box-shadow:0 9px 22px rgba(16,73,56,.22);
+  font-size:20px;
+  font-weight:600;
+  line-height:1.32;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(7px);
+  pointer-events:none;
+  transition:opacity .2s ease,visibility .2s ease,transform .2s ease;
+}
+
+.ci-card:hover .ci-tooltip,
+.ci-card:focus-visible .ci-tooltip{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+}
+
+/* INDICADORES */
+.ci-dots{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:11px;
+  margin-top:9px;
+}
+
+.ci-dot{
+  width:14px;
+  height:14px;
+  border-radius:50% !important;
+  background:#CFE3DA !important;
+  cursor:pointer;
+  transition:width .22s ease,border-radius .22s ease,background .22s ease;
+}
+
+.ci-dot.ci-active{
+  width:40px;
+  border-radius:999px !important;
+  background:var(--ci-se) !important;
+}
+
+/* MODAL: contenido limitado al escenario, no al viewport
+   general del navegador. */
+.ci-modal{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  background:rgba(16,73,56,.62);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .22s ease,visibility .22s ease;
+}
+
+.ci-modal.ci-opened{
+  opacity:1;
+  visibility:visible;
+}
+
+.ci-modal-box{
+  position:relative;
+  width:900px;
+  max-height:340px;
+  overflow-y:auto;
+  padding:27px 30px 28px;
+  border-radius:22px;
+  background:var(--ci-popup);
+  color:var(--ci-tinta);
+  box-shadow:0 18px 48px rgba(0,0,0,.28);
+  transform:translateY(14px) scale(.985);
+  transition:transform .25s ease;
+  scrollbar-width:thin;
+  scrollbar-color:var(--ci-tinta) rgba(255,255,255,.40);
+}
+
+.ci-modal.ci-opened .ci-modal-box{
+  transform:none;
+}
+
+.ci-close{
+  position:sticky;
+  float:right;
+  top:0;
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  margin:-7px -8px 0 16px !important;
+  border-radius:50% !important;
+  color:#FFFFFF !important;
+  background:var(--ci-tinta) !important;
+  cursor:pointer;
+  z-index:4;
+}
+
+.ci-close svg{
+  display:block;
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:#FFFFFF;
+  stroke-width:2.6;
+  stroke-linecap:round;
+}
+
+.ci-modal-title{
+  margin:0 54px 19px 0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.ci-info-block{
+  margin-top:12px;
+  padding:13px 16px;
+  border-left:6px solid var(--ci-se);
+  border-radius:13px;
+  background:rgba(255,255,255,.58);
+}
+
+.ci-info-label{
+  display:block;
+  margin-bottom:5px;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.23;
+}
+
+.ci-info-text{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.38;
+}
+
+/* El componente se escala como una sola pieza. No cambia su
+   distribución interna al publicar la presentación. */
+@media (prefers-reduced-motion:reduce){
+  #ci-root *,
+  #ci-root *::before,
+  #ci-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .ci-card{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<div id="ci-root">
+  <div id="ci-stage">
+
+    <div class="ci-progress" aria-hidden="true">
+      <div class="ci-progress-bar" id="ci-progress-bar"></div>
+    </div>
+
+    <div class="ci-carousel">
+      <button class="ci-arrow" id="ci-prev" type="button" aria-label="Mostrar grupo anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+
+      <div class="ci-viewport">
+        <div class="ci-track" id="ci-track"></div>
+      </div>
+
+      <button class="ci-arrow" id="ci-next" type="button" aria-label="Mostrar grupo siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="ci-dots" id="ci-dots" aria-label="Grupos de organismos"></div>
+
+    <div class="ci-modal" id="ci-modal" role="dialog" aria-modal="true" aria-labelledby="ci-modal-title">
+      <div class="ci-modal-box">
+        <button class="ci-close" id="ci-close" type="button" aria-label="Cerrar ventana">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18"/>
+          </svg>
+        </button>
+        <h2 class="ci-modal-title" id="ci-modal-title"></h2>
+        <div id="ci-modal-body"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const CI_ORGANISMOS = [
+  {
+    nombre:"Secretaría de Economía",
+    tipo:"Público centralizado",
+    funcion:"Diseña e impulsa políticas de desarrollo económico, comercio exterior e inversión.",
+    informacion:"Información comercial, herramientas como SIAVI, datos de exportaciones e importaciones, directorios y programas de apoyo.",
+    utilidad:"Permite analizar mercados, revisar fracciones arancelarias, identificar destinos comerciales y evaluar oportunidades de exportación.",
+    color:"#279371",
+    clase:"ci-dark",
+    icono:"economia"
+  },
+  {
+    nombre:"Agencia Nacional de Aduanas de México",
+    tipo:"Órgano desconcentrado",
+    funcion:"Administra y controla operaciones aduaneras.",
+    informacion:"Información sobre procesos aduaneros, pedimentos, despacho y normatividad operativa.",
+    utilidad:"Ayuda a identificar requisitos, restricciones y condiciones operativas para movilizar mercancías.",
+    color:"#156049",
+    clase:"ci-dark",
+    icono:"aduana"
+  },
+  {
+    nombre:"Servicio de Administración Tributaria",
+    tipo:"Órgano desconcentrado",
+    funcion:"Administra obligaciones fiscales y tributarias.",
+    informacion:"Información sobre comprobantes fiscales, complemento de comercio exterior y obligaciones fiscales.",
+    utilidad:"Permite considerar requisitos fiscales y documentales dentro del análisis de viabilidad comercial.",
+    color:"#156049",
+    clase:"ci-dark",
+    icono:"fiscal"
+  },
+  {
+    nombre:"Secretaría de Relaciones Exteriores",
+    tipo:"Público centralizado",
+    funcion:"Coordina la política exterior de México.",
+    informacion:"Representaciones diplomáticas, promoción económica, vinculación internacional y contexto bilateral.",
+    utilidad:"Apoya la identificación de contactos institucionales, oportunidades de vinculación y contexto del país destino.",
+    color:"#279371",
+    clase:"ci-dark",
+    icono:"relaciones"
+  },
+  {
+    nombre:"Banco de México",
+    tipo:"Banco central",
+    funcion:"Mantiene la estabilidad del poder adquisitivo de la moneda y genera información financiera.",
+    informacion:"Tipo de cambio, indicadores financieros, estadísticas económicas y Cubo de Información de Comercio Exterior.",
+    utilidad:"Permite analizar riesgos cambiarios, tendencias comerciales y condiciones macroeconómicas que afectan precios y rentabilidad.",
+    color:"#3F9089",
+    clase:"ci-dark",
+    icono:"banco"
+  },
+  {
+    nombre:"Bancomext",
+    tipo:"Institución financiera pública especializada",
+    funcion:"Otorga financiamiento y apoyo a empresas vinculadas con comercio exterior.",
+    informacion:"Programas de financiamiento, apoyo a sectores estratégicos y soluciones financieras.",
+    utilidad:"Ayuda a evaluar la viabilidad financiera de proyectos de internacionalización.",
+    color:"#3F9089",
+    clase:"ci-dark",
+    icono:"financiamiento"
+  },
+  {
+    nombre:"INEGI",
+    tipo:"Organismo autónomo",
+    funcion:"Genera información estadística y geográfica oficial.",
+    informacion:"DENUE, BIE, balanza comercial, indicadores económicos y directorios empresariales.",
+    utilidad:"Permite dimensionar mercados, identificar empresas, analizar tendencias y construir diagnósticos con datos oficiales.",
+    color:"#93C01F",
+    clase:"ci-dark",
+    icono:"estadistica"
+  },
+  {
+    nombre:"COMCE",
+    tipo:"Organismo del sector privado",
+    funcion:"Promueve comercio exterior, inversión y vinculación empresarial.",
+    informacion:"Redes empresariales, comités bilaterales, eventos, misiones comerciales y contactos.",
+    utilidad:"Facilita el análisis de actores del mercado, redes de contacto y oportunidades empresariales.",
+    color:"#D1DE8C",
+    clase:"ci-light",
+    icono:"red"
+  },
+  {
+    nombre:"ProMéxico",
+    tipo:"Antecedente histórico",
+    funcion:"Fue organismo de promoción de exportaciones e inversión.",
+    informacion:"Referencia histórica sobre promoción comercial.",
+    utilidad:"Permite comprender la evolución institucional, pero no debe usarse como organismo vigente.",
+    color:"#FFFFFF",
+    clase:"ci-light ci-promexico",
+    icono:"historia"
+  }
+];
+
+const CI_ICONOS = {
+  economia:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M10 53h44"/>
+      <path d="M15 47V34h8v13M28 47V26h8v21M41 47V16h8v31"/>
+      <path d="M13 23l12-7 11 5 15-11"/>
+      <path d="M44 10h7v7"/>
+    </svg>`,
+
+  aduana:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M8 52h48"/>
+      <path d="M12 24h40v28H12z"/>
+      <path d="M9 24L32 9l23 15"/>
+      <path d="M20 33h24v19H20z"/>
+      <path d="M32 33v19M20 42h24"/>
+    </svg>`,
+
+  fiscal:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M18 7h23l9 9v41H18z"/>
+      <path d="M41 7v11h9"/>
+      <path d="M25 29h18M25 37h18M25 45h12"/>
+      <path d="M11 19h7M11 27h7M11 35h7"/>
+    </svg>`,
+
+  relaciones:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="23"/>
+      <path d="M9 32h46M15 18h34M15 46h34"/>
+      <path d="M32 9c8 8 12 15 12 23S40 47 32 55"/>
+      <path d="M32 9c-8 8-12 15-12 23s4 15 12 23"/>
+    </svg>`,
+
+  banco:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M8 24h48L32 8z"/>
+      <path d="M13 25v25M23 25v25M32 25v25M41 25v25M51 25v25"/>
+      <path d="M7 50h50M5 56h54"/>
+    </svg>`,
+
+  financiamiento:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M8 27h48L32 11z"/>
+      <path d="M14 27v20M24 27v20M40 27v20M50 27v20"/>
+      <path d="M10 47h44M7 53h50"/>
+      <circle cx="49" cy="16" r="8"/>
+      <path d="M49 11v10M45.5 14.5c0-2 1.7-3.5 3.8-3.5 2.2 0 3.7 1.2 3.7 3 0 1.9-1.5 2.8-3.8 3.1-2.1.3-3.7 1.1-3.7 3 0 1.8 1.6 3 3.8 3 2.1 0 3.7-1.4 3.7-3.4"/>
+    </svg>`,
+
+  estadistica:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M9 54h46"/>
+      <path d="M14 49V35h9v14M28 49V26h9v23M42 49V15h9v34"/>
+      <path d="M13 21l12 5 11-11 15 6"/>
+    </svg>`,
+
+  red:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="12" r="7"/>
+      <circle cx="13" cy="47" r="7"/>
+      <circle cx="51" cy="47" r="7"/>
+      <circle cx="32" cy="34" r="7"/>
+      <path d="M32 19v8M27 38l-8 5M37 38l8 5"/>
+      <path d="M18 43l9-7M46 43l-9-7"/>
+    </svg>`,
+
+  historia:`
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M16 8h25l9 9v39H16z"/>
+      <path d="M41 8v11h9"/>
+      <path d="M23 29h18M23 37h12"/>
+      <circle cx="43" cy="45" r="11"/>
+      <path d="M43 39v7l5 3"/>
+    </svg>`
+};
+
+const ciTrack = document.getElementById("ci-track");
+const ciDots = document.getElementById("ci-dots");
+const ciPrev = document.getElementById("ci-prev");
+const ciNext = document.getElementById("ci-next");
+const ciProgress = document.getElementById("ci-progress-bar");
+const ciModal = document.getElementById("ci-modal");
+const ciModalTitle = document.getElementById("ci-modal-title");
+const ciModalBody = document.getElementById("ci-modal-body");
+const ciClose = document.getElementById("ci-close");
+
+let ciCurrent = 0;
+let ciPreviousFocus = null;
+
+const ciGroups = [
+  CI_ORGANISMOS.slice(0,3),
+  CI_ORGANISMOS.slice(3,6),
+  CI_ORGANISMOS.slice(6,9)
+];
+
+function ciCardHTML(item, globalIndex){
+  return `
+    <button
+      type="button"
+      class="ci-card ${item.clase}"
+      style="background:${item.color} !important"
+      data-index="${globalIndex}"
+      aria-label="${item.nombre}. ${item.tipo}. Abrir información."
+    >
+      <span class="ci-icon">${CI_ICONOS[item.icono]}</span>
+      <strong class="ci-name">${item.nombre}</strong>
+      <span class="ci-type">${item.tipo}</span>
+
+      <span class="ci-tooltip">
+        ${item.funcion}
+      </span>
+
+      <span class="ci-open" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+      </span>
+    </button>
+  `;
+}
+
+ciTrack.innerHTML = ciGroups.map((group, groupIndex) => `
+  <div class="ci-group">
+    ${group.map((item, i) => ciCardHTML(item, groupIndex * 3 + i)).join("")}
+  </div>
+`).join("");
+
+ciDots.innerHTML = ciGroups.map((_, i) => `
+  <button
+    type="button"
+    class="ci-dot ${i === 0 ? "ci-active" : ""}"
+    data-group="${i}"
+    aria-label="Mostrar grupo ${i + 1}"
+  ></button>
+`).join("");
+
+function ciShowGroup(groupIndex){
+  ciCurrent = Math.max(0, Math.min(groupIndex, ciGroups.length - 1));
+  ciTrack.style.transform = `translateX(-${ciCurrent * 100}%)`;
+
+  [...ciDots.children].forEach((dot, i) => {
+    dot.classList.toggle("ci-active", i === ciCurrent);
+    dot.setAttribute("aria-current", i === ciCurrent ? "true" : "false");
+  });
+
+  ciPrev.disabled = ciCurrent === 0;
+  ciNext.disabled = ciCurrent === ciGroups.length - 1;
+  ciProgress.style.width = `${((ciCurrent + 1) / ciGroups.length) * 100}%`;
+
+  const currentCards = ciTrack.children[ciCurrent].querySelectorAll(".ci-card");
+  currentCards.forEach((card, i) => {
+    card.classList.remove("ci-visible");
+    setTimeout(() => card.classList.add("ci-visible"), i * 110);
+  });
+}
+
+function ciOpenModal(index){
+  const item = CI_ORGANISMOS[index];
+  ciPreviousFocus = document.activeElement;
+
+  ciModalTitle.textContent = item.nombre;
+  ciModalBody.innerHTML = `
+    <section class="ci-info-block">
+      <strong class="ci-info-label">Tipo</strong>
+      <p class="ci-info-text">${item.tipo}</p>
+    </section>
+
+    <section class="ci-info-block">
+      <strong class="ci-info-label">Información o apoyo que aporta</strong>
+      <p class="ci-info-text">${item.informacion}</p>
+    </section>
+
+    <section class="ci-info-block">
+      <strong class="ci-info-label">Utilidad para investigación de mercados internacional</strong>
+      <p class="ci-info-text">${item.utilidad}</p>
+    </section>
+  `;
+
+  ciModal.classList.add("ci-opened");
+  ciClose.focus();
+}
+
+function ciCloseModal(){
+  ciModal.classList.remove("ci-opened");
+  if(ciPreviousFocus) ciPreviousFocus.focus();
+}
+
+ciTrack.addEventListener("click", event => {
+  const card = event.target.closest(".ci-card");
+  if(card) ciOpenModal(Number(card.dataset.index));
+});
+
+ciPrev.addEventListener("click", () => ciShowGroup(ciCurrent - 1));
+ciNext.addEventListener("click", () => ciShowGroup(ciCurrent + 1));
+
+ciDots.addEventListener("click", event => {
+  const dot = event.target.closest(".ci-dot");
+  if(dot) ciShowGroup(Number(dot.dataset.group));
+});
+
+ciClose.addEventListener("click", ciCloseModal);
+
+ciModal.addEventListener("click", event => {
+  if(event.target === ciModal) ciCloseModal();
+});
+
+document.addEventListener("keydown", event => {
+  if(event.key === "Escape" && ciModal.classList.contains("ci-opened")){
+    ciCloseModal();
+    return;
+  }
+
+  if(!ciModal.classList.contains("ci-opened")){
+    if(event.key === "ArrowLeft") ciShowGroup(ciCurrent - 1);
+    if(event.key === "ArrowRight") ciShowGroup(ciCurrent + 1);
+  }
+});
+
+/* ESCALADO PROPORCIONAL:
+   la composición interna siempre mide 1060 × 390 y se adapta
+   como una sola pieza al tamaño real del bloque en Genially. */
+function ciFit(){
+  const root = document.getElementById("ci-root");
+  const stage = document.getElementById("ci-stage");
+  const rootWidth = root.clientWidth || window.innerWidth;
+  const rootHeight = root.clientHeight || window.innerHeight;
+
+  const scale = Math.min(rootWidth / 1060, rootHeight / 390);
+  const scaledWidth = 1060 * scale;
+  const scaledHeight = 390 * scale;
+
+  stage.style.transform = `scale(${scale})`;
+  stage.style.left = `${(rootWidth - scaledWidth) / 2}px`;
+  stage.style.top = `${(rootHeight - scaledHeight) / 2}px`;
+}
+
+window.addEventListener("resize", ciFit);
+
+if("ResizeObserver" in window){
+  const ciObserver = new ResizeObserver(ciFit);
+  ciObserver.observe(document.getElementById("ci-root"));
+}
+
+ciShowGroup(0);
+ciFit();
+</script>
+</body>
+</html>
