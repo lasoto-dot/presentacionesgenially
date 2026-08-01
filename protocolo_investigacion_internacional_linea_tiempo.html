@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Componentes del protocolo de investigación de mercados internacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#pti-root{
+  --pti-verde:#279371;
+  --pti-bosque:#156049;
+  --pti-oscuro:#104938;
+  --pti-claro:#D1DE8C;
+  --pti-fondo:#F4F9F4;
+  --pti-blanco:#FFFFFF;
+  --pti-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 14px 10px;
+  overflow:hidden;
+  color:var(--pti-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  box-sizing:border-box;
+}
+
+#pti-root,
+#pti-root *{
+  box-sizing:border-box;
+}
+
+#pti-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.pti-layout{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-columns:41% 59%;
+  gap:14px;
+}
+
+/* ==========================================================
+   LÍNEA DE TIEMPO
+========================================================== */
+.pti-timeline{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:repeat(6,minmax(0,1fr));
+  gap:7px;
+  padding:2px 0;
+}
+
+.pti-line{
+  position:absolute;
+  left:29px;
+  top:31px;
+  bottom:31px;
+  width:5px;
+  border-radius:999px;
+  background:var(--pti-borde);
+  z-index:0;
+}
+
+.pti-progress{
+  width:100%;
+  height:0;
+  border-radius:999px;
+  background:var(--pti-bosque);
+  transition:height .25s ease;
+}
+
+.pti-node{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr);
+  align-items:center;
+  gap:10px;
+  padding:7px 12px 7px 0 !important;
+  border-radius:15px !important;
+  color:var(--pti-oscuro) !important;
+  background:var(--pti-fondo) !important;
+  box-shadow:0 4px 12px rgba(16,73,56,.08);
+  cursor:pointer;
+  z-index:2;
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+}
+
+.pti-node:hover{
+  transform:translateX(3px);
+  box-shadow:0 7px 16px rgba(16,73,56,.12);
+}
+
+.pti-node:focus-visible{
+  outline:3px solid var(--pti-claro);
+  outline-offset:2px;
+}
+
+.pti-number{
+  width:46px;
+  height:46px;
+  margin-left:6px;
+  display:grid;
+  place-items:center;
+  border:5px solid var(--pti-fondo);
+  border-radius:50%;
+  color:#FFFFFF;
+  background:var(--pti-verde);
+  font-size:20px;
+  font-weight:700;
+  line-height:1;
+  transition:background .15s ease,transform .15s ease;
+}
+
+.pti-node.pti-visited .pti-number{
+  background:var(--pti-bosque);
+}
+
+.pti-node.pti-active{
+  background:var(--pti-claro) !important;
+}
+
+.pti-node.pti-active .pti-number{
+  background:var(--pti-verde);
+  transform:scale(1.08);
+  outline:3px solid var(--pti-verde);
+  outline-offset:2px;
+}
+
+.pti-label{
+  min-width:0;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.13;
+  text-align:left;
+}
+
+/* ==========================================================
+   PANEL DE DETALLE
+========================================================== */
+.pti-panel{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr) auto;
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--pti-claro);
+  box-shadow:0 8px 21px rgba(16,73,56,.13);
+}
+
+.pti-bar{
+  background:var(--pti-verde);
+}
+
+.pti-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:14px 19px 8px;
+}
+
+.pti-title{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.17;
+}
+
+.pti-status{
+  flex:0 0 auto;
+  padding:6px 12px;
+  border-radius:999px;
+  color:#FFFFFF;
+  background:var(--pti-oscuro);
+  font-size:18px;
+  font-weight:700;
+  line-height:1.1;
+}
+
+.pti-scroll{
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  margin:0 18px;
+  padding:15px 17px;
+  border-radius:15px;
+  background:#FFFFFF;
+  scrollbar-width:thin;
+  scrollbar-color:var(--pti-verde) rgba(39,147,113,.12);
+}
+
+.pti-scroll::-webkit-scrollbar{
+  width:7px;
+}
+
+.pti-scroll::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.10);
+  border-radius:999px;
+}
+
+.pti-scroll::-webkit-scrollbar-thumb{
+  background:var(--pti-verde);
+  border-radius:999px;
+}
+
+.pti-body{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.pti-body p{
+  margin:0 0 14px;
+}
+
+.pti-body p:last-child{
+  margin-bottom:0;
+}
+
+.pti-body.pti-enter{
+  animation:pti-enter .22s ease;
+}
+
+@keyframes pti-enter{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+}
+
+.pti-legend{
+  margin:10px 18px 16px;
+  padding:10px 14px;
+  border-left:6px solid var(--pti-verde);
+  border-radius:12px;
+  color:var(--pti-oscuro);
+  background:rgba(255,255,255,.72);
+  font-size:20px;
+  font-weight:700;
+  line-height:1.25;
+  text-align:center;
+}
+
+@media(max-width:900px){
+  html,body{
+    overflow:auto;
+  }
+
+  #pti-root{
+    min-height:980px;
+    overflow:auto;
+  }
+
+  .pti-layout{
+    grid-template-columns:1fr;
+  }
+
+  .pti-timeline{
+    min-height:500px;
+  }
+
+  .pti-panel{
+    min-height:430px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #pti-root *,
+  #pti-root *::before,
+  #pti-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="pti-root" aria-label="Componentes del protocolo de investigación de mercados internacional">
+  <div class="pti-layout">
+
+    <nav class="pti-timeline" aria-label="Seis componentes del protocolo">
+      <div class="pti-line" aria-hidden="true">
+        <div class="pti-progress" id="pti-progress"></div>
+      </div>
+
+      <button class="pti-node pti-active" type="button" data-index="0">
+        <span class="pti-number">1</span>
+        <span class="pti-label">Planteamiento del problema</span>
+      </button>
+
+      <button class="pti-node" type="button" data-index="1">
+        <span class="pti-number">2</span>
+        <span class="pti-label">Objetivos de la investigación</span>
+      </button>
+
+      <button class="pti-node" type="button" data-index="2">
+        <span class="pti-number">3</span>
+        <span class="pti-label">Análisis del ambiente internacional</span>
+      </button>
+
+      <button class="pti-node" type="button" data-index="3">
+        <span class="pti-number">4</span>
+        <span class="pti-label">Identificación de organismos institucionales</span>
+      </button>
+
+      <button class="pti-node" type="button" data-index="4">
+        <span class="pti-number">5</span>
+        <span class="pti-label">Proceso metodológico</span>
+      </button>
+
+      <button class="pti-node" type="button" data-index="5">
+        <span class="pti-number">6</span>
+        <span class="pti-label">Resultados esperados y conclusión integrada</span>
+      </button>
+    </nav>
+
+    <article class="pti-panel" aria-live="polite">
+      <div class="pti-bar"></div>
+
+      <header class="pti-head">
+        <h2 class="pti-title" id="pti-title"></h2>
+        <div class="pti-status" id="pti-status">1 de 6</div>
+      </header>
+
+      <div class="pti-scroll">
+        <div class="pti-body" id="pti-body"></div>
+      </div>
+
+      <div class="pti-legend">
+        La coherencia entre apartados es el criterio central de calidad.
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<script>
+const PTI_DATA = [
+  {
+    titulo:"1. Planteamiento del problema",
+    contenido:`
+      <p>El protocolo inicia con el <strong>planteamiento del problema</strong>, que debe describir con precisión la situación organizacional que genera la necesidad de investigación, la incertidumbre comercial que enfrenta la empresa y el contexto internacional en el que opera. Un buen planteamiento responde a tres preguntas: qué ocurre, qué se necesita conocer y por qué es necesario investigarlo. La precisión en esta sección es determinante, ya que todos los demás apartados del protocolo deben derivarse de ella.</p>
+    `
+  },
+  {
+    titulo:"2. Objetivos de la investigación",
+    contenido:`
+      <p>Los <strong>objetivos de la investigación</strong> expresan en términos medibles y alcanzables lo que el estudio busca lograr. El objetivo general debe ser coherente con el problema planteado y formularse con un verbo en infinitivo (analizar, identificar, evaluar, comprender). Los <strong>objetivos específicos</strong> desagregan el objetivo general en componentes verificables y metodológicamente útiles: cada uno debe ser alcanzable mediante las técnicas de recopilación y análisis que se definirán en el proceso metodológico. Una inconsistencia frecuente en protocolos mal estructurados es la de objetivos que no pueden ser respondidos por el método de investigación seleccionado.</p>
+    `
+  },
+  {
+    titulo:"3. Análisis del ambiente internacional",
+    contenido:`
+      <p>El <strong>análisis del ambiente internacional</strong> sitúa la investigación en su contexto externo. Como se describió en la sección anterior de este documento, las dimensiones económica, legal, cultural, política y tecnológica del mercado objetivo condicionan las decisiones metodológicas. En el protocolo, cada factor del ambiente debe describirse, evaluarse en términos de su posible impacto sobre la organización e interpretarse en cuanto a sus implicaciones comerciales concretas. No basta nombrar los factores: es necesario argumentar cómo afectan la situación planteada.</p>
+    `
+  },
+  {
+    titulo:"4. Identificación de organismos institucionales",
+    contenido:`
+      <p>La <strong>identificación de organismos institucionales pertinentes</strong> conecta el protocolo con el ecosistema de apoyo disponible para la empresa. Cada organismo debe presentarse con su nombre, función y justificación de pertinencia en relación con el caso específico. La justificación es el elemento crítico: no se trata de listar instituciones de comercio exterior en general, sino de argumentar por qué ese organismo en particular es relevante para la situación que enfrenta la empresa y en qué etapa del proceso podría intervenir.</p>
+    `
+  },
+  {
+    titulo:"5. Proceso metodológico",
+    contenido:`
+      <p>El <strong>proceso metodológico</strong> es el componente central del protocolo. Debe organizarse de forma secuencial, con lógica interna entre cada etapa: el planteamiento del problema debe generar los objetivos; los objetivos deben determinar el tipo de información requerida; el tipo de información debe definir las fuentes y los métodos de recopilación; los métodos deben guiar el diseño del instrumento; el instrumento debe ser aplicable al universo y muestra definidos; y los resultados del análisis deben poder responder los objetivos originales. Una ruptura en cualquier punto de esa cadena produce un protocolo incoherente (mcdaniel y Gates, 2011).</p>
+    `
+  },
+  {
+    titulo:"6. Resultados esperados y conclusión integrada",
+    contenido:`
+      <p>El protocolo concluye con los <strong>resultados esperados</strong> y la <strong>conclusión integrada</strong>. Los resultados esperados no anticipan los hallazgos (que aún no existen), sino que describen el tipo de información que la investigación permitirá obtener y cómo esa información apoyará la toma de decisiones de la organización. La conclusión debe integrar la relevancia del estudio, la utilidad del protocolo y el valor estratégico de la investigación propuesta para la situación específica de la empresa en el mercado internacional analizado.</p>
+
+      <p>La coherencia total entre apartados es el criterio que distingue a un protocolo de calidad de una suma de secciones aisladas. El problema debe reconocerse en los objetivos; los objetivos deben quedar respondidos por el proceso metodológico; el ambiente debe justificar las decisiones metodológicas; los organismos deben aparecer vinculados a etapas específicas del proceso o a fuentes de información; y los resultados esperados deben conectar con el problema original. Cuando un lector puede trazar esa cadena lógica de principio a fin, el protocolo cumple su función.</p>
+    `
+  }
+];
+
+const root = document.getElementById("pti-root");
+const nodes = root.querySelectorAll(".pti-node");
+const titleEl = document.getElementById("pti-title");
+const statusEl = document.getElementById("pti-status");
+const bodyEl = document.getElementById("pti-body");
+const progressEl = document.getElementById("pti-progress");
+
+let current = 0;
+const visited = new Set([0]);
+
+function showComponent(index){
+  current = Math.max(0,Math.min(index,PTI_DATA.length-1));
+  visited.add(current);
+
+  nodes.forEach((node,i)=>{
+    const active = i===current;
+    node.classList.toggle("pti-active",active);
+    node.classList.toggle("pti-visited",visited.has(i) && !active);
+    node.setAttribute("aria-pressed",active ? "true":"false");
+  });
+
+  titleEl.textContent = PTI_DATA[current].titulo;
+  statusEl.textContent = `${current+1} de 6`;
+  progressEl.style.height = `${current*20}%`;
+
+  bodyEl.classList.remove("pti-enter");
+  bodyEl.innerHTML = PTI_DATA[current].contenido;
+  bodyEl.parentElement.scrollTop = 0;
+  requestAnimationFrame(()=>bodyEl.classList.add("pti-enter"));
+}
+
+root.addEventListener("click",event=>{
+  const node = event.target.closest(".pti-node");
+  if(!node || !root.contains(node)) return;
+  event.preventDefault();
+  showComponent(Number(node.dataset.index));
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="ArrowUp" || event.key==="ArrowLeft") showComponent(current-1);
+  if(event.key==="ArrowDown" || event.key==="ArrowRight") showComponent(current+1);
+});
+
+document.fonts.ready.then(()=>showComponent(0));
+</script>
+</body>
+</html>
