@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El proceso metodológico como referente</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent}
+#pmr-root{--teal:#279371;--medio:#3F9089;--bosque:#156049;--oscuro:#104938;--claro:#D1DE8C;--fondo:#F4F9F4;--borde:#CFE3DA;width:100%;height:100%;min-height:450px;padding:8px 14px 10px;overflow:hidden;color:var(--oscuro);background:transparent;font-family:"Montserrat",Arial,sans-serif;box-sizing:border-box}
+#pmr-root,#pmr-root *{box-sizing:border-box}
+#pmr-root button{margin:0;border:0;appearance:none;-webkit-appearance:none;font:inherit;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.pmr-layout{width:100%;height:100%;min-height:0;display:grid;grid-template-rows:118px minmax(0,1fr);gap:11px}
+.pmr-flow{min-width:0;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr) 58px minmax(0,1fr);align-items:center;gap:8px}
+.pmr-phase{position:relative;width:100%;height:104px;padding:13px 15px!important;display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:13px;border-radius:18px!important;color:#fff!important;background:var(--teal)!important;box-shadow:0 7px 17px rgba(16,73,56,.13);cursor:pointer;opacity:0;animation:pmr-in .38s ease forwards;transition:background .17s ease,box-shadow .17s ease,transform .17s ease}
+.pmr-phase:nth-of-type(1){animation-delay:.06s}.pmr-phase:nth-of-type(2){animation-delay:.20s}.pmr-phase:nth-of-type(3){animation-delay:.34s}
+@keyframes pmr-in{to{opacity:1}}
+.pmr-phase:hover{transform:translateY(-2px);box-shadow:0 10px 21px rgba(16,73,56,.18)}
+.pmr-phase.pmr-active{background:var(--bosque)!important;outline:4px solid var(--claro);outline-offset:-4px}
+.pmr-phase:focus-visible{outline:3px solid var(--claro);outline-offset:3px}
+.pmr-phase-icon{width:58px;height:58px;display:grid;place-items:center;border-radius:16px;background:rgba(255,255,255,.16)}
+.pmr-phase-icon svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:2.35;stroke-linecap:round;stroke-linejoin:round}
+.pmr-phase-text{min-width:0;text-align:left}.pmr-phase-number{display:block;margin-bottom:4px;font-size:20px;font-weight:700;line-height:1.1}.pmr-phase-title{display:block;font-size:22px;font-weight:700;line-height:1.14}
+.pmr-arrow{display:grid;place-items:center;color:var(--teal)}.pmr-arrow svg{width:46px;height:46px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.pmr-content{min-width:0;min-height:0;display:grid;grid-template-columns:38% 62%;gap:11px}
+.pmr-panel{min-width:0;min-height:0;overflow:hidden;border-radius:18px;box-shadow:0 8px 20px rgba(16,73,56,.11)}
+.pmr-reference{display:grid;grid-template-rows:7px auto minmax(0,1fr);background:var(--fondo)}.pmr-bar{background:var(--teal)}
+.pmr-panel-heading{margin:0;padding:13px 17px 7px;font-size:22px;font-weight:700;line-height:1.18}
+.pmr-scroll{min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--teal) rgba(39,147,113,.12)}
+.pmr-scroll::-webkit-scrollbar{width:7px}.pmr-scroll::-webkit-scrollbar-track{background:rgba(39,147,113,.10);border-radius:999px}.pmr-scroll::-webkit-scrollbar-thumb{background:var(--teal);border-radius:999px}
+.pmr-reference-body{padding:5px 17px 17px}.pmr-p{margin:0;font-size:20px;font-weight:400;line-height:1.36}
+.pmr-detail{display:grid;grid-template-rows:7px auto auto minmax(0,1fr);background:var(--claro)}.pmr-detail-bar{background:var(--bosque);transition:background .18s ease}
+.pmr-detail-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 18px 7px}.pmr-detail-title{margin:0;font-size:22px;font-weight:700;line-height:1.16}
+.pmr-status{flex:0 0 auto;padding:6px 12px;border-radius:999px;color:#fff;background:var(--oscuro);font-size:18px;font-weight:700;line-height:1.1}
+.pmr-subphases{display:flex;flex-wrap:wrap;gap:7px;padding:2px 18px 9px}.pmr-chip{padding:6px 10px;border:1px solid rgba(16,73,56,.15);border-radius:999px;color:var(--oscuro);background:#fff;font-size:17px;font-weight:700;line-height:1.15}
+.pmr-detail-body{padding:3px 19px 17px}.pmr-detail-body.pmr-enter{animation:pmr-enter .23s ease}@keyframes pmr-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:900px){html,body{overflow:auto}#pmr-root{min-height:1080px;overflow:auto}.pmr-layout{grid-template-rows:auto auto}.pmr-flow{grid-template-columns:1fr}.pmr-arrow{transform:rotate(90deg)}.pmr-content{grid-template-columns:1fr}.pmr-reference,.pmr-detail{min-height:390px}}
+@media(prefers-reduced-motion:reduce){#pmr-root *,#pmr-root *::before,#pmr-root *::after{animation:none!important;transition:none!important}.pmr-phase{opacity:1}}
+</style>
+</head>
+<body>
+<section id="pmr-root" aria-label="El proceso metodológico como referente">
+<div class="pmr-layout">
+<nav class="pmr-flow" aria-label="Fases del proceso de investigación de mercados">
+<button class="pmr-phase pmr-active" type="button" data-index="0">
+<span class="pmr-phase-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M13 12h38v40H13z"/><path d="M21 23h22M21 32h15M21 41h18"/><path d="M45 7v10M40 12h10"/></svg></span>
+<span class="pmr-phase-text"><span class="pmr-phase-number">Fase 1</span><span class="pmr-phase-title">Planteamiento y diseño</span></span>
+</button>
+<div class="pmr-arrow" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M8 32h44"/><path d="M40 20l12 12-12 12"/></svg></div>
+<button class="pmr-phase" type="button" data-index="1">
+<span class="pmr-phase-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M13 12h38v40H13z"/><path d="M20 23h24M20 32h24M20 41h16"/><path d="M44 37l8 8M48 33v16"/></svg></span>
+<span class="pmr-phase-text"><span class="pmr-phase-number">Fase 2</span><span class="pmr-phase-title">Recopilación de datos</span></span>
+</button>
+<div class="pmr-arrow" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M8 32h44"/><path d="M40 20l12 12-12 12"/></svg></div>
+<button class="pmr-phase" type="button" data-index="2">
+<span class="pmr-phase-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M10 52h44"/><path d="M15 45V33h8v12M28 45V24h8v21M41 45V15h8v30"/><path d="M16 20l10 5 10-8 12 4"/></svg></span>
+<span class="pmr-phase-text"><span class="pmr-phase-number">Fase 3</span><span class="pmr-phase-title">Procesamiento y comunicación</span></span>
+</button>
+</nav>
+
+<section class="pmr-content">
+<article class="pmr-panel pmr-reference">
+<div class="pmr-bar"></div>
+<h2 class="pmr-panel-heading">Punto de partida</h2>
+<div class="pmr-scroll pmr-reference-body">
+<p class="pmr-p">El <strong>proceso de investigación de mercados</strong> es una secuencia ordenada de etapas que permite obtener, analizar e interpretar información para la toma de decisiones. Este proceso fue abordado en la asignatura Sistema de Investigación de Mercados I en el contexto del mercado nacional. Lo que se presenta a continuación no es una repetición de ese contenido, sino un recordatorio estructurado de las etapas que el estudiante ya conoce, con el propósito de servir como punto de partida para comprender cómo ese mismo proceso se transforma cuando opera en un entorno internacional. La descripción de su dimensión aplicada al contexto global se desarrolla con mayor profundidad en las secciones siguientes.</p>
+</div>
+</article>
+
+<article class="pmr-panel pmr-detail" aria-live="polite">
+<div class="pmr-detail-bar" id="pmr-detail-bar"></div>
+<header class="pmr-detail-head">
+<h2 class="pmr-detail-title" id="pmr-detail-title"></h2>
+<div class="pmr-status" id="pmr-status">1 de 3</div>
+</header>
+<div class="pmr-subphases" id="pmr-subphases"></div>
+<div class="pmr-scroll pmr-detail-body" id="pmr-detail-body"></div>
+</article>
+</section>
+</div>
+</section>
+
+<script>
+const PMR_DATA=[
+{
+titulo:"Fase 1: Planteamiento y diseño",
+color:"#279371",
+subfases:["Planteamiento del problema","Objetivos de la investigación","Investigación preliminar","Hipótesis","Diseño de la investigación"],
+texto:`<p class="pmr-p">El proceso inicia con el <strong>planteamiento del problema</strong> y la detección de la necesidad de información, que consiste en identificar con precisión la situación que motiva el estudio. A partir de ello se definen los <strong>objetivos de la investigación</strong>, tanto general como específicos. Posteriormente se realiza una <strong>investigación preliminar mediante fuentes secundarias</strong>, que permite ampliar la comprensión del problema antes de comprometer recursos en la recopilación de datos primarios. Con esa base se formula la <strong>hipótesis</strong>, es decir, una suposición tentativa y verificable sobre el problema, y se procede al <strong>diseño de la investigación</strong>, que especifica el enfoque metodológico (exploratorio, descriptivo o causal) y los procedimientos que se seguirán.</p>`
+},
+{
+titulo:"Fase 2: Recopilación de datos",
+color:"#3F9089",
+subfases:["Fuentes de información","Universo del estudio","Muestra representativa","Instrumento de recopilación","Trabajo de campo"],
+texto:`<p class="pmr-p">La segunda fase comprende la definición de los elementos de recopilación. Primero se determinan las <strong>fuentes de información primarias y secundarias</strong>; luego se establece el <strong>universo del estudio</strong> y se define la <strong>muestra representativa</strong>. A continuación se diseña el <strong>instrumento de recopilación</strong> y se ejecuta el <strong>trabajo de campo</strong>, etapa en que los datos son efectivamente recopilados.</p>`
+},
+{
+titulo:"Fase 3: Procesamiento y comunicación",
+color:"#156049",
+subfases:["Procesamiento de los datos","Análisis e interpretación","Limitaciones","Conclusiones y recomendaciones","Informe"],
+texto:`<p class="pmr-p">La fase final comprende el <strong>procesamiento de los datos</strong> (revisión, codificación y verificación), el <strong>análisis e interpretación</strong> de los resultados, la identificación y documentación de las limitaciones del estudio, y la elaboración de <strong>conclusiones y recomendaciones</strong> que respondan directamente a los objetivos planteados. El proceso concluye con la elaboración del <strong>informe</strong>, documento técnico que consolida y comunica los hallazgos a los tomadores de decisiones (mcdaniel y Gates, 2011).</p>`
+}
+];
+
+const root=document.getElementById("pmr-root");
+const buttons=root.querySelectorAll(".pmr-phase");
+const title=document.getElementById("pmr-detail-title");
+const status=document.getElementById("pmr-status");
+const subphases=document.getElementById("pmr-subphases");
+const body=document.getElementById("pmr-detail-body");
+const bar=document.getElementById("pmr-detail-bar");
+
+function showPhase(index){
+const safe=Math.max(0,Math.min(index,PMR_DATA.length-1));
+const phase=PMR_DATA[safe];
+buttons.forEach((button,i)=>{
+const active=i===safe;
+button.classList.toggle("pmr-active",active);
+button.setAttribute("aria-pressed",active?"true":"false");
+});
+title.textContent=phase.titulo;
+status.textContent=`${safe+1} de 3`;
+bar.style.background=phase.color;
+subphases.innerHTML=phase.subfases.map(item=>`<span class="pmr-chip">${item}</span>`).join("");
+body.classList.remove("pmr-enter");
+body.innerHTML=phase.texto;
+body.scrollTop=0;
+requestAnimationFrame(()=>body.classList.add("pmr-enter"));
+}
+
+root.addEventListener("click",event=>{
+const button=event.target.closest(".pmr-phase");
+if(!button||!root.contains(button))return;
+event.preventDefault();
+showPhase(Number(button.dataset.index));
+});
+
+document.addEventListener("keydown",event=>{
+const active=[...buttons].findIndex(button=>button.classList.contains("pmr-active"));
+if(event.key==="ArrowLeft")showPhase(active-1);
+if(event.key==="ArrowRight")showPhase(active+1);
+});
+
+document.fonts.ready.then(()=>showPhase(0));
+</script>
+</body>
+</html>
