@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conclusión general</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#cgu-root{
+  --cgu-verde:#279371;
+  --cgu-lima:#93C01F;
+  --cgu-oscuro:#104938;
+  --cgu-claro:#D1DE8C;
+  --cgu-blanco:#FFFFFF;
+  --cgu-fondo:#F4F9F4;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:10px 16px;
+  overflow:hidden;
+  color:var(--cgu-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  box-sizing:border-box;
+}
+
+#cgu-root,
+#cgu-root *{
+  box-sizing:border-box;
+}
+
+#cgu-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.cgu-stage{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border-radius:22px;
+  background:var(--cgu-oscuro);
+  box-shadow:0 10px 26px rgba(16,73,56,.18);
+}
+
+.cgu-stage::before,
+.cgu-stage::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(209,222,140,.08);
+  pointer-events:none;
+}
+
+.cgu-stage::before{
+  width:290px;
+  height:290px;
+  left:-90px;
+  top:-120px;
+}
+
+.cgu-stage::after{
+  width:360px;
+  height:360px;
+  right:-130px;
+  bottom:-170px;
+}
+
+.cgu-intro{
+  position:relative;
+  z-index:2;
+  width:min(720px,88%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:22px;
+  text-align:center;
+}
+
+.cgu-icon{
+  width:88px;
+  height:88px;
+  display:grid;
+  place-items:center;
+  border-radius:24px;
+  color:var(--cgu-oscuro);
+  background:var(--cgu-claro);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+}
+
+.cgu-icon svg{
+  width:54px;
+  height:54px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.cgu-label{
+  margin:0;
+  color:var(--cgu-claro);
+  font-size:22px;
+  font-weight:700;
+  line-height:1.25;
+}
+
+.cgu-open{
+  min-width:310px;
+  min-height:58px;
+  padding:13px 28px !important;
+  border-radius:999px !important;
+  color:#FFFFFF !important;
+  background:var(--cgu-lima) !important;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.15;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,.20);
+  animation:cgu-pulse 2.3s ease-in-out infinite;
+}
+
+.cgu-open:hover{
+  filter:brightness(1.04);
+}
+
+.cgu-open:focus-visible,
+.cgu-close:focus-visible{
+  outline:3px solid var(--cgu-claro);
+  outline-offset:4px;
+}
+
+@keyframes cgu-pulse{
+  0%,100%{
+    box-shadow:0 8px 20px rgba(0,0,0,.20),0 0 0 0 rgba(147,192,31,.32);
+  }
+  50%{
+    box-shadow:0 10px 24px rgba(0,0,0,.24),0 0 0 12px rgba(147,192,31,0);
+  }
+}
+
+/* Se mantiene en display:none mientras está cerrada para que no bloquee clics. */
+.cgu-modal{
+  position:absolute;
+  inset:0;
+  z-index:20;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(5,36,27,.78);
+}
+
+.cgu-modal.cgu-visible{
+  display:flex;
+}
+
+.cgu-dialog{
+  position:relative;
+  width:min(1080px,96%);
+  height:min(394px,94%);
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  overflow:hidden;
+  border:4px solid var(--cgu-verde);
+  border-radius:22px;
+  background:#FFFFFF;
+  box-shadow:0 20px 54px rgba(0,0,0,.34);
+  animation:cgu-dialog-in .22s ease;
+}
+
+@keyframes cgu-dialog-in{
+  from{opacity:0;transform:translateY(10px) scale(.985)}
+  to{opacity:1;transform:none}
+}
+
+.cgu-dialog-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:14px 16px 9px 22px;
+  border-bottom:1px solid rgba(16,73,56,.12);
+}
+
+.cgu-dialog-title{
+  margin:0;
+  color:var(--cgu-oscuro);
+  font-size:22px;
+  font-weight:700;
+  line-height:1.15;
+}
+
+.cgu-close{
+  width:42px;
+  height:42px;
+  flex:0 0 auto;
+  display:grid;
+  place-items:center;
+  border-radius:50% !important;
+  color:#FFFFFF !important;
+  background:var(--cgu-verde) !important;
+  cursor:pointer;
+}
+
+.cgu-close svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.8;
+  stroke-linecap:round;
+}
+
+.cgu-scroll{
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:16px 24px 12px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--cgu-verde) rgba(39,147,113,.12);
+}
+
+.cgu-scroll::-webkit-scrollbar{
+  width:7px;
+}
+
+.cgu-scroll::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.10);
+  border-radius:999px;
+}
+
+.cgu-scroll::-webkit-scrollbar-thumb{
+  background:var(--cgu-verde);
+  border-radius:999px;
+}
+
+.cgu-paragraph{
+  margin:0 0 15px;
+  color:var(--cgu-oscuro);
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.cgu-paragraph:last-child{
+  margin-bottom:0;
+}
+
+.cgu-message{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+  padding:11px 20px 13px;
+  border-top:1px solid rgba(16,73,56,.12);
+  color:var(--cgu-oscuro);
+  background:var(--cgu-fondo);
+  font-size:18px;
+  font-weight:700;
+  line-height:1.22;
+  text-align:center;
+}
+
+.cgu-check{
+  width:34px;
+  height:34px;
+  flex:0 0 auto;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:#FFFFFF;
+  background:var(--cgu-verde);
+}
+
+.cgu-check svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+@media(max-width:900px){
+  html,body{
+    overflow:auto;
+  }
+
+  #cgu-root{
+    min-height:700px;
+    overflow:auto;
+  }
+
+  .cgu-dialog{
+    height:620px;
+  }
+
+  .cgu-message{
+    align-items:flex-start;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #cgu-root *,
+  #cgu-root *::before,
+  #cgu-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="cgu-root" aria-label="Conclusión general">
+  <div class="cgu-stage">
+
+    <div class="cgu-intro">
+      <div class="cgu-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64">
+          <path d="M12 15h40v34H12z"/>
+          <path d="M20 25h24M20 33h18"/>
+          <path d="M21 49v7M43 49v7"/>
+          <path d="M25 41l5 5 11-13"/>
+        </svg>
+      </div>
+
+      <p class="cgu-label">Revisa la síntesis final de la unidad.</p>
+
+      <button class="cgu-open" id="cgu-open" type="button">
+        Conclusión de la unidad
+      </button>
+    </div>
+
+    <div class="cgu-modal" id="cgu-modal" role="dialog" aria-modal="true" aria-labelledby="cgu-dialog-title">
+      <article class="cgu-dialog">
+        <header class="cgu-dialog-head">
+          <h2 class="cgu-dialog-title" id="cgu-dialog-title">Conclusión de la unidad</h2>
+
+          <button class="cgu-close" id="cgu-close" type="button" aria-label="Cerrar conclusión">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+          </button>
+        </header>
+
+        <div class="cgu-scroll">
+          <p class="cgu-paragraph">
+            La <strong>investigación de mercados con enfoque internacional</strong> es, antes que un proceso diferente, un proceso aplicado en condiciones más complejas. El estudiante que ya domina el proceso metodológico de la asignatura Sistema de Investigación de Mercados I tiene la base necesaria para abordarlo en contextos internacionales, siempre que comprenda que cada <strong>decisión metodológica</strong> (desde el diseño del instrumento hasta la interpretación de resultados) debe adaptarse a las condiciones del entorno del mercado estudiado.
+          </p>
+
+          <p class="cgu-paragraph">
+            Las dimensiones económica, legal, cultural, política y tecnológica no son elementos decorativos del análisis: son <strong>variables que condicionan</strong> lo que es metodológicamente posible, ético y útil en cada mercado. Ignorarlas no solo reduce la calidad de la investigación, sino que puede producir diseños inaplicables o violatorios de la normativa del país de destino. El investigador internacional debe diagnosticar el entorno antes de diseñar el proceso, y revisar ese diagnóstico a lo largo de toda la investigación.
+          </p>
+
+          <p class="cgu-paragraph">
+            El <strong>protocolo de investigación</strong> es el instrumento que articula todos estos elementos en un documento técnico coherente. Su valor no reside en la cantidad de información que contiene, sino en la <strong>lógica interna que lo sostiene</strong>: problema, objetivos, ambiente, organismos, proceso y resultados esperados deben formar una cadena argumentativa verificable. Desarrollar esa capacidad de integración es el objetivo de aprendizaje central de esta unidad.
+          </p>
+        </div>
+
+        <footer class="cgu-message">
+          <span class="cgu-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12l4 4L19 6"/>
+            </svg>
+          </span>
+          <span>Dominar el proceso es el punto de partida; comprenderlo en contexto internacional es el objetivo de esta unidad.</span>
+        </footer>
+      </article>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const cguRoot = document.getElementById("cgu-root");
+const cguModal = document.getElementById("cgu-modal");
+const cguOpen = document.getElementById("cgu-open");
+const cguClose = document.getElementById("cgu-close");
+let cguPreviousFocus = null;
+
+function openConclusion(){
+  cguPreviousFocus = document.activeElement;
+  cguModal.classList.add("cgu-visible");
+  cguClose.focus();
+}
+
+function closeConclusion(){
+  cguModal.classList.remove("cgu-visible");
+  if(cguPreviousFocus) cguPreviousFocus.focus();
+}
+
+cguRoot.addEventListener("click",event=>{
+  if(event.target.closest("#cgu-open")){
+    event.preventDefault();
+    openConclusion();
+    return;
+  }
+
+  if(event.target.closest("#cgu-close")){
+    event.preventDefault();
+    closeConclusion();
+    return;
+  }
+
+  if(event.target===cguModal){
+    closeConclusion();
+  }
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape" && cguModal.classList.contains("cgu-visible")){
+    closeConclusion();
+  }
+});
+</script>
+</body>
+</html>
