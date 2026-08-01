@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard de fuentes de información</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#fdi-root{
+  --fdi-internacional:#279371;
+  --fdi-regional:#3F9089;
+  --fdi-nacional:#93C01F;
+  --fdi-oscuro:#104938;
+  --fdi-claro:#D1DE8C;
+  --fdi-fondo:#F4F9F4;
+  --fdi-blanco:#FFFFFF;
+  --fdi-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 14px 10px;
+  overflow:hidden;
+  color:var(--fdi-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  box-sizing:border-box;
+}
+
+#fdi-root,
+#fdi-root *{
+  box-sizing:border-box;
+}
+
+#fdi-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.fdi-layout{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-columns:59% 41%;
+  gap:12px;
+}
+
+/* ==========================================================
+   DASHBOARD
+========================================================== */
+.fdi-dashboard{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:repeat(3,minmax(0,1fr)) 46px;
+  gap:9px;
+}
+
+.fdi-band{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:146px minmax(0,1fr);
+  overflow:hidden;
+  border-radius:17px;
+  background:var(--fdi-fondo);
+  box-shadow:0 6px 16px rgba(16,73,56,.10);
+}
+
+.fdi-band-title{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  color:#FFFFFF;
+  font-size:18px;
+  font-weight:700;
+  line-height:1.15;
+  text-align:center;
+}
+
+.fdi-band[data-band="internacional"] .fdi-band-title{
+  background:var(--fdi-internacional);
+}
+
+.fdi-band[data-band="regional"] .fdi-band-title{
+  background:var(--fdi-regional);
+}
+
+.fdi-band[data-band="nacional"] .fdi-band-title{
+  color:var(--fdi-oscuro);
+  background:var(--fdi-nacional);
+}
+
+.fdi-cards{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  padding:9px;
+}
+
+.fdi-card{
+  min-width:0;
+  min-height:0;
+  padding:9px 10px !important;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:4px;
+  border:2px solid transparent !important;
+  border-radius:13px !important;
+  color:var(--fdi-oscuro) !important;
+  background:#FFFFFF !important;
+  box-shadow:0 3px 9px rgba(16,73,56,.07);
+  cursor:pointer;
+  text-align:left;
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+}
+
+.fdi-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 13px rgba(16,73,56,.12);
+}
+
+.fdi-card.fdi-active{
+  border-color:var(--fdi-oscuro) !important;
+  box-shadow:0 6px 15px rgba(16,73,56,.15);
+}
+
+.fdi-card:focus-visible,
+.fdi-criteria:focus-visible{
+  outline:3px solid var(--fdi-claro);
+  outline-offset:2px;
+}
+
+.fdi-card-name{
+  font-size:18px;
+  font-weight:700;
+  line-height:1.12;
+}
+
+.fdi-card-type,
+.fdi-card-coverage{
+  font-size:14px;
+  font-weight:600;
+  line-height:1.18;
+}
+
+.fdi-card-coverage{
+  opacity:.76;
+}
+
+.fdi-criteria{
+  width:100%;
+  height:46px;
+  padding:8px 16px !important;
+  border-radius:999px !important;
+  color:#FFFFFF !important;
+  background:var(--fdi-oscuro) !important;
+  font-size:19px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 5px 12px rgba(16,73,56,.13);
+}
+
+/* ==========================================================
+   PANEL DE DETALLE
+========================================================== */
+.fdi-detail{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--fdi-claro);
+  box-shadow:0 8px 21px rgba(16,73,56,.13);
+}
+
+.fdi-bar{
+  background:var(--fdi-internacional);
+  transition:background .18s ease;
+}
+
+.fdi-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 18px 7px;
+}
+
+.fdi-title{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.17;
+}
+
+.fdi-level{
+  flex:0 0 auto;
+  max-width:150px;
+  padding:6px 10px;
+  border-radius:999px;
+  color:#FFFFFF;
+  background:var(--fdi-oscuro);
+  font-size:15px;
+  font-weight:700;
+  line-height:1.15;
+  text-align:center;
+}
+
+.fdi-summary{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  padding:2px 18px 10px;
+}
+
+.fdi-summary-item{
+  padding:9px 11px;
+  border-radius:11px;
+  background:#FFFFFF;
+}
+
+.fdi-summary-label{
+  display:block;
+  margin-bottom:3px;
+  font-size:15px;
+  font-weight:700;
+}
+
+.fdi-summary-value{
+  display:block;
+  font-size:17px;
+  font-weight:600;
+  line-height:1.2;
+}
+
+.fdi-scroll{
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  margin:0 18px 18px;
+  padding:14px 15px;
+  border-radius:14px;
+  background:#FFFFFF;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fdi-internacional) rgba(39,147,113,.12);
+}
+
+.fdi-scroll::-webkit-scrollbar{
+  width:7px;
+}
+
+.fdi-scroll::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.10);
+  border-radius:999px;
+}
+
+.fdi-scroll::-webkit-scrollbar-thumb{
+  background:var(--fdi-internacional);
+  border-radius:999px;
+}
+
+.fdi-description{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.fdi-scroll.fdi-enter{
+  animation:fdi-enter .22s ease;
+}
+
+@keyframes fdi-enter{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+
+  #fdi-root{
+    min-height:1150px;
+    overflow:auto;
+  }
+
+  .fdi-layout{
+    grid-template-columns:1fr;
+  }
+
+  .fdi-dashboard{
+    min-height:670px;
+  }
+
+  .fdi-band{
+    grid-template-columns:1fr;
+  }
+
+  .fdi-cards{
+    grid-template-columns:1fr;
+  }
+
+  .fdi-detail{
+    min-height:430px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #fdi-root *,
+  #fdi-root *::before,
+  #fdi-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="fdi-root" aria-label="Dashboard interactivo de fuentes de información">
+  <div class="fdi-layout">
+
+    <section class="fdi-dashboard" aria-label="Fuentes agrupadas por nivel de cobertura">
+
+      <article class="fdi-band" data-band="internacional">
+        <div class="fdi-band-title">Internacional</div>
+        <div class="fdi-cards">
+          <button class="fdi-card fdi-active" type="button" data-index="0">
+            <span class="fdi-card-name">trademap</span>
+            <span class="fdi-card-type">Estadísticas de comercio exterior</span>
+            <span class="fdi-card-coverage">Producto, país y año</span>
+          </button>
+
+          <button class="fdi-card" type="button" data-index="1">
+            <span class="fdi-card-name">OMC</span>
+            <span class="fdi-card-type">Políticas comerciales y aranceles</span>
+            <span class="fdi-card-coverage">Países miembros</span>
+          </button>
+
+          <button class="fdi-card" type="button" data-index="2">
+            <span class="fdi-card-name">Banco Mundial</span>
+            <span class="fdi-card-type">Indicadores económicos y demográficos</span>
+            <span class="fdi-card-coverage">Por país</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="fdi-band" data-band="regional">
+        <div class="fdi-band-title">Regional América Latina</div>
+        <div class="fdi-cards">
+          <button class="fdi-card" type="button" data-index="3">
+            <span class="fdi-card-name">CEPAL</span>
+            <span class="fdi-card-type">Comercio, inversión y desarrollo</span>
+            <span class="fdi-card-coverage">Países latinoamericanos</span>
+          </button>
+
+          <button class="fdi-card" type="button" data-index="4">
+            <span class="fdi-card-name">Eurostat</span>
+            <span class="fdi-card-type">Consumo, comercio, empleo e industria</span>
+            <span class="fdi-card-coverage">Unión Europea</span>
+          </button>
+
+          <button class="fdi-card" type="button" data-index="5">
+            <span class="fdi-card-name">Statistics Canada</span>
+            <span class="fdi-card-type">Población, consumo y comercio</span>
+            <span class="fdi-card-coverage">Mercado canadiense</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="fdi-band" data-band="nacional">
+        <div class="fdi-band-title">Nacional mexicano</div>
+        <div class="fdi-cards">
+          <button class="fdi-card" type="button" data-index="6">
+            <span class="fdi-card-name">Secretaría de Economía</span>
+            <span class="fdi-card-type">Acuerdos y oportunidades de exportación</span>
+            <span class="fdi-card-coverage">Mercados internacionales</span>
+          </button>
+
+          <button class="fdi-card" type="button" data-index="7">
+            <span class="fdi-card-name">Bancomext</span>
+            <span class="fdi-card-type">Estudios de mercado y asesorías</span>
+            <span class="fdi-card-coverage">Sector y país de destino</span>
+          </button>
+
+          <button class="fdi-card" type="button" data-index="8">
+            <span class="fdi-card-name">Agregados comerciales</span>
+            <span class="fdi-card-type">Inteligencia de mercado</span>
+            <span class="fdi-card-coverage">Mercados locales en el exterior</span>
+          </button>
+        </div>
+      </article>
+
+      <button class="fdi-criteria" id="fdi-criteria" type="button">
+        Criterios para evaluar la confiabilidad
+      </button>
+    </section>
+
+    <article class="fdi-detail" aria-live="polite">
+      <div class="fdi-bar" id="fdi-bar"></div>
+
+      <header class="fdi-head">
+        <h2 class="fdi-title" id="fdi-title"></h2>
+        <div class="fdi-level" id="fdi-level"></div>
+      </header>
+
+      <div class="fdi-summary" id="fdi-summary">
+        <div class="fdi-summary-item">
+          <span class="fdi-summary-label">Tipo de información</span>
+          <span class="fdi-summary-value" id="fdi-type"></span>
+        </div>
+        <div class="fdi-summary-item">
+          <span class="fdi-summary-label">Nivel de cobertura</span>
+          <span class="fdi-summary-value" id="fdi-coverage"></span>
+        </div>
+      </div>
+
+      <div class="fdi-scroll" id="fdi-scroll">
+        <p class="fdi-description" id="fdi-description"></p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<script>
+const FDI_DATA = [
+  {
+    titulo:"trademap del International Trade Centre (ITC)",
+    nivel:"Internacional",
+    color:"#279371",
+    tipo:"Estadísticas de comercio exterior",
+    cobertura:"Producto, país y año",
+    descripcion:`El <strong>trademap del International Trade Centre (ITC)</strong> es una plataforma gratuita que permite consultar estadísticas de comercio exterior por producto, país y año, facilitando la identificación de tendencias de importación y exportación en el mercado objetivo.`
+  },
+  {
+    titulo:"Organización Mundial del Comercio (OMC)",
+    nivel:"Internacional",
+    color:"#279371",
+    tipo:"Políticas comerciales, aranceles, acuerdos y barreras al comercio",
+    cobertura:"Países miembros",
+    descripcion:`La <strong>Organización Mundial del Comercio (OMC)</strong> publica información sobre políticas comerciales, aranceles, acuerdos y barreras al comercio de los países miembros, y es una fuente indispensable cuando el problema incluye condiciones de acceso al mercado.`
+  },
+  {
+    titulo:"Banco Mundial",
+    nivel:"Internacional",
+    color:"#279371",
+    tipo:"Indicadores económicos, demográficos y de desarrollo",
+    cobertura:"Por país",
+    descripcion:`El <strong>Banco Mundial</strong> ofrece bases de datos de indicadores económicos, demográficos y de desarrollo por país, útiles para contextualizar el universo de la investigación y dimensionar el mercado potencial (Cateora et al., 2014).`
+  },
+  {
+    titulo:"Comisión Económica para América Latina y el Caribe (CEPAL)",
+    nivel:"Regional América Latina",
+    color:"#3F9089",
+    tipo:"Comercio, inversión y desarrollo",
+    cobertura:"Países latinoamericanos y su relación con otros mercados",
+    descripcion:`A nivel regional, la <strong>Comisión Económica para América Latina y el Caribe (CEPAL)</strong> concentra datos sobre comercio, inversión y desarrollo de los países latinoamericanos y su relación con otros mercados.`
+  },
+  {
+    titulo:"Eurostat",
+    nivel:"Regional América Latina",
+    color:"#3F9089",
+    tipo:"Consumo, comercio, empleo e industria",
+    cobertura:"Unión Europea, por sector y país",
+    descripcion:`Para investigaciones orientadas al mercado europeo, <strong>Eurostat</strong> es la fuente estadística oficial de la Unión Europea y ofrece datos de consumo, comercio, empleo e industria con alta desagregación por sector y país.`
+  },
+  {
+    titulo:"Statistics Canada",
+    nivel:"Regional América Latina",
+    color:"#3F9089",
+    tipo:"Población, consumo y comercio",
+    cobertura:"Mercado canadiense",
+    descripcion:`Para el mercado canadiense, <strong>Statistics Canada</strong> es el organismo equivalente al INEGI mexicano y ofrece estadísticas de población, consumo y comercio con actualización periódica.`
+  },
+  {
+    titulo:"Secretaría de Economía",
+    nivel:"Nacional mexicano",
+    color:"#93C01F",
+    tipo:"Acuerdos comerciales, oportunidades de exportación y requisitos de acceso",
+    cobertura:"Mercados internacionales",
+    descripcion:`En el ámbito nacional mexicano, la <strong>Secretaría de Economía</strong> publica información sobre acuerdos comerciales vigentes, oportunidades de exportación y requisitos de acceso a mercados internacionales.`
+  },
+  {
+    titulo:"Banco Nacional de Comercio Exterior (Bancomext)",
+    nivel:"Nacional mexicano",
+    color:"#93C01F",
+    tipo:"Estudios de mercado y asesorías especializadas",
+    cobertura:"Sector y país de destino",
+    descripcion:`El <strong>Banco Nacional de Comercio Exterior (Bancomext)</strong> ofrece estudios de mercado por sector y país de destino, además de asesorías especializadas para empresas exportadoras.`
+  },
+  {
+    titulo:"Agregados comerciales de las embajadas mexicanas",
+    nivel:"Nacional mexicano",
+    color:"#93C01F",
+    tipo:"Condiciones regulatorias, entorno competitivo y canales de distribución locales",
+    cobertura:"Mercados locales en el exterior",
+    descripcion:`Los <strong>agregados comerciales de las embajadas mexicanas</strong> en el exterior representan una fuente de inteligencia de mercado particularmente valiosa, ya que pueden proporcionar información actualizada sobre condiciones regulatorias, entorno competitivo y canales de distribución locales, frecuentemente de forma gratuita para empresas mexicanas interesadas en exportar (García-Sordo, 2007).`
+  }
+];
+
+const FDI_CRITERIA = {
+  titulo:"Criterios para evaluar la confiabilidad",
+  nivel:"Fuentes secundarias internacionales",
+  color:"#104938",
+  descripcion:`Al evaluar la confiabilidad de las fuentes secundarias internacionales, el investigador debe verificar la <strong>actualidad de los datos</strong> (preferiblemente de los últimos tres años), la metodología con que fueron generados, el organismo responsable y la cobertura geográfica real de la información. Cateora et al. (2014) advierten que la <strong>comparabilidad entre fuentes</strong> de distintos países no siempre está garantizada, ya que las definiciones operativas de variables como ingreso, desempleo o consumo pueden diferir entre sistemas estadísticos nacionales. Por ello, el investigador debe documentar con precisión las fuentes utilizadas y sus posibles limitaciones en el informe final.`
+};
+
+const root = document.getElementById("fdi-root");
+const cards = root.querySelectorAll(".fdi-card");
+const criteriaButton = document.getElementById("fdi-criteria");
+const titleEl = document.getElementById("fdi-title");
+const levelEl = document.getElementById("fdi-level");
+const typeEl = document.getElementById("fdi-type");
+const coverageEl = document.getElementById("fdi-coverage");
+const summaryEl = document.getElementById("fdi-summary");
+const descriptionEl = document.getElementById("fdi-description");
+const scrollEl = document.getElementById("fdi-scroll");
+const barEl = document.getElementById("fdi-bar");
+
+function animateDetail(){
+  scrollEl.classList.remove("fdi-enter");
+  scrollEl.scrollTop = 0;
+  requestAnimationFrame(()=>scrollEl.classList.add("fdi-enter"));
+}
+
+function showSource(index){
+  const safe = Math.max(0,Math.min(index,FDI_DATA.length-1));
+  const item = FDI_DATA[safe];
+
+  cards.forEach((card,i)=>{
+    const active = i===safe;
+    card.classList.toggle("fdi-active",active);
+    card.setAttribute("aria-pressed",active ? "true":"false");
+  });
+
+  criteriaButton.classList.remove("fdi-active");
+  titleEl.textContent = item.titulo;
+  levelEl.textContent = item.nivel;
+  typeEl.textContent = item.tipo;
+  coverageEl.textContent = item.cobertura;
+  summaryEl.style.display = "grid";
+  descriptionEl.innerHTML = item.descripcion;
+  barEl.style.background = item.color;
+  animateDetail();
+}
+
+function showCriteria(){
+  cards.forEach(card=>{
+    card.classList.remove("fdi-active");
+    card.setAttribute("aria-pressed","false");
+  });
+
+  titleEl.textContent = FDI_CRITERIA.titulo;
+  levelEl.textContent = FDI_CRITERIA.nivel;
+  summaryEl.style.display = "none";
+  descriptionEl.innerHTML = FDI_CRITERIA.descripcion;
+  barEl.style.background = FDI_CRITERIA.color;
+  animateDetail();
+}
+
+root.addEventListener("click",event=>{
+  const card = event.target.closest(".fdi-card");
+
+  if(card && root.contains(card)){
+    event.preventDefault();
+    showSource(Number(card.dataset.index));
+    return;
+  }
+
+  if(event.target.closest("#fdi-criteria")){
+    event.preventDefault();
+    showCriteria();
+  }
+});
+
+document.fonts.ready.then(()=>showSource(0));
+</script>
+</body>
+</html>
