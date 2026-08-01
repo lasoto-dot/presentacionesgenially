@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ejemplo aplicado: Eco Bebidas</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#eb-root{
+  --eb-verde:#279371;
+  --eb-medio:#3F9089;
+  --eb-oscuro:#104938;
+  --eb-claro:#D1DE8C;
+  --eb-fondo:#F4F9F4;
+  --eb-blanco:#FFFFFF;
+  --eb-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 14px 10px;
+  overflow:hidden;
+  color:var(--eb-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  box-sizing:border-box;
+}
+
+#eb-root,
+#eb-root *{
+  box-sizing:border-box;
+}
+
+#eb-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.eb-layout{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-rows:112px minmax(0,1fr);
+  gap:11px;
+}
+
+/* ==========================================================
+   LÍNEA DE TIEMPO
+========================================================== */
+.eb-timeline{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  align-items:start;
+  gap:10px;
+  padding:0 12px;
+}
+
+.eb-track{
+  position:absolute;
+  left:9%;
+  right:9%;
+  top:73px;
+  height:5px;
+  border-radius:999px;
+  background:var(--eb-borde);
+  z-index:0;
+}
+
+.eb-track-progress{
+  width:0;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--eb-verde),var(--eb-medio));
+  transition:width .28s ease;
+}
+
+.eb-step{
+  position:relative;
+  min-width:0;
+  height:104px;
+  padding:0 5px 11px !important;
+  display:grid;
+  grid-template-rows:48px 46px;
+  justify-items:center;
+  align-items:end;
+  color:var(--eb-oscuro) !important;
+  background:transparent !important;
+  cursor:pointer;
+  z-index:2;
+  opacity:0;
+  transform:translateY(8px);
+  animation:eb-step-in .36s ease forwards;
+}
+
+.eb-step:nth-child(2){animation-delay:.05s}
+.eb-step:nth-child(3){animation-delay:.16s}
+.eb-step:nth-child(4){animation-delay:.27s}
+.eb-step:nth-child(5){animation-delay:.38s}
+.eb-step:nth-child(6){animation-delay:.49s}
+
+@keyframes eb-step-in{
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.eb-step-label{
+  max-width:190px;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.12;
+  text-align:center;
+}
+
+.eb-step-node{
+  position:relative;
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  border:5px solid var(--eb-fondo);
+  border-radius:50%;
+  color:#FFFFFF;
+  background:var(--eb-verde);
+  box-shadow:0 5px 12px rgba(16,73,56,.16);
+  transition:transform .17s ease,box-shadow .17s ease;
+}
+
+.eb-step:nth-child(even) .eb-step-node{
+  background:var(--eb-medio);
+}
+
+.eb-step:hover .eb-step-node{
+  transform:scale(1.08);
+  box-shadow:0 8px 17px rgba(16,73,56,.20);
+}
+
+.eb-step.eb-active .eb-step-node{
+  transform:scale(1.12);
+  outline:4px solid var(--eb-claro);
+  outline-offset:2px;
+}
+
+.eb-step:focus-visible{
+  outline:3px solid var(--eb-verde);
+  outline-offset:2px;
+  border-radius:12px;
+}
+
+.eb-step-number{
+  font-size:20px;
+  font-weight:700;
+  line-height:1;
+}
+
+/* ==========================================================
+   PANEL DE CONTENIDO
+========================================================== */
+.eb-panel{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:255px minmax(0,1fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--eb-fondo);
+  box-shadow:0 8px 21px rgba(16,73,56,.13);
+}
+
+.eb-side{
+  min-width:0;
+  min-height:0;
+  padding:22px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  color:#FFFFFF;
+  background:linear-gradient(145deg,var(--eb-verde),var(--eb-medio));
+  text-align:center;
+}
+
+.eb-side-icon{
+  width:82px;
+  height:82px;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  background:rgba(255,255,255,.16);
+}
+
+.eb-side-icon svg{
+  width:52px;
+  height:52px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.25;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.eb-side-company{
+  font-size:22px;
+  font-weight:700;
+  line-height:1.15;
+}
+
+.eb-side-route{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.15;
+}
+
+.eb-side-caption{
+  max-width:190px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.25;
+}
+
+.eb-content{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  background:var(--eb-claro);
+}
+
+.eb-color-bar{
+  background:var(--eb-verde);
+  transition:background .18s ease;
+}
+
+.eb-content-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 20px 8px;
+}
+
+.eb-content-title{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.18;
+}
+
+.eb-status{
+  flex:0 0 auto;
+  padding:6px 12px;
+  border-radius:999px;
+  color:#FFFFFF;
+  background:var(--eb-oscuro);
+  font-size:18px;
+  font-weight:700;
+  line-height:1.1;
+}
+
+.eb-scroll{
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:4px 21px 20px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--eb-verde) rgba(39,147,113,.14);
+}
+
+.eb-scroll::-webkit-scrollbar{
+  width:7px;
+}
+
+.eb-scroll::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.12);
+  border-radius:999px;
+}
+
+.eb-scroll::-webkit-scrollbar-thumb{
+  background:var(--eb-verde);
+  border-radius:999px;
+}
+
+.eb-scroll.eb-enter{
+  animation:eb-content-in .22s ease;
+}
+
+@keyframes eb-content-in{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+}
+
+.eb-section{
+  margin:0 0 14px;
+  padding:13px 15px;
+  border-radius:13px;
+  background:#FFFFFF;
+}
+
+.eb-section:last-child{
+  margin-bottom:0;
+}
+
+.eb-section-title{
+  margin:0 0 8px;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.17;
+}
+
+.eb-p{
+  margin:0 0 13px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.37;
+}
+
+.eb-p:last-child{
+  margin-bottom:0;
+}
+
+.eb-list{
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.eb-list li{
+  position:relative;
+  margin:0 0 12px;
+  padding-left:20px;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.35;
+}
+
+.eb-list li:last-child{
+  margin-bottom:0;
+}
+
+.eb-list li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.58em;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--eb-verde);
+}
+
+.eb-highlight{
+  border-left:6px solid var(--eb-verde);
+  background:#FFFFFF;
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+
+  #eb-root{
+    min-height:1120px;
+    overflow:auto;
+  }
+
+  .eb-layout{
+    grid-template-rows:auto auto;
+  }
+
+  .eb-timeline{
+    grid-template-columns:1fr;
+    padding:0;
+  }
+
+  .eb-track{
+    display:none;
+  }
+
+  .eb-step{
+    height:auto;
+    min-height:76px;
+    grid-template-columns:58px minmax(0,1fr);
+    grid-template-rows:1fr;
+    justify-items:start;
+    align-items:center;
+    padding:8px 12px !important;
+    border-radius:14px !important;
+    background:#FFFFFF !important;
+  }
+
+  .eb-step-label{
+    grid-column:2;
+    grid-row:1;
+    text-align:left;
+  }
+
+  .eb-step-node{
+    grid-column:1;
+    grid-row:1;
+  }
+
+  .eb-panel{
+    grid-template-columns:1fr;
+  }
+
+  .eb-side{
+    min-height:220px;
+  }
+
+  .eb-content{
+    min-height:600px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #eb-root *,
+  #eb-root *::before,
+  #eb-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+
+  .eb-step{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="eb-root" aria-label="Ejemplo aplicado: análisis del ambiente internacional para Eco Bebidas">
+  <div class="eb-layout">
+
+    <nav class="eb-timeline" id="eb-timeline" aria-label="Etapas del ejemplo aplicado">
+      <div class="eb-track" aria-hidden="true">
+        <div class="eb-track-progress" id="eb-progress"></div>
+      </div>
+
+      <button class="eb-step eb-active" type="button" data-index="0">
+        <span class="eb-step-label">Contexto</span>
+        <span class="eb-step-node"><span class="eb-step-number">1</span></span>
+      </button>
+
+      <button class="eb-step" type="button" data-index="1">
+        <span class="eb-step-label">Problema</span>
+        <span class="eb-step-node"><span class="eb-step-number">2</span></span>
+      </button>
+
+      <button class="eb-step" type="button" data-index="2">
+        <span class="eb-step-label">Objetivo</span>
+        <span class="eb-step-node"><span class="eb-step-number">3</span></span>
+      </button>
+
+      <button class="eb-step" type="button" data-index="3">
+        <span class="eb-step-label">Factores externos</span>
+        <span class="eb-step-node"><span class="eb-step-number">4</span></span>
+      </button>
+
+      <button class="eb-step" type="button" data-index="4">
+        <span class="eb-step-label">Factores internos + diseño</span>
+        <span class="eb-step-node"><span class="eb-step-number">5</span></span>
+      </button>
+    </nav>
+
+    <section class="eb-panel">
+      <aside class="eb-side">
+        <div class="eb-side-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M23 8h18l4 10v34a4 4 0 0 1-4 4H23a4 4 0 0 1-4-4V18z"/>
+            <path d="M23 8v10h18V8"/>
+            <path d="M24 35c5-5 11-7 17-6"/>
+            <path d="M28 43c4-2 8-3 12-2"/>
+            <path d="M32 27c-1-5 2-9 7-11 1 5-2 9-7 11z"/>
+          </svg>
+        </div>
+        <div class="eb-side-company">Eco Bebidas</div>
+        <div class="eb-side-route">
+          <span>México</span>
+          <span>→</span>
+          <span>Brasil</span>
+        </div>
+        <div class="eb-side-caption">Bebidas orgánicas y saludables</div>
+      </aside>
+
+      <article class="eb-content" aria-live="polite">
+        <div class="eb-color-bar" id="eb-bar"></div>
+
+        <header class="eb-content-head">
+          <h2 class="eb-content-title" id="eb-title">Contexto</h2>
+          <div class="eb-status" id="eb-status">1 de 5</div>
+        </header>
+
+        <div class="eb-scroll" id="eb-body"></div>
+      </article>
+    </section>
+
+  </div>
+</section>
+
+<script>
+const EB_DATA = [
+  {
+    titulo:"Contexto",
+    color:"#279371",
+    contenido:`
+      <section class="eb-section">
+        <p class="eb-p"><strong>Eco Bebidas</strong> es una empresa mexicana que produce bebidas orgánicas y saludables. La empresa desea analizar la posibilidad de ingresar al mercado brasileño. Para ello, necesita diseñar una <strong>investigación de mercados</strong> <strong>internacional</strong> que le permita conocer si existe una oportunidad viable, qué condiciones presenta el mercado y qué información debe recopilarse antes de tomar una decisión estratégica (Malhotra, 2020).</p>
+        <p class="eb-p">El propósito de la investigación no sería únicamente conocer si las personas consumidoras brasileñas comprarían el producto. El <strong>diseño de investigación de mercados</strong> también debe considerar factores del ambiente que pueden facilitar o dificultar la entrada al mercado.</p>
+      </section>
+    `
+  },
+  {
+    titulo:"Definición preliminar del problema",
+    color:"#3F9089",
+    contenido:`
+      <section class="eb-section eb-highlight">
+        <h3 class="eb-section-title">Definición preliminar del problema</h3>
+        <p class="eb-p">La empresa necesita determinar si el mercado brasileño representa una oportunidad viable para introducir bebidas orgánicas y saludables, identificar las condiciones del entorno que facilitarían o dificultarían su entrada, y conocer el perfil y las expectativas del <strong>problema de investigación</strong> central.</p>
+      </section>
+    `
+  },
+  {
+    titulo:"Objetivo general de la investigación",
+    color:"#279371",
+    contenido:`
+      <section class="eb-section eb-highlight">
+        <h3 class="eb-section-title">Objetivo general de la investigación</h3>
+        <p class="eb-p">Analizar los factores del ambiente de <strong>mercadotecnia internacional</strong> que influyen en la posible entrada de Eco Bebidas al mercado de Brasil, con el fin de identificar oportunidades, restricciones y condiciones que orienten el diseño de una investigación de mercados.</p>
+      </section>
+    `
+  },
+  {
+    titulo:"Factores externos que deberían analizarse",
+    color:"#3F9089",
+    contenido:`
+      <section class="eb-section">
+        <h3 class="eb-section-title">Factores externos que deberían analizarse</h3>
+        <ul class="eb-list">
+          <li>El <strong>factor socioeconómico</strong> permitiría revisar indicadores como PIB, ingreso per cápita, inflación, tipo de cambio y nivel de gasto en productos saludables. Ayudaría a estimar la <strong>capacidad de compra</strong> de los consumidores potenciales y la <strong>sensibilidad al precio</strong>.</li>
+          <li>El <strong>factor político</strong> permitiría identificar si existen políticas comerciales, incentivos, restricciones o riesgos políticos que afecten la importación de bebidas mexicanas a Brasil.</li>
+          <li>El <strong>factor demográfico</strong> permitiría analizar tamaño de población, concentración urbana, edad, ocupación y estilos de vida. Esto ayudaría a identificar el segmento potencial con mayor <strong>capacidad de compra</strong> e interés en productos orgánicos.</li>
+          <li>El <strong>factor legal</strong> obligaría a revisar requisitos sanitarios, etiquetado, permisos, normas de importación y regulaciones aplicables a alimentos y bebidas en Brasil.</li>
+          <li>El <strong>factor cultural</strong> permitiría analizar preferencias de sabor, hábitos de consumo, percepciones sobre productos orgánicos, idioma y actitudes hacia marcas extranjeras.</li>
+          <li>El <strong>factor tecnológico</strong> permitiría revisar el uso de comercio electrónico, plataformas digitales, redes sociales y medios de comunicación disponibles para la investigación y la distribución.</li>
+          <li>El <strong>factor geográfico</strong> permitiría valorar distancia, clima, infraestructura logística, acceso a puertos y zonas urbanas con mayor concentración de consumidores objetivo.</li>
+        </ul>
+      </section>
+    `
+  },
+  {
+    titulo:"Factores internos + diseño",
+    color:"#279371",
+    contenido:`
+      <section class="eb-section">
+        <h3 class="eb-section-title">Factores internos y microambientales que deberían analizarse</h3>
+        <ul class="eb-list">
+          <li>La <strong>competencia</strong> permitiría identificar marcas de bebidas saludables, precios, presentaciones, canales y estrategias de comunicación, para analizar posibles ventajas de <strong>diferenciación</strong>.</li>
+          <li>Los <strong>proveedores e intermediarios</strong> permitirían analizar si la empresa cuenta con proveedores capaces de sostener producción para exportación y si existen canales de distribución viables en Brasil.</li>
+          <li>El análisis de <strong>clientes</strong> permitiría conocer necesidades, hábitos, expectativas y motivaciones de las personas consumidoras, principalmente a través de <strong>fuentes secundarias</strong> digitales, estudios de consumo y bases de datos disponibles.</li>
+          <li>Los <strong>públicos y la opinión pública</strong> permitirían revisar percepciones sobre sostenibilidad, productos orgánicos, envases ecológicos y <strong>propuesta de valor</strong> de la empresa.</li>
+          <li>Los <strong>recursos financieros</strong> permitirían valorar si la empresa cuenta con presupuesto suficiente para investigar, adaptar el producto y cubrir los costos de entrada al mercado. La <strong>estrategia de entrada</strong> condiciona el alcance y profundidad de la investigación.</li>
+          <li>La <strong>estrategia de marketing</strong> permitiría alinear la investigación con la decisión empresarial: si la empresa busca posicionarse en un segmento premium o masivo, la investigación debe recopilar información diferente.</li>
+          <li>La <strong>capacidad de análisis</strong> y la <strong>cultura organizacional</strong> permitirían evaluar si la empresa tiene condiciones para interpretar los datos y tomar decisiones fundamentadas a partir de los resultados.</li>
+        </ul>
+      </section>
+
+      <section class="eb-section">
+        <h3 class="eb-section-title">Diseño sugerido de investigación</h3>
+        <p class="eb-p">Con base en los factores anteriores, Eco Bebidas podría diseñar una investigación en dos fases. La primera sería una <strong>investigación secundaria</strong>, que utilizaría <strong>investigación secundaria</strong> disponible en organismos como INEGI, Banco de México, agencias de estadística de Brasil, reportes sectoriales y plataformas digitales. El propósito de esta fase sería construir un diagnóstico preliminar del entorno, estimar el tamaño del mercado y delimitar el <strong>trabajo de campo</strong> necesario.</p>
+        <p class="eb-p">La segunda fase sería una <strong>investigación exploratoria</strong>, que podría incluir entrevistas virtuales con consumidores potenciales, análisis de redes sociales y grupos focales en línea. Esta fase permitiría conocer percepciones, hábitos, expectativas y posibles objeciones de los consumidores del mercado objetivo.</p>
+      </section>
+
+      <section class="eb-section eb-highlight">
+        <h3 class="eb-section-title">Resultado esperado</h3>
+        <p class="eb-p">Al finalizar el análisis, Eco Bebidas podría determinar si Brasil representa una oportunidad viable, qué segmento de consumidores tiene mayor potencial, qué adaptaciones requiere el producto, qué canales son más pertinentes y qué restricciones deben resolverse antes de ingresar al mercado.</p>
+        <p class="eb-p">Este ejemplo muestra que el análisis del ambiente internacional no es una actividad aislada, sino una etapa clave para diseñar una <strong>investigación de mercados</strong> pertinente, viable y orientada a la <strong>toma de decisiones</strong>.</p>
+      </section>
+    `
+  }
+];
+
+const ebRoot = document.getElementById("eb-root");
+const ebSteps = ebRoot.querySelectorAll(".eb-step");
+const ebTitle = document.getElementById("eb-title");
+const ebStatus = document.getElementById("eb-status");
+const ebBody = document.getElementById("eb-body");
+const ebBar = document.getElementById("eb-bar");
+const ebProgress = document.getElementById("eb-progress");
+
+function ebShow(index){
+  const safeIndex = Math.max(0,Math.min(index,EB_DATA.length-1));
+  const item = EB_DATA[safeIndex];
+
+  ebSteps.forEach((step,i)=>{
+    const active = i===safeIndex;
+    step.classList.toggle("eb-active",active);
+    step.setAttribute("aria-pressed",active ? "true":"false");
+  });
+
+  ebTitle.textContent = item.titulo;
+  ebStatus.textContent = `${safeIndex+1} de 5`;
+  ebBar.style.background = item.color;
+  ebProgress.style.width = `${safeIndex*25}%`;
+
+  ebBody.classList.remove("eb-enter");
+  ebBody.innerHTML = item.contenido;
+  ebBody.scrollTop = 0;
+  requestAnimationFrame(()=>ebBody.classList.add("eb-enter"));
+}
+
+ebRoot.addEventListener("click",event=>{
+  const step = event.target.closest(".eb-step");
+  if(!step || !ebRoot.contains(step)) return;
+  event.preventDefault();
+  ebShow(Number(step.dataset.index));
+});
+
+document.addEventListener("keydown",event=>{
+  const active = [...ebSteps].findIndex(step=>step.classList.contains("eb-active"));
+  if(event.key==="ArrowLeft") ebShow(active-1);
+  if(event.key==="ArrowRight") ebShow(active+1);
+});
+
+document.fonts.ready.then(()=>ebShow(0));
+</script>
+</body>
+</html>
