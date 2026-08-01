@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cinco dimensiones del entorno internacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+#eci-root{
+  --eci-verde:#279371;
+  --eci-medio:#3F9089;
+  --eci-bosque:#156049;
+  --eci-oscuro:#104938;
+  --eci-claro:#D1DE8C;
+  --eci-fondo:#F4F9F4;
+  --eci-blanco:#FFFFFF;
+  --eci-borde:#CFE3DA;
+
+  width:100%;
+  height:100%;
+  min-height:450px;
+  padding:8px 14px 10px;
+  overflow:hidden;
+  color:var(--eci-oscuro);
+  background:transparent;
+  font-family:"Montserrat",Arial,sans-serif;
+  box-sizing:border-box;
+}
+
+#eci-root,
+#eci-root *{
+  box-sizing:border-box;
+}
+
+#eci-root button{
+  margin:0;
+  border:0;
+  appearance:none;
+  -webkit-appearance:none;
+  font:inherit;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.eci-layout{
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-rows:102px minmax(0,1fr) 42px;
+  gap:10px;
+}
+
+/* ==========================================================
+   NAVEGACIÓN SUPERIOR
+========================================================== */
+.eci-tabs{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;
+}
+
+.eci-tab{
+  position:relative;
+  min-width:0;
+  height:100%;
+  padding:11px 12px !important;
+  display:grid;
+  grid-template-columns:50px minmax(0,1fr);
+  align-items:center;
+  gap:10px;
+  border-radius:17px !important;
+  color:#FFFFFF !important;
+  background:var(--eci-bosque) !important;
+  box-shadow:0 6px 15px rgba(16,73,56,.12);
+  cursor:pointer;
+  opacity:0;
+  animation:eci-tab-in .34s ease forwards;
+  transition:filter .16s ease,box-shadow .16s ease,transform .16s ease;
+}
+
+.eci-tab:nth-child(1){animation-delay:.04s}
+.eci-tab:nth-child(2){animation-delay:.12s}
+.eci-tab:nth-child(3){animation-delay:.20s}
+.eci-tab:nth-child(4){animation-delay:.28s}
+.eci-tab:nth-child(5){animation-delay:.36s}
+
+@keyframes eci-tab-in{
+  to{opacity:1}
+}
+
+.eci-tab:hover{
+  filter:brightness(1.045);
+  transform:translateY(-2px);
+  box-shadow:0 9px 20px rgba(16,73,56,.17);
+}
+
+.eci-tab.eci-active{
+  background:var(--eci-verde) !important;
+  outline:4px solid var(--eci-claro);
+  outline-offset:-4px;
+}
+
+.eci-tab:focus-visible{
+  outline:3px solid var(--eci-claro);
+  outline-offset:3px;
+}
+
+.eci-tab-icon{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.16);
+}
+
+.eci-tab-icon svg{
+  width:32px;
+  height:32px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.3;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.eci-tab-label{
+  min-width:0;
+  font-size:18px;
+  font-weight:700;
+  line-height:1.12;
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+
+/* ==========================================================
+   PANEL CENTRAL
+========================================================== */
+.eci-panel{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:8px auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--eci-claro);
+  box-shadow:0 8px 21px rgba(16,73,56,.13);
+}
+
+.eci-bar{
+  background:var(--eci-verde);
+  transition:background .18s ease;
+}
+
+.eci-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:13px 20px 8px;
+}
+
+.eci-title{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.16;
+}
+
+.eci-status{
+  flex:0 0 auto;
+  padding:6px 12px;
+  border-radius:999px;
+  color:#FFFFFF;
+  background:var(--eci-oscuro);
+  font-size:18px;
+  font-weight:700;
+  line-height:1.1;
+}
+
+.eci-content{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+  padding:3px 18px 18px;
+}
+
+.eci-box{
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  overflow:hidden;
+  border-radius:15px;
+  background:#FFFFFF;
+}
+
+.eci-box-title{
+  margin:0;
+  padding:12px 15px 7px;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.16;
+}
+
+.eci-scroll{
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:4px 15px 15px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--eci-verde) rgba(39,147,113,.12);
+}
+
+.eci-scroll::-webkit-scrollbar{
+  width:7px;
+}
+
+.eci-scroll::-webkit-scrollbar-track{
+  background:rgba(39,147,113,.10);
+  border-radius:999px;
+}
+
+.eci-scroll::-webkit-scrollbar-thumb{
+  background:var(--eci-verde);
+  border-radius:999px;
+}
+
+.eci-p{
+  margin:0;
+  font-size:20px;
+  font-weight:400;
+  line-height:1.36;
+}
+
+.eci-content.eci-enter{
+  animation:eci-enter .22s ease;
+}
+
+@keyframes eci-enter{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+}
+
+/* ==========================================================
+   NAVEGACIÓN INFERIOR
+========================================================== */
+.eci-footer{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:14px;
+}
+
+.eci-btn{
+  min-height:40px;
+  padding:8px 18px !important;
+  border-radius:999px !important;
+  color:#FFFFFF !important;
+  background:var(--eci-oscuro) !important;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.1;
+  cursor:pointer;
+  box-shadow:0 5px 12px rgba(16,73,56,.14);
+}
+
+.eci-btn:disabled{
+  opacity:.28;
+  cursor:default;
+}
+
+.eci-prev{justify-self:start}
+.eci-next{justify-self:end}
+
+.eci-center-status{
+  min-width:110px;
+  padding:7px 15px;
+  border:2px solid var(--eci-borde);
+  border-radius:999px;
+  background:#FFFFFF;
+  font-size:20px;
+  font-weight:700;
+  text-align:center;
+}
+
+@media(max-width:900px){
+  html,body{overflow:auto}
+
+  #eci-root{
+    min-height:1050px;
+    overflow:auto;
+  }
+
+  .eci-layout{
+    grid-template-rows:auto auto 44px;
+  }
+
+  .eci-tabs{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .eci-tab{
+    min-height:92px;
+  }
+
+  .eci-content{
+    grid-template-columns:1fr;
+  }
+
+  .eci-box{
+    min-height:300px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #eci-root *,
+  #eci-root *::before,
+  #eci-root *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+
+  .eci-tab{
+    opacity:1;
+  }
+}
+</style>
+</head>
+
+<body>
+<section id="eci-root" aria-label="Cómo el entorno internacional condiciona el proceso">
+  <div class="eci-layout">
+
+    <nav class="eci-tabs" aria-label="Dimensiones del entorno internacional">
+      <button class="eci-tab eci-active" type="button" data-index="0">
+        <span class="eci-tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M9 52h46"/>
+            <path d="M14 46V34h8v12M28 46V24h8v22M42 46V15h8v31"/>
+            <path d="M13 23l12-6 11 5 15-11"/>
+          </svg>
+        </span>
+        <span class="eci-tab-label">Económico</span>
+      </button>
+
+      <button class="eci-tab" type="button" data-index="1">
+        <span class="eci-tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M12 54h40M32 10v44M18 18h28"/>
+            <path d="M18 18l-9 17h18zM46 18l-9 17h18z"/>
+          </svg>
+        </span>
+        <span class="eci-tab-label">Legal y regulatorio</span>
+      </button>
+
+      <button class="eci-tab" type="button" data-index="2">
+        <span class="eci-tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M13 12h38v29H31L19 52V41h-6z"/>
+            <path d="M21 22h22M21 30h15"/>
+          </svg>
+        </span>
+        <span class="eci-tab-label">Cultural</span>
+      </button>
+
+      <button class="eci-tab" type="button" data-index="3">
+        <span class="eci-tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <path d="M8 52h48M12 26h40"/>
+            <path d="M16 26v22M27 26v22M37 26v22M48 26v22"/>
+            <path d="M9 26L32 10l23 16z"/>
+          </svg>
+        </span>
+        <span class="eci-tab-label">Político-comercial</span>
+      </button>
+
+      <button class="eci-tab" type="button" data-index="4">
+        <span class="eci-tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <rect x="11" y="13" width="42" height="30" rx="4"/>
+            <path d="M22 52h20M32 43v9"/>
+            <path d="M19 28h7l4-7 7 14 4-7h5"/>
+          </svg>
+        </span>
+        <span class="eci-tab-label">Tecnológico</span>
+      </button>
+    </nav>
+
+    <article class="eci-panel" aria-live="polite">
+      <div class="eci-bar" id="eci-bar"></div>
+
+      <header class="eci-head">
+        <h2 class="eci-title" id="eci-title"></h2>
+        <div class="eci-status" id="eci-status">1 / 5</div>
+      </header>
+
+      <div class="eci-content" id="eci-content">
+        <section class="eci-box">
+          <h3 class="eci-box-title">Condiciones del entorno</h3>
+          <div class="eci-scroll" id="eci-context"></div>
+        </section>
+
+        <section class="eci-box">
+          <h3 class="eci-box-title">Impacto metodológico concreto</h3>
+          <div class="eci-scroll" id="eci-impact"></div>
+        </section>
+      </div>
+    </article>
+
+    <footer class="eci-footer">
+      <button class="eci-btn eci-prev" id="eci-prev" type="button">← Anterior</button>
+      <div class="eci-center-status" id="eci-center-status">1 de 5</div>
+      <button class="eci-btn eci-next" id="eci-next" type="button">Siguiente →</button>
+    </footer>
+
+  </div>
+</section>
+
+<script>
+const ECI_DATA = [
+  {
+    titulo:"El ambiente económico y la disponibilidad de información",
+    color:"#279371",
+    contexto:`<p class="eci-p">Las condiciones económicas del mercado objetivo determinan, en primer lugar, si el nivel de desarrollo estadístico del país permite acceder a <strong>datos secundarios</strong> confiables y actualizados. En mercados de alta industrialización, como Alemania, Canadá o Japón, existe una vasta oferta de estudios de mercado, estadísticas gubernamentales e información sectorial de acceso público. En mercados emergentes o con menor desarrollo institucional, esa información puede ser escasa, desactualizada o poco comparable entre regiones del mismo país (Cateora et al., 2014).</p>`,
+    impacto:`<p class="eci-p">En términos prácticos, el <strong>ambiente económico</strong> afecta la etapa de <strong>investigación preliminar</strong> (que dependerá de la calidad de las fuentes secundarias disponibles), la determinación del <strong>universo y la muestra</strong> (que requiere datos demográficos y de consumo que no siempre existen con la granularidad necesaria) y la <strong>interpretación de resultados</strong> (que debe contextualizarse en indicadores como poder adquisitivo, distribución del ingreso y tendencias de crecimiento del sector estudiado). Un investigador que no conoce las condiciones económicas del mercado puede llegar a conclusiones inaplicables a la realidad de ese entorno.</p>`
+  },
+  {
+    titulo:"El ambiente legal y regulatorio como condicionante metodológico",
+    color:"#156049",
+    contexto:`<p class="eci-p">Las leyes del país donde se realiza la investigación pueden restringir o condicionar prácticas metodológicas que en México son estándar. El Reglamento General de Protección de Datos (RGPD) de la Unión Europea, por ejemplo, establece condiciones muy específicas sobre cómo pueden recopilarse, almacenarse y transferirse <strong>datos personales</strong> de ciudadanos europeos, lo que afecta directamente el <strong>diseño del instrumento</strong>, el procedimiento de muestreo y el almacenamiento de respuestas en plataformas digitales (Malhotra, 2020).</p>`,
+    impacto:`<p class="eci-p">Además, la regulación sanitaria, de etiquetado, de ingredientes permitidos o de certificaciones exigidas en el mercado objetivo es información que el investigador debe identificar desde la etapa de <strong>investigación preliminar</strong>, ya que condiciona el <strong>planteamiento del problema</strong>, los objetivos de investigación y las fuentes de información pertinentes. No considerar el ambiente legal puede generar un diseño de investigación que obtiene información irrelevante o que no puede ser utilizada legalmente en el país de destino.</p>`
+  },
+  {
+    titulo:"El ambiente cultural y la equivalencia metodológica",
+    color:"#3F9089",
+    contexto:`<p class="eci-p">La <strong>equivalencia cultural</strong> es, según Malhotra (2020), el desafío metodológico más frecuente y menos visible en la investigación internacional. Se refiere a la necesidad de que los instrumentos, las escalas y los conceptos utilizados comuniquen el mismo significado en la cultura del mercado estudiado que en la cultura desde la que se diseñan. Una pregunta que en México resulta directa y neutra puede percibirse como invasiva, ambigua o sin sentido en otro contexto cultural.</p>`,
+    impacto:`<p class="eci-p">Las implicaciones prácticas son múltiples. El <strong>diseño del instrumento</strong> debe someterse a un proceso de retrotraducción: el instrumento se traduce al idioma del mercado objetivo por un traductor, y luego un segundo traductor lo retraduce al idioma original sin conocer la versión inicial. Las diferencias entre ambas versiones revelan los conceptos que no son equivalentes entre culturas (Cateora et al., 2014). Además, ciertas culturas presentan tendencia a respuestas socialmente deseables o a evitar el extremo negativo de las escalas, lo que introduce <strong>sesgos</strong> en el análisis de datos si el investigador no los identifica. La <strong>interpretación de resultados</strong> debe realizarse, siempre que sea posible, con el apoyo de informantes clave locales que ayuden a contextualizar los hallazgos.</p>`
+  },
+  {
+    titulo:"El ambiente político-comercial y el acceso institucional",
+    color:"#156049",
+    contexto:`<p class="eci-p">Las condiciones políticas y los acuerdos comerciales vigentes entre México y el país de destino determinan tanto las restricciones como las oportunidades que enfrenta una empresa al ingresar a ese mercado. Para la <strong>investigación de mercados</strong>, este ambiente tiene consecuencias directas en dos etapas clave del proceso: la <strong>identificación de fuentes de información</strong> y la definición de las <strong>instancias institucionales</strong> que pueden apoyar la investigación.</p>`,
+    impacto:`<p class="eci-p">En el contexto del T-MEC (Tratado entre México, Estados Unidos y Canadá), por ejemplo, existen mecanismos de cooperación comercial y acceso a información estadística que facilitan la investigación de mercados en Canadá. Asimismo, los <strong>agregados comerciales de las embajadas mexicanas</strong> en el exterior funcionan como una fuente directa de <strong>inteligencia de mercado</strong>, capaces de proporcionar datos sobre el entorno competitivo, los canales de distribución locales y los requisitos regulatorios aplicables a cada sector. Ignorar el ambiente político-comercial en la etapa de investigación preliminar implica desaprovechar fuentes de información estratégica de alto valor y bajo costo (García-Sordo, 2007).</p>`
+  },
+  {
+    titulo:"El ambiente tecnológico y la viabilidad del trabajo de campo",
+    color:"#279371",
+    contexto:`<p class="eci-p">La viabilidad de las distintas modalidades de <strong>trabajo de campo</strong> está directamente condicionada por el nivel de penetración tecnológica del mercado objetivo. En países con alta tasa de acceso a internet y uso extendido de dispositivos móviles, los cuestionarios online y las entrevistas por videoconferencia son métodos de recopilación eficaces y de bajo costo. En mercados con infraestructura tecnológica limitada, el trabajo de campo presencial puede ser la única alternativa viable, lo que implica un mayor costo y la necesidad de contratar agencias de investigación locales.</p>`,
+    impacto:`<p class="eci-p">Además, las plataformas digitales de investigación de mercados pueden estar sujetas a restricciones de uso en ciertos países, o los datos recopilados a través de ellas pueden no cumplir con la legislación local de <strong>protección de datos</strong>. Por ello, la <strong>selección del método de recopilación</strong> debe evaluarse en función de las condiciones tecnológicas y legales del mercado estudiado, y no solo en función de las preferencias del equipo de investigación (Malhotra, 2020).</p>`
+  }
+];
+
+const root = document.getElementById("eci-root");
+const tabs = root.querySelectorAll(".eci-tab");
+const titleEl = document.getElementById("eci-title");
+const statusEl = document.getElementById("eci-status");
+const centerStatus = document.getElementById("eci-center-status");
+const contextEl = document.getElementById("eci-context");
+const impactEl = document.getElementById("eci-impact");
+const contentEl = document.getElementById("eci-content");
+const barEl = document.getElementById("eci-bar");
+const prevEl = document.getElementById("eci-prev");
+const nextEl = document.getElementById("eci-next");
+
+let current = 0;
+
+function showSlide(index){
+  current = Math.max(0,Math.min(index,ECI_DATA.length-1));
+  const item = ECI_DATA[current];
+
+  tabs.forEach((tab,i)=>{
+    const active = i===current;
+    tab.classList.toggle("eci-active",active);
+    tab.setAttribute("aria-pressed",active ? "true":"false");
+  });
+
+  titleEl.textContent = item.titulo;
+  statusEl.textContent = `${current+1} / 5`;
+  centerStatus.textContent = `${current+1} de 5`;
+  barEl.style.background = item.color;
+
+  contentEl.classList.remove("eci-enter");
+  contextEl.innerHTML = item.contexto;
+  impactEl.innerHTML = item.impacto;
+  contextEl.scrollTop = 0;
+  impactEl.scrollTop = 0;
+  requestAnimationFrame(()=>contentEl.classList.add("eci-enter"));
+
+  prevEl.disabled = current===0;
+  nextEl.disabled = current===ECI_DATA.length-1;
+}
+
+root.addEventListener("click",event=>{
+  const tab = event.target.closest(".eci-tab");
+  if(tab && root.contains(tab)){
+    event.preventDefault();
+    showSlide(Number(tab.dataset.index));
+    return;
+  }
+
+  if(event.target.closest("#eci-prev")){
+    event.preventDefault();
+    showSlide(current-1);
+    return;
+  }
+
+  if(event.target.closest("#eci-next")){
+    event.preventDefault();
+    showSlide(current+1);
+  }
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="ArrowLeft") showSlide(current-1);
+  if(event.key==="ArrowRight") showSlide(current+1);
+});
+
+document.fonts.ready.then(()=>showSlide(0));
+</script>
+</body>
+</html>
